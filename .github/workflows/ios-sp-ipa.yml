@@ -1,0 +1,257 @@
+# ============================================================================
+#  Build iOS IPA (SP, unsigned) —— Mini DAYZ **单机版**（汉化 + 已删 MDZ☆START）
+# ----------------------------------------------------------------------------
+#  和联机版那条 (ios-unsigned-ipa.yml) 的区别：
+#    · 资源来自 sp/（游戏本体是 2.2.6 汉化单机版），不是 web/
+#    · **不用 Capacitor CLI**（cap copy / cap update）—— 单机版没有 MLKit 扫码插件，
+#      走 CLI 会被 package.json 里的插件把 MLKit 重新写回 Podfile。
+#      所以资源用 pwsh 脚本纯复制、Podfile 手写死，pod install 只要几秒。
+#    · 因此不需要"Xcode >= 16"那条限制（那是 MLKit 8.x 的要求）
+#
+#  用法：push 到 GitHub → Actions → 本工作流 → Run workflow
+#        （免费 Apple ID 请填一个你独有的 bundle_id）
+# ============================================================================
+name: Build iOS IPA (SP single-player)
+
+on:
+  workflow_dispatch:
+    inputs:
+      bundle_id:
+        description: 'Bundle ID（留空用 com.mdz.minidayz.sp；免费 Apple ID 请填一个你独有的，如 com.yourname.mdzsp）'
+        required: false
+        default: ''
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'sp/**'
+      - '.github/workflows/ios-sp-ipa.yml'
+      - 'package.json'
+      - 'package-lock.json'
+
+jobs:
+  build-ipa:
+    runs-on: macos-14
+    timeout-minutes: 45
+
+    env:
+      SP_DIR: sp
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      # ---------------------------------------------------------------- 自检
+      - name: 自检：构建哪个提交 / 关键文件是否齐
+        run: |
+          echo "================ 本次构建的提交 ================"
+          git log -1 --oneline
+          echo ""
+          echo "================ 单机版构建树 ================"
+          ls -la "$SP_DIR" || { echo "::error::sp/ 目录不存在"; exit 1; }
+          missing=0
+          for f in "$SP_DIR/ios/App/Podfile" \
+                   "$SP_DIR/ios/App/App.xcodeproj/project.pbxproj" \
+                   "$SP_DIR/ios/App/App.xcodeproj/xcshareddata/xcschemes/App.xcscheme" \
+                   "$SP_DIR/ios/App/App/Info.plist" \
+                   "$SP_DIR/scripts/prepare.ps1" \
+                   "$SP_DIR/scripts/transform-web.js" \
+                   "$SP_DIR/web/index.html" \
+                   "$SP_DIR/web/data.js" \
+                   "$SP_DIR/web/l_eng_ui.xml" ; do
+            if [ -f "$f" ]; then echo "  OK   $f"; else echo "  ::error::缺失 $f"; missing=1; fi
+          done
+          [ "$missing" = "0" ] || { echo "::error::仓库内容不完整（sp/web 是否已提交？）"; exit 1; }
+          echo "  sp/web 文件数: $(find "$SP_DIR/web" -type f | wc -l)"
+          echo "  sp/web 大小  : $(du -sh "$SP_DIR/web" | cut -f1)"
+          echo ""
+          echo "================ Podfile（应只有 Capacitor 本体，无 MLKit）================"
+          cat "$SP_DIR/ios/App/Podfile"
+          if grep -qi 'mlkit' "$SP_DIR/ios/App/Podfile"; then
+            echo "::error::单机版 Podfile 里出现了 MLKit —— 与设计不符"; exit 1
+          fi
+          echo "  OK   未引用 MLKit ✅"
+
+      - name: 自检：游戏本体确实是"汉化 + 无 MDZ☆START"
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const G = 'sp/web';
+          let bad = 0;
+          // 1) data.js 不应再含 ☆ (MDZ☆START)
+          const data = fs.readFileSync(`${G}/data.js`, 'utf8');
+          const hasStar = data.includes('\u2606');
+          console.log(`  data.js 含 ☆ (MDZ☆START): ${hasStar}  ${hasStar ? '✗' : '✓'}`);
+          if (hasStar) bad = 1;
+          // 2) 四个语言文件都要有足量中文
+          const files = ['l_eng_ui.xml','l_eng_items.xml','l_eng_log.xml','l_eng_new.xml'];
+          for (const f of files) {
+            const t = fs.readFileSync(`${G}/${f}`, 'utf8');
+            const cjk = (t.match(/[\u4e00-\u9fff]/g) || []).length;
+            const need = f === 'l_eng_ui.xml' ? 1000 : 200;
+            const ok = cjk >= need;
+            console.log(`  ${f.padEnd(18)} 中文字符 ${String(cjk).padStart(6)}  ${ok ? '✓' : '✗'}`);
+            if (!ok) bad = 1;
+          }
+          // 3) 不应残留联机脚本（单机版是另一份游戏源）
+          for (const f of ['mdz_p2p.js','lan_bridge.js','peerjs.min.js']) {
+            const exists = fs.existsSync(`${G}/${f}`);
+            console.log(`  联机脚本 ${f.padEnd(16)} 存在=${exists}  ${exists ? '✗' : '✓'}`);
+            if (exists) bad = 1;
+          }
+          process.exit(bad);
+          NODE
+
+      # ---------------------------------------------------------------- 工具链
+      - name: 选择 Xcode
+        run: |
+          ls -d /Applications/Xcode*.app || true
+          LATEST=$(ls -d /Applications/Xcode*.app | sort -V | tail -n 1)
+          echo "选中: $LATEST"
+          sudo xcode-select -s "$LATEST/Contents/Developer"
+          xcodebuild -version
+
+      - name: Ensure CocoaPods
+        run: |
+          if ! command -v pod >/dev/null 2>&1; then
+            echo "安装 CocoaPods..."
+            sudo gem install cocoapods --no-document
+          fi
+          pod --version
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: 安装依赖（只要 Capacitor 运行时）
+        run: |
+          npm ci --omit=dev
+          echo "@capacitor/ios: $(test -d node_modules/@capacitor/ios && echo OK || echo 缺失)"
+          test -d node_modules/@capacitor/ios || { echo "::error::@capacitor/ios 没装上"; exit 1; }
+
+      # ---------------------------------------------------------------- 准备构建树
+      - name: 准备（复制游戏本体 + Capacitor 运行时 + 生成配置）
+        run: |
+          # 用 powershell（macOS runner 上一定有），不要用 pwsh —— 那是 PowerShell 7，
+          # 只在装了它之后才存在；本脚本只用到 5.1 也有的东西。
+          powershell -NoProfile -ExecutionPolicy Bypass -File "$SP_DIR/scripts/prepare.ps1" -RepoRoot "$PWD"
+          echo "---------------- public/ 概况 ----------------"
+          ls "$SP_DIR/ios/App/App/public" | head -n 20
+          echo "文件数: $(find "$SP_DIR/ios/App/App/public" -type f | wc -l)"
+          echo "大小  : $(du -sh "$SP_DIR/ios/App/App/public" | cut -f1)"
+          test -f "$SP_DIR/ios/App/App/public/l_eng_ui.xml" || { echo "::error::汉化文件没拷进去"; exit 1; }
+          test -f "$SP_DIR/ios/App/App/capacitor.config.json" || { echo "::error::capacitor.config.json 未生成"; exit 1; }
+          echo "--- index.html 变换自检 ---"
+          grep -c 'iOS 版：禁用 Service Worker' "$SP_DIR/ios/App/App/public/index.html" || true
+
+      - name: 应用自定义 Bundle ID（可选）
+        run: |
+          PBX="$SP_DIR/ios/App/App.xcodeproj/project.pbxproj"
+          # 先把工程里的默认 ID 统一换成单机版 ID
+          /usr/bin/sed -i '' "s/com\.mdz\.webrtcmp/com.mdz.minidayz.sp/g" "$PBX"
+          NEW_ID="${{ github.event.inputs.bundle_id }}"
+          if [ -n "$NEW_ID" ]; then
+            echo "把 Bundle ID 改成: $NEW_ID"
+            /usr/bin/sed -i '' "s/com\.mdz\.minidayz\.sp/$NEW_ID/g" "$PBX"
+          fi
+          echo "--- 结果 ---"
+          grep -n "PRODUCT_BUNDLE_IDENTIFIER" "$PBX"
+          if grep -q "com\.mdz\.webrtcmp" "$PBX"; then
+            echo "::error::工程里还残留联机版的 Bundle ID"; exit 1
+          fi
+
+      # ---------------------------------------------------------------- pods
+      - name: pod install
+        working-directory: sp/ios/App
+        run: |
+          set -o pipefail
+          echo "--- Podfile ---"; cat Podfile
+          echo "--- node_modules 就位检查 ---"
+          ls -d node_modules/@capacitor/ios || { echo "::error::node_modules/@capacitor/ios 不在（prepare.ps1 没跑成功？）"; exit 1; }
+          if ! pod install 2>&1 | tail -n 60; then
+            echo "::warning::第一次 pod install 失败，pod repo update 后重试"
+            pod repo update || true
+            pod install
+          fi
+          test -f Podfile.lock && echo "Podfile.lock 已生成 ✅"
+          ls -d App.xcworkspace || { echo "::error::没有生成 App.xcworkspace"; exit 1; }
+
+      - name: 列出 scheme
+        working-directory: sp/ios/App
+        run: xcodebuild -workspace App.xcworkspace -list
+
+      # ---------------------------------------------------------------- 编译
+      - name: Archive（未签名）
+        working-directory: sp/ios/App
+        run: |
+          set -o pipefail
+          LOG="$RUNNER_TEMP/archive.log"
+          if xcodebuild \
+               -workspace App.xcworkspace \
+               -scheme App \
+               -configuration Release \
+               -sdk iphoneos \
+               -destination 'generic/platform=iOS' \
+               -archivePath "$RUNNER_TEMP/App.xcarchive" \
+               CODE_SIGN_IDENTITY="" \
+               CODE_SIGNING_REQUIRED=NO \
+               CODE_SIGNING_ALLOWED=NO \
+               ENABLE_USER_SCRIPT_SANDBOXING=NO \
+               archive > "$LOG" 2>&1; then
+            echo "Archive 成功 ✅"
+            tail -n 12 "$LOG"
+          else
+            echo "==================== Archive 失败 ===================="
+            tail -n 60 "$LOG"
+            grep -n -i -E "error:|fatal error|ARCHIVE FAILED" "$LOG" | head -n 8 | while IFS= read -r line; do
+              echo "::error::$(printf '%s' "$line" | sed 's/%/%25/g')"
+            done || true
+            exit 1
+          fi
+
+      - name: 打包 .ipa 并校验内容
+        run: |
+          set -e
+          APP="$RUNNER_TEMP/App.xcarchive/Products/Applications/App.app"
+          test -d "$APP" || { echo "::error::没找到 App.app"; exit 1; }
+          mkdir -p "$RUNNER_TEMP/Payload"
+          cp -R "$APP" "$RUNNER_TEMP/Payload/"
+          cd "$RUNNER_TEMP"
+          zip -qry Minidayz-SP-unsigned.ipa Payload
+          ls -lh Minidayz-SP-unsigned.ipa
+
+          echo "--- 确认汉化文件进包 ---"
+          unzip -l Minidayz-SP-unsigned.ipa | grep -E 'l_eng_(ui|items|log|new)\.xml|data\.js|c2runtime\.js' || true
+
+          echo "--- 确认没有联机脚本（单机版不该有）---"
+          if unzip -l Minidayz-SP-unsigned.ipa | grep -qE 'mdz_p2p\.js|lan_bridge\.js|peerjs\.min\.js'; then
+            echo "::error::包里出现了联机脚本，出错了版本"; exit 1
+          fi
+          echo "  OK 无联机脚本 ✅"
+
+          echo "--- Info.plist 关键项 ---"
+          PLIST="$APP/Info.plist"
+          for k in CFBundleDisplayName UIRequiresFullScreen ITSAppUsesNonExemptEncryption; do
+            v=$(/usr/libexec/PlistBuddy -c "Print :$k" "$PLIST" 2>/dev/null || echo '(缺失)')
+            echo "  $k = $v"
+          done
+          for k in NSCameraUsageDescription NSLocalNetworkUsageDescription; do
+            if /usr/libexec/PlistBuddy -c "Print :$k" "$PLIST" >/dev/null 2>&1; then
+              echo "  ::warning::单机版不该有 $k，但包里存在"
+            else
+              echo "  OK 已无 $k"
+            fi
+          done
+          echo "--- Bundle ID ---"
+          /usr/libexec/PlistBuddy -c "Print :CFBundleIdentifier" "$PLIST"
+
+      - name: Upload IPA artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: minidayz-sp-unsigned-ipa
+          path: ${{ runner.temp }}/Minidayz-SP-unsigned.ipa
+          if-no-files-found: error
+          retention-days: 30

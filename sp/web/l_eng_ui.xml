@@ -1,0 +1,3305 @@
+<?xml version="1.0" ?>
+
+<list>
+<!-- Main menu buttons-->
+<text>
+	<id>1</id>
+	<name>新游戏</name>
+</text>
+
+<text>
+	<id>2</id>
+	<name>继续</name>
+</text>
+
+<text>
+	<id>3</id>
+	<name>成就</name>
+</text>
+
+<text>
+	<id>4</id>
+	<name>社区</name>
+</text>
+
+<text>
+	<id>5</id>
+	<name>更新日志</name>
+</text>
+
+<text>
+	<id>6</id>
+	<name>退出登录</name>
+</text>
+
+<text>
+	<id>7</id>
+	<name>新手</name>
+</text>
+
+<text>
+	<id>8</id>
+	<name>普通</name>
+</text>
+
+<text>
+	<id>9</id>
+	<name>老兵</name>
+</text>
+
+<text>
+	<id>10</id>
+	<name>返回</name>
+</text>
+
+<text>
+	<id>11</id>
+	<name>继续</name>
+</text>
+
+<!-- Main menu player achievement labels-->
+
+<text>
+	<id>12</id>
+	<name>存活分钟数</name>
+</text>
+
+<text>
+	<id>13</id>
+	<name>击杀感染者</name>
+</text>
+
+<text>
+	<id>14</id>
+	<name>击杀强盗</name>
+</text>
+
+<text>
+	<id>15</id>
+	<name>难度</name>
+</text>
+
+<!-- Level loading-->
+
+<text>
+	<id>16</id>
+	<name>正在生成世界</name>
+</text>
+
+<text>
+	<id>18</id>
+	<name>铺设道路（第 1 步）</name>
+</text>
+
+<text>
+	<id>19</id>
+	<name>放置城镇（第 2 步）</name>
+</text>
+
+<text>
+	<id>20</id>
+	<name>添加秘密地点</name>
+</text>
+
+<text>
+	<id>21</id>
+	<name>绘制瓦片地图</name>
+</text>
+
+<text>
+	<id>22</id>
+	<name>创建小地图</name>
+</text>
+
+<!-- Menu btns-->
+
+<text>
+	<id>23</id>
+	<name>跳过教程</name>
+</text>
+
+<text>
+	<id>24</id>
+	<name>是</name>
+</text>
+
+<text>
+	<id>25</id>
+	<name>否</name>
+</text>
+
+<text>
+	<id>26</id>
+	<name>确定要跳过教程吗？</name>
+</text>
+
+<!--MENU ADDITIONS -->
+
+<text>
+	<id>27</id>
+	<name>角色</name>
+</text>
+
+<text>
+	<id>28</id>
+	<name>总统计</name>
+</text>
+
+<text>
+	<id>29</id>
+	<name>存活分钟数</name>
+</text>
+
+<text>
+	<id>30</id>
+	<name>总击杀感染者：</name>
+</text>
+
+<text>
+	<id>31</id>
+	<name>总击杀强盗：</name>
+</text>
+
+<text>
+	<id>32</id>
+	<name>死亡次数</name>
+</text>
+
+<!--In-game menu buttons-->
+<text>
+	<id>33</id>
+	<name>移动方式：点击</name>
+</text>
+
+<text>
+	<id>34</id>
+	<name>移动方式：摇杆</name>
+</text>
+
+<text>
+	<id>35</id>
+	<name>声音：开</name>
+</text>
+
+<text>
+	<id>36</id>
+	<name>声音：关</name>
+</text>
+
+<text>
+	<id>37</id>
+	<name>主菜单</name>
+</text>
+
+<text>
+	<id>38</id>
+	<name>青铜</name>
+</text>
+
+<text>
+	<id>39</id>
+	<name>白银</name>
+</text>
+
+<text>
+	<id>40</id>
+	<name>黄金</name>
+</text>
+
+<!--Castaway UI-->
+
+<text>
+	<id>41</id>
+	<name>确定</name>
+</text>
+
+<text>
+	<id>42</id>
+	<name>你需要木堆来修复这艘船。</name>
+</text>
+
+<text>
+	<id>43</id>
+	<name>你需要胶带来修复这艘船。</name>
+</text>
+
+<text>
+	<id>44</id>
+	<name>修复</name>
+</text>
+
+<text>
+	<id>45</id>
+	<name>离开</name>
+</text>
+
+<text>
+	<id>46</id>
+	<name>你可以用手中的木堆修复这艘木船。</name>
+</text>
+
+<text>
+	<id>47</id>
+	<name>你可以用手中的胶带修复这艘船。</name>
+</text>
+
+<text>
+	<id>48</id>
+	<name>就绪</name>
+</text>
+
+<text>
+	<id>49</id>
+	<name>未就绪</name>
+</text>
+
+<text>
+	<id>50</id>
+	<name>船已修好，准备好前往下一座岛屿了吗？你将无法返回。</name>
+</text>
+
+<text>
+	<id>51</id>
+	<name>选择</name>
+</text>
+
+<text>
+	<id>52</id>
+	<name>看完视频广告后将投放补给。</name>
+</text>
+
+<text>
+	<id>53</id>
+	<name>食物</name>
+</text>
+
+<text>
+	<id>54</id>
+	<name>饮料</name>
+</text>
+
+<text>
+	<id>55</id>
+	<name>绷带</name>
+</text>
+
+<text>
+	<id>56</id>
+	<name>“你好，想交换些物品吗？这是我提供的：”</name>
+</text>
+
+<text>
+	<id>57</id>
+	<name>提供：</name>
+</text>
+
+<text>
+	<id>58</id>
+	<name>价格：</name>
+</text>
+
+<text>
+	<id>59</id>
+	<name>拒绝</name>
+</text>
+
+<text>
+	<id>60</id>
+	<name>交换</name>
+</text>
+
+<text>
+	<id>61</id>
+	<name>下一份报价</name>
+</text>
+
+<text>
+	<id>62</id>
+	<name>选择</name>
+</text>
+
+<text>
+	<id>63</id>
+	<name>未解锁</name>
+</text>
+
+<text>
+	<id>64</id>
+	<name>当前</name>
+</text>
+
+<text>
+	<id>65</id>
+	<name>新角色已解锁！</name>
+</text>
+
+<text>
+	<id>66</id>
+	<name>箱子里可能装着任何东西，从食物到枪支。</name>
+</text>
+
+<text>
+	<id>67</id>
+	<name>‼(•'╻'• )꒳ᵒ꒳ᵎᵎᵎ</name>
+</text>
+
+<text>
+	<id>68</id>
+	<name>选项</name>
+</text>
+
+<text>
+	<id>69</id>
+	<name>摇杆位置</name>
+</text>
+
+<text>
+	<id>70</id>
+	<name>语言</name>
+</text>
+
+<!--Billy "Red" Locked-->
+<text>
+	<id>71</id>
+	<name>比利 “红”
+解锁条件：用任意霰弹枪击杀 5 名感染者。
+任意难度。</name>
+</text>
+
+<!--Emilio "Doc" Locked-->
+<text>
+	<id>72</id>
+	<name>埃米利奥 “医生”
+解锁条件：止血 6 次。
+任意难度。</name>
+</text>
+
+<!--Dave "Boxer" Locked-->
+<text>
+	<id>73</id>
+	<name>戴夫 “拳击手”
+解锁条件：徒手击杀 10 名感染者。
+任意难度。</name>
+</text>
+
+<!--Lee "Maniac" Locked-->
+<text>
+	<id>74</id>
+	<name>李 “疯子”
+用任意斧头击杀一个强盗幸存者。
+“普通”或更高难度。</name>
+</text>
+
+<!--Sergey "Slav" Locked-->
+<text>
+	<id>75</id>
+	<name>谢尔盖 “斯拉夫”
+解锁条件：在一次游戏内击杀 3 名其他幸存者。
+“普通”或更高难度。</name>
+</text>
+
+<!--John "Biker" Locked-->
+<text>
+	<id>76</id>
+	<name>约翰 “骑手”
+解锁条件：同时携带骑手夹克、摩托车头盔和水管扳手。
+“普通”或更高难度。</name>
+</text>
+
+<!--Ganzo "Dragon" Locked-->
+<text>
+	<id>77</id>
+	<name>甘佐 “龙”
+解锁条件：击杀 4 名手持枪械的敌对幸存者。
+“老兵”或更高难度。</name>
+</text>
+
+<!--Tom "Survivor" Locked-->
+<text>
+	<id>78</id>
+	<name>汤姆 “幸存者”
+解锁条件：存活 7 天。
+“老兵”或更高难度。</name>
+</text>
+
+<!--Garry "Veteran" Locked-->
+<text>
+	<id>79</id>
+	<name>加里 “老兵”
+解锁条件：在一次游戏内同时穿戴整套 Gorka 装备（Gorka 裤、Gorka 夹克、Gorka 头盔）。
+“老兵”或更高难度。</name>
+</text>
+
+
+<text>
+	<id>80</id>
+	<name>幸存者 1
+初始装备：牛仔裤、T恤。
+已解锁特长：无</name>
+</text>
+
+<text>
+	<id>81</id>
+	<name>幸存者 2
+初始装备：牛仔裤、T恤。
+已解锁特长：无</name>
+</text>
+
+<text>
+	<id>82</id>
+	<name>幸存者 3
+初始装备：牛仔裤、T恤。
+已解锁特长：无</name>
+</text>
+
+<!--Billy "Red" Unlocked-->
+<text>
+	<id>83</id>
+	<name>比利 “红”
+初始装备：牛仔裤、T恤、头巾。
+已解锁特长：神枪手。</name>
+</text>
+
+<!--Emilio "Doc" Unlocked-->
+<text>
+	<id>84</id>
+	<name>埃米利奥 “医生”
+初始装备：医护裤、T恤、绷带。
+已解锁特长：红+。</name>
+</text>
+
+<!--Dave "Boxer" Unlocked-->
+<text>
+	<id>85</id>
+	<name>戴夫 “拳击手”
+初始装备：牛仔裤、T恤、碎布。
+已解锁特长：格挡者。</name>
+</text>
+
+<!--Lee "Maniac" Unlocked-->
+<text>
+	<id>86</id>
+	<name>李 “疯子”
+初始装备：牛仔裤、连衣裙、防毒面具、屠宰刀。
+已解锁特长：甜蜜之家。</name>
+</text>
+
+<!--John "Biker" Unlocked-->
+<text>
+	<id>87</id>
+	<name>约翰 “骑手”
+初始装备：牛仔裤、骑手夹克、摩托车头盔、水管扳手。
+已解锁特长：疾跑者。</name>
+</text>
+
+<!--Sergey "Slav" Unlocked-->
+<text>
+	<id>88</id>
+	<name>谢尔盖 “斯拉夫”
+初始装备：运动裤、运动夹克、巴拉克拉瓦头套、棒球棍。
+已解锁特长：重拳手。</name>
+</text>
+
+<!--Ganzo "Dragon" Unlocked-->
+<text>
+	<id>89</id>
+	<name>甘佐 “龙”
+初始装备：猎装裤、弓、5 支复合箭矢。
+已解锁特长：疾跑者、雪之子。</name>
+</text>
+
+<!--Tom "Survivor" Unlocked-->
+<text>
+	<id>90</id>
+	<name>汤姆 “幸存者”
+初始装备：牛仔裤、T恤、牛仔帽、猎刀、布袋。
+已解锁特长：猎人、生存专家。</name>
+</text>
+
+<!--Garry "Veteran" Unlocked-->
+<text>
+	<id>91</id>
+	<name>加里 “老兵”
+初始装备：牛仔裤、T恤、棒球帽、防弹背心、柯尔特 1911、子弹。
+已解锁特长：神枪手、侦察兵。</name>
+</text>
+
+<text>
+	<id>95</id>
+	<name>无法连接空投中心！请恢复网络连接。</name>
+</text>
+
+<text>
+	<id>96</id>
+	<name>无法连接空投中心！</name>
+</text>
+
+<text>
+	<id>97</id>
+	<name>重置</name>
+</text>
+
+<text>
+	<id>98</id>
+	<name>保存</name>
+</text>
+
+<text>
+	<id>99</id>
+	<name>!!!</name>
+</text>
+
+<!--Achievements-->
+
+<text>
+	<id>101</id>
+	<name>24 小时</name>
+</text>
+
+<text>
+	<id>102</id>
+	<name>木乃伊</name>
+</text>
+
+<text>
+	<id>103</id>
+	<name>吸血鬼</name>
+</text>
+
+<text>
+	<id>104</id>
+	<name>黑匣子收集者</name>
+</text>
+
+<text>
+	<id>105</id>
+	<name>手枪手</name>
+</text>
+
+<text>
+	<id>106</id>
+	<name>霰弹枪手</name>
+</text>
+
+<text>
+	<id>107</id>
+	<name>突击兵</name>
+</text>
+
+<text>
+	<id>108</id>
+	<name>终结者</name>
+</text>
+
+<text>
+	<id>109</id>
+	<name>罗宾汉</name>
+</text>
+
+<text>
+	<id>110</id>
+	<name>超级素食者</name>
+</text>
+
+<text>
+	<id>111</id>
+	<name>幸存者之神</name>
+</text>
+
+<text>
+	<id>112</id>
+	<name>疯狂集卡人</name>
+</text>
+
+<text>
+	<id>113</id>
+	<name>步枪手</name>
+</text>
+
+<text>
+	<id>114</id>
+	<name>感染者杀手</name>
+</text>
+
+<text>
+	<id>115</id>
+	<name>旅行者</name>
+</text>
+
+<text>
+	<id>116</id>
+	<name>暴食者</name>
+</text>
+
+<text>
+	<id>117</id>
+	<name>后备箱掠夺者</name>
+</text>
+
+<text>
+	<id>118</id>
+	<name>升级</name>
+</text>
+
+<text>
+	<id>119</id>
+	<name>铜墙铁壁</name>
+</text>
+
+<text>
+	<id>120</id>
+	<name>黑暗之魂</name>
+</text>
+
+<text>
+	<id>121</id>
+	<name>冷血杀手</name>
+</text>
+
+<text>
+	<id>122</id>
+	<name>忍者</name>
+</text>
+
+<text>
+	<id>123</id>
+	<name>农夫</name>
+</text>
+
+<text>
+	<id>124</id>
+	<name>庇护所</name>
+</text>
+
+<text>
+	<id>125</id>
+	<name>伐木工</name>
+</text>
+
+<text>
+	<id>126</id>
+	<name>兄弟</name>
+</text>
+
+<text>
+	<id>127</id>
+	<name>骆驼</name>
+</text>
+
+<text>
+	<id>128</id>
+	<name>真正的猎人</name>
+</text>
+
+<text>
+	<id>129</id>
+	<name>⚔️ 最后的骑士</name>
+</text>
+
+<text>
+	<id>130</id>
+	<name>🚪“安全”区</name>
+</text>
+
+<text>
+	<id>131</id>
+	<name>全面防护</name>
+</text>
+
+<text>
+	<id>132</id>
+	<name>莫名饥饿</name>
+</text>
+
+<text>
+	<id>133</id>
+	<name>地狱空无一人</name>
+</text>
+
+<!--Achievements descriptions-->
+
+<text>
+	<id>151</id>
+	<name>存活 1/2/3 天</name>
+</text>
+
+<text>
+	<id>152</id>
+	<name>止血 2/4/6 次</name>
+</text>
+
+<text>
+	<id>153</id>
+	<name>使用 1/2/3 个血袋或生理盐水袋</name>
+</text>
+
+<text>
+	<id>154</id>
+	<name>找到 1/2/3 个直升机坠机点</name>
+</text>
+
+<text>
+	<id>155</id>
+	<name>用手枪击杀 5/15/30 名感染者</name>
+</text>
+
+<text>
+	<id>156</id>
+	<name>用霰弹枪击杀 5/15/30 名感染者</name>
+</text>
+
+<text>
+	<id>157</id>
+	<name>用突击步枪或冲锋枪击杀 5/15/30 名感染者</name>
+</text>
+
+<text>
+	<id>158</id>
+	<name>承受 5/15/30 次枪击而不死</name>
+</text>
+
+<text>
+	<id>159</id>
+	<name>用弓或十字弩击杀 5/15/30 名感染者</name>
+</text>
+
+<text>
+	<id>160</id>
+	<name>承受 10/20/30 次感染者或狼的攻击而不死</name>
+</text>
+
+<text>
+	<id>161</id>
+	<name>学会所有特长</name>
+</text>
+
+<text>
+	<id>162</id>
+	<name>收集 5/10/15 个浆果</name>
+</text>
+
+<text>
+	<id>163</id>
+	<name>用半自动或栓动步枪击杀 5/15/30 名感染者</name>
+</text>
+
+<text>
+	<id>164</id>
+	<name>击杀 20/40/80 名感染者</name>
+</text>
+
+<text>
+	<id>165</id>
+	<name>在 1/2/3 座岛屿（关卡）上至少探访一座城市</name>
+</text>
+
+<text>
+	<id>166</id>
+	<name>吃 15/30/50 个食物</name>
+</text>
+
+<text>
+	<id>167</id>
+	<name>打开 50/100/150 个汽车后备箱</name>
+</text>
+
+<text>
+	<id>168</id>
+	<name>喝一瓶 Nuko-Cola</name>
+</text>
+
+<text>
+	<id>169</id>
+	<name>建造 1/2/3 个路障或铁丝网</name>
+</text>
+
+<text>
+	<id>170</id>
+	<name>点燃 1/2/3 个篝火</name>
+</text>
+
+<text>
+	<id>171</id>
+	<name>击杀 1/2/3 名幸存者</name>
+</text>
+
+<text>
+	<id>172</id>
+	<name>12/24/36 游戏小时内不受到伤害</name>
+</text>
+
+<text>
+	<id>173</id>
+	<name>种植 5/10/15 株植物</name>
+</text>
+
+<text>
+	<id>174</id>
+	<name>部署 1/2/3 个民用帐篷</name>
+</text>
+
+<text>
+	<id>175</id>
+	<name>砍伐 3/6/10 棵树</name>
+</text>
+
+<text>
+	<id>176</id>
+	<name>遇到一名友善的幸存者</name>
+</text>
+
+<text>
+	<id>177</id>
+	<name>喝 10/20/30 瓶饮料</name>
+</text>
+
+<text>
+	<id>178</id>
+	<name>剥皮 1/2/3 只动物</name>
+</text>
+
+<text>
+	<id>179</id>
+	<name>找到中世纪城堡；一个辉煌时代的见证</name>
+</text>
+
+<text>
+	<id>180</id>
+	<name>进入地堡；一座未能阻挡病毒的军事要塞</name>
+</text>
+
+<text>
+	<id>181</id>
+	<name>装备全套防化服和防毒面具</name>
+</text>
+
+<text>
+	<id>182</id>
+	<name>烤一次人肉</name>
+</text>
+
+<text>
+	<id>183</id>
+	<name>在传奇难度下击杀所有类型的感染者</name>
+</text>
+
+<!--TUTORIAL PAD -->
+<text>
+	<id>228</id>
+	<name>战斗</name>
+</text>
+
+<text>
+	<id>229</id>
+	<name>你可以徒手或使用近战武器进行近战。
+靠近敌人时近战会自动进行。每种武器都有不同的三倍伤害几率或格挡敌人攻击的几率。</name>
+</text>
+
+<text>
+	<id>230</id>
+	<name>使用远程武器时，瞄准会自动进行。点击按钮射击。
+奔跑时射击不如站立时精准。</name>
+</text>
+
+<text>
+	<id>231</id>
+	<name>篝火提供热量、光亮和烹饪功能。建成后最多可使用三次。
+
+</name>
+</text>
+
+<text>
+	<id>232</id>
+	<name>你可以种植植物获取食物。需要种子和铁锹、干草叉或镐来种植。</name>
+</text>
+
+<text>
+	<id>233</id>
+	<name>你需要资源来制作物品。你可以在世界中找到或采集它们。</name>
+</text>
+
+<text>
+	<id>234</id>
+	<name>受伤时你可能会开始流血。流血时无法回血，并且会持续失血。使用绷带或碎布止血。</name>
+</text>
+
+<text>
+	<id>235</id>
+	<name>如果体温降到 0%，或在少数情况下被感染者攻击，你可能会染上疾病。患病时无法回血。要治愈疾病，请使用四环素，或将体温、食物和水状态维持在 75% 以上。</name>
+</text>
+
+<text>
+	<id>236</id>
+	<name>状态</name>
+</text>
+
+<text>
+	<id>237</id>
+	<name>寒冷天气会降低你的体温。夜晚、下雨或下雪时，体温下降得更快。</name>
+</text>
+
+<text>
+	<id>238</id>
+	<name>你需要进食和饮水才能生存。查看饥饿和口渴状态条。如果它们降到 50% 以下，你就无法回复血量。</name>
+</text>
+
+<text>
+	<id>239</id>
+	<name>玩家状态：饥饿/口渴</name>
+</text>
+
+<text>
+	<id>240</id>
+	<name>小地图</name>
+</text>
+
+<text>
+	<id>241</id>
+	<name>世界地图</name>
+</text>
+
+<text>
+	<id>250</id>
+	<name>指南</name>
+</text>
+
+<text>
+	<id>251</id>
+	<name>制作</name>
+</text>
+
+<text>
+	<id>252</id>
+	<name>地图</name>
+</text>
+
+<text>
+	<id>253</id>
+	<name>玩家状态：血量</name>
+</text>
+
+<text>
+	<id>254</id>
+	<name>如果血量降为零，你就会死亡。被近战攻击或子弹击中会失血。当热量/水/食物降为零时也会开始失血。</name>
+</text>
+
+<text>
+	<id>255</id>
+	<name>你可以用绷带或碎布止血（有些衣服可以撕成碎布）。</name>
+</text>
+
+<text>
+	<id>256</id>
+	<name>使用血袋和生理盐水袋回复血量。</name>
+</text>
+
+<text>
+	<id>257</id>
+	<name>如果水、食物和热量都高于 50%，你将开始回复血量。</name>
+</text>
+
+<text>
+	<id>258</id>
+	<name>玩家状态：饥饿/口渴</name>
+</text>
+
+<text>
+	<id>259</id>
+	<name>玩家状态：热量</name>
+</text>
+
+<text>
+	<id>260</id>
+	<name>躲进建筑里取暖。</name>
+</text>
+
+<text>
+	<id>261</id>
+	<name>寻找状态完好的保暖衣物来取暖。</name>
+</text>
+
+<text>
+	<id>262</id>
+	<name>喝威士忌也能恢复热量。</name>
+</text>
+
+<text>
+	<id>263</id>
+	<name>点燃篝火取暖。</name>
+</text>
+
+<text>
+	<id>264</id>
+	<name>找到帐篷并部署，躲在里面避雨并稍微暖和些。</name>
+</text>
+
+
+<text>
+	<id>265</id>
+	<name>搜刮</name>
+</text>
+
+<text>
+	<id>266</id>
+	<name>大部分物资可以在建筑里找到。</name>
+</text>
+
+<text>
+	<id>267</id>
+	<name>物资也可以在汽车后备箱里找到。</name>
+</text>
+
+<text>
+	<id>268</id>
+	<name>你可以在一些灌木丛中找到可食用的浆果。</name>
+</text>
+
+
+<text>
+	<id>269</id>
+	<name>资源</name>
+</text>
+
+<text>
+	<id>270</id>
+	<name>你可以用斧头砍树。不同种类的树提供不同的资源。
+其他有用的物品可以在世界中找到。</name>
+</text>
+
+
+<text>
+	<id>271</id>
+	<name>夜晚</name>
+</text>
+
+<text>
+	<id>272</id>
+	<name>找到头灯或夜视仪来照亮夜晚（需要电池）。</name>
+</text>
+
+<text>
+	<id>273</id>
+	<name>信号棒被扔出后可以在短时间内照亮一小片区域。</name>
+</text>
+
+<text>
+	<id>274</id>
+	<name>篝火也可以在夜晚照亮更大的区域更长时间。</name>
+</text>
+
+
+<text>
+	<id>275</id>
+	<name>水泵</name>
+</text>
+
+<text>
+	<id>276</id>
+	<name>水泵里可能含有可饮用的水。你可以直接饮用，但要注意水是有限的。</name>
+</text>
+
+<text>
+	<id>277</id>
+	<name>你也可以用水泵装满水瓶和水壶。</name>
+</text>
+
+
+<text>
+	<id>278</id>
+	<name>修理</name>
+</text>
+
+<text>
+	<id>279</id>
+	<name>胶带可以为部分装备增加 15% 耐久。</name>
+</text>
+
+<text>
+	<id>280</id>
+	<name>针线包可以为部分装备增加 50% 耐久。</name>
+</text>
+
+<text>
+	<id>281</id>
+	<name>清洁工具可以为你的枪械增加 25% 耐久。</name>
+</text>
+
+
+<text>
+	<id>282</id>
+	<name>狩猎</name>
+</text>
+
+<text>
+	<id>283</id>
+	<name>你可以在水边或森林里找到鹿。它们很警觉，所以你需要远程武器来狩猎。</name>
+</text>
+
+<text>
+	<id>284</id>
+	<name>如果你射杀了鹿，可以用刀剥皮获得肉排。</name>
+</text>
+
+<text>
+	<id>285</id>
+	<name>肉排可以用篝火烹饪。</name>
+</text>
+
+
+<text>
+	<id>286</id>
+	<name>自制弓</name>
+</text>
+
+<text>
+	<id>287</id>
+	<name>白蜡木棍 + 绳子 = 弓</name>
+</text>
+
+<text>
+	<id>288</id>
+	<name>木棍 + 任意刀 = 箭矢</name>
+</text>
+
+
+<text>
+	<id>289</id>
+	<name>自制背包</name>
+</text>
+
+<text>
+	<id>290</id>
+	<name>绳子 + 麻袋 = 自制布袋（3 格）</name>
+</text>
+
+<text>
+	<id>291</id>
+	<name>自制布袋 + 3 根木棍 = 自制背包（5 格）</name>
+</text>
+
+
+<text>
+	<id>292</id>
+	<name>篝火</name>
+</text>
+
+<text>
+	<id>293</id>
+	<name>木堆 + 碎布/木棍/纸 = 篝火工具包</name>
+</text>
+
+<text>
+	<id>294</id>
+	<name>把篝火工具包放在地面上，用火柴点燃。</name>
+</text>
+
+<text>
+	<id>295</id>
+	<name>教程结束后将开放地图。</name>
+</text>
+
+<text>
+	<id>296</id>
+	<name>船</name>
+</text>
+
+<text>
+	<id>297</id>
+	<name>船可以用来从当前岛屿前往下一座岛屿。必须先修复它（木堆或胶带）。
+有多座岛屿可以探索，但要小心！一旦到达另一座岛屿，就无法返回前一座。</name>
+</text>
+
+<text>
+	<id>298</id>
+	<name>基地建设</name>
+</text>
+
+<text>
+	<id>299</id>
+	<name>民用帐篷可以部署，用于取暖和存放物品。存放在里面的物品是永久的。
+
+</name>
+</text>
+
+<text>
+	<id>300</id>
+	<name>木质路障（木堆 + 木棍 x5）和铁丝网能在遭到攻击时减缓敌人的速度。</name>
+</text>
+
+
+
+
+<!-- INVENTORY-->
+
+<text>
+	<id>301</id>
+	<name>已损坏</name>
+</text>
+
+<!-- Ammo ejecting from ranged weapon-->
+<text>
+	<id>302</id>
+	<name>退弹</name>
+</text>
+
+<text>
+	<id>303</id>
+	<name>撕成碎布</name>
+</text>
+
+<!--NVG and headlamp switch On/Off-->
+<text>
+	<id>304</id>
+	<name>开关</name>
+</text>
+
+<!-- for fireplace kit, barberwire, landmine and beartrap -->
+<text>
+	<id>305</id>
+	<name>部署</name>
+</text>
+
+<text>
+	<id>306</id>
+	<name>堆叠</name>
+</text>
+
+<text>
+	<id>307</id>
+	<name>装填主武器</name>
+</text>
+
+<text>
+	<id>308</id>
+	<name>制作布袋</name>
+</text>
+
+<text>
+	<id>309</id>
+	<name>制作弓</name>
+</text>
+
+<text>
+	<id>310</id>
+	<name>制作箭矢</name>
+</text>
+
+<text>
+	<id>311</id>
+	<name>制作篝火工具包</name>
+</text>
+
+<text>
+	<id>312</id>
+	<name>清洁</name>
+</text>
+
+<text>
+	<id>313</id>
+	<name>作为近战武器拿起</name>
+</text>
+
+<text>
+	<id>314</id>
+	<name>小刀入鞘</name>
+</text>
+
+<text>
+	<id>315</id>
+	<name>修补</name>
+</text>
+
+<text>
+	<id>316</id>
+	<name>安装电池</name>
+</text>
+
+<text>
+	<id>317</id>
+	<name>制作背包</name>
+</text>
+
+<text>
+	<id>318</id>
+	<name>吃</name>
+</text>
+
+<text>
+	<id>319</id>
+	<name>喝</name>
+</text>
+
+<text>
+	<id>320</id>
+	<name>种植</name>
+</text>
+
+<text>
+	<id>321</id>
+	<name>剥皮</name>
+</text>
+
+<!-- for waterbottle and canteen-->
+<text>
+	<id>322</id>
+	<name>装满水</name>
+</text>
+
+<text>
+	<id>323</id>
+	<name>烹饪</name>
+</text>
+
+<text>
+	<id>324</id>
+	<name>使用暖手宝</name>
+</text>
+
+<text>
+	<id>325</id>
+	<name>包扎</name>
+</text>
+
+<text>
+	<id>326</id>
+	<name>输血</name>
+</text>
+
+<!-- for flare-->
+<text>
+	<id>327</id>
+	<name>点燃并投掷</name>
+</text>
+
+<text>
+	<id>328</id>
+	<name>投掷手榴弹</name>
+</text>
+
+<text>
+	<id>329</id>
+	<name>点燃篝火</name>
+</text>
+
+<text>
+	<id>330</id>
+	<name>生理盐水输液</name>
+</text>
+
+<text>
+	<id>331</id>
+	<name>拆分</name>
+</text>
+
+<text>
+	<id>332</id>
+	<name>服用抗生素</name>
+</text>
+
+<text>
+	<id>333</id>
+	<name>服用维生素</name>
+</text>
+
+<text>
+	<id>334</id>
+	<name>建造路障</name>
+</text>
+
+<text>
+	<id>335</id>
+	<name>点燃</name>
+</text>
+
+<text>
+	<id>336</id>
+	<name>暴击 </name>
+</text>
+
+<text>
+	<id>337</id>
+	<name>经验 </name>
+</text>
+
+<text>
+	<id>338</id>
+	<name>扫描区域</name>
+</text>
+
+<text>
+	<id>339</id>
+	<name>装填副武器</name>
+</text>
+
+<!-- Perks Title and Description-->
+
+<text>
+	<id>400</id>
+	<name>神枪手
+等级 1：远程武器爆头几率提高 10%。
+等级 2：爆头伤害提高 30%。</name>
+</text>
+
+<text>
+	<id>401</id>
+	<name>侦察兵
+等级 1：可以从更远的距离发现其他幸存者。
+等级 2：可以侦测其他幸存者的敌意。</name>
+</text>
+
+<text>
+	<id>402</id>
+	<name>疾跑者
+等级 1：移动速度提高 5%
+等级 2：移动速度提高 10%</name>
+</text>
+
+<text>
+	<id>403</id>
+	<name>骆驼
+等级 1：口渴速度降低 10%。
+等级 2：所有罐装饮料额外 +10 水分。</name>
+</text>
+
+<text>
+	<id>404</id>
+	<name>仓鼠
+等级 1：饥饿速度降低 10%。
+等级 2：所有罐头食品额外 +10 食物。</name>
+</text>
+
+<text>
+	<id>405</id>
+	<name>雪之子
+等级 1：下雨和下雪时热量流失速度慢 50%。
+等级 2：持续获得 +2 热量。</name>
+</text>
+
+<text>
+	<id>406</id>
+	<name>子弹农夫
+等级 1：所有找到的武器至少含一发子弹。
+等级 2：所有找到的弹药堆额外多 5 发子弹。</name>
+</text>
+
+<text>
+	<id>407</id>
+	<name>生存专家
+等级 1：血量低于 50% 时回血速度翻倍。
+等级 2：血量低于 20% 时移动速度提高 10%。</name>
+</text>
+
+<text>
+	<id>408</id>
+	<name>格挡者
+等级 1：近战格挡敌人攻击的几率提高 5%。
+等级 2：近战格挡敌人攻击的几率提高 15%。</name>
+</text>
+
+<text>
+	<id>409</id>
+	<name>重拳手
+等级 1：近战暴击几率提高 10%。
+等级 2：近战暴击伤害提高 30%。</name>
+</text>
+
+<text>
+	<id>410</id>
+	<name>后备箱挖掘者
+等级 1：在汽车后备箱找到物资的几率提高 20%。
+等级 2：后备箱中找到 2 件物品的几率提高 10%。</name>
+</text>
+
+<text>
+	<id>411</id>
+	<name>猎人
+等级 1：动物发现你的几率降低。
+等级 2：剥皮时获得额外肉排的几率为 50%。</name>
+</text>
+
+<text>
+	<id>412</id>
+	<name>甜蜜之家
+等级 1：在建筑内停留时热量恢复提高 50%。
+等级 2：睡觉时饥饿和口渴速度减慢 30%。</name>
+</text>
+
+<text>
+	<id>413</id>
+	<name>红+
+等级 1：流血时失血速度降低 50%。
+等级 2：止血速度快 2 倍。</name>
+</text>
+
+<text>
+	<id>414</id>
+	<name>警觉
+等级 1：更容易发现隐藏的敌人。
+等级 2：夜晚看得更清楚一些。</name>
+</text>
+
+<text>
+	<id>415</id>
+	<name>农学家
+等级 1：采集野生浆果时获得更多浆果的几率为 50%。
+等级 2：收获自己种植的植物时获得更多蔬菜的几率为 50%。</name>
+</text>
+
+<!--Tutorial UI-->
+<text>
+	<id>451</id>
+	<name>收起</name>
+</text>
+
+<text>
+	<id>452</id>
+	<name>装备</name>
+</text>
+
+<text>
+	<id>453</id>
+	<name>卸下</name>
+</text>
+
+<text>
+	<id>454</id>
+	<name>开启</name>
+</text>
+
+<text>
+	<id>455</id>
+	<name>关闭</name>
+</text>
+
+<text>
+	<id>456</id>
+	<name>加油</name>
+</text>
+
+<text>
+	<id>457</id>
+	<name>加注燃油</name>
+</text>
+
+<text>
+	<id>458</id>
+	<name>燃油耗尽</name>
+</text>
+
+<text>
+	<id>459</id>
+	<name>转换</name>
+</text>
+
+<text>
+	<id>460</id>
+	<name>辐射区</name>
+</text>
+
+<text>
+	<id>461</id>
+	<name>建造食槽</name>
+</text>
+
+<text>
+	<id>462</id>
+	<name>存入背包</name>
+</text>
+
+<text>
+	<id>463</id>
+	<name>移除</name>
+</text>
+
+<text>
+	<id>464</id>
+	<name>存放</name>
+</text>
+
+<text>
+	<id>465</id>
+	<name>补充</name>
+</text>
+
+<text>
+	<id>466</id>
+	<name>制作钉刺棒</name>
+</text>
+
+<text>
+	<id>467</id>
+	<name>收入靴中</name>
+</text>
+
+<text>
+	<id>468</id>
+	<name>召回狗</name>
+</text>
+
+<!--Tutorial text hints that appear above objects in tutorial cuts -->
+
+<text>
+	<id>469</id>
+	<name>挂载手榴弹</name>
+</text>
+
+<text>
+	<id>470</id>
+	<name>收起主武器</name>
+</text>
+
+<text>
+	<id>471</id>
+	<name>挂载烟雾弹</name>
+</text>
+
+<text>
+	<id>472</id>
+	<name>移除小刀</name>
+</text>
+
+<text>
+	<id>473</id>
+	<name>地图：不透明</name>
+</text>
+
+<text>
+	<id>474</id>
+	<name>地图：半透明</name>
+</text>
+
+<text>
+	<id>475</id>
+	<name>更换载具涂装</name>
+</text>
+
+
+<!--1.2.0 Content-->
+
+<text>
+	<id>340</id>
+	<name>安装</name>
+</text>
+
+<text>
+	<id>341</id>
+	<name>拆卸</name>
+</text>
+
+<text>
+	<id>342</id>
+	<name>瞄准镜</name>
+</text>
+
+<text>
+	<id>343</id>
+	<name>消音器</name>
+</text>
+
+<text>
+	<id>344</id>
+	<name>弹带</name>
+</text>
+
+<text>
+	<id>345</id>
+	<name>锯短枪管</name>
+</text>
+
+<text>
+	<id>346</id>
+	<name>锯短枪管</name>
+</text>
+
+<text>
+	<id>347</id>
+	<name>热量 </name>
+</text>
+
+<text>
+	<id>348</id>
+	<name>护甲 </name>
+</text>
+
+<text>
+	<id>349</id>
+	<name>你可以用手中的油桶给这艘船加油。</name>
+</text>
+
+<text>
+	<id>350</id>
+	<name>加油</name>
+</text>
+
+<text>
+	<id>351</id>
+	<name>你需要一个油桶来给这艘船加油。</name>
+</text>
+
+<text>
+	<id>352</id>
+	<name>进入这个地堡？之后你可以返回。</name>
+</text>
+
+<text>
+	<id>353</id>
+	<name>离开这个地堡？之后你还可以回来。</name>
+</text>
+
+<text>
+	<id>354</id>
+	<name>地下时无法接收空投。</name>
+</text>
+
+<text>
+	<id>355</id>
+	<name>你失去了意识。</name>
+</text>
+
+<text>
+	<id>356</id>
+	<name>观看广告以醒来。</name>
+</text>
+
+<text>
+	<id>357</id>
+	<name>地堡开启倒计时： </name>
+</text>
+
+<text>
+	<id>358</id>
+	<name>MDZ+ WIKI</name>
+</text>
+
+<text>
+	<id>359</id>
+	<name>你即将死亡。继续游戏的唯一机会是看完视频广告后使用这支肾上腺素注射剂。</name>
+</text>
+
+<text>
+	<id>360</id>
+	<name>你需要网络连接才能继续。</name>
+</text>
+
+<text>
+	<id>361</id>
+	<name>使用注射剂</name>
+</text>
+
+<text>
+	<id>362</id>
+	<name>拒绝</name>
+</text>
+
+<!--PAD-->
+
+<text>
+	<id>242</id>
+	<name>配件</name>
+</text>
+
+<text>
+	<id>243</id>
+	<name>弹带 - 装填速度提高 30%</name>
+</text>
+
+<text>
+	<id>244</id>
+	<name>RDS 红点瞄准镜 - 略微降低散布</name>
+</text>
+
+<text>
+	<id>245</id>
+	<name>光学瞄准镜——降低散布，提高爆头几率</name>
+</text>
+
+<text>
+	<id>246</id>
+	<name>消音器——隐藏枪口焰，减弱枪声。</name>
+</text>
+
+<!--1.3.0 Content-->
+
+<text>
+	<id>363</id>
+	<name>修理载具</name>
+</text>
+
+<!--Kate "Tourist" Unlocked-->
+<text>
+	<id>92</id>
+	<name>凯特 “游客”
+初始装备：牛仔裤、雨衣、民用帐篷、头灯。
+已解锁特长：猎人、警觉。</name>
+</text>
+
+<!--Jasmine "Lumber" Unlocked-->
+<text>
+	<id>93</id>
+	<name>茉莉 “伐木工”
+初始装备：猎装裤、T恤、贝雷帽、短柄斧、胶带。
+已解锁特长：仓鼠、骆驼、雪之子。</name>
+</text>
+
+<!--Aika "Stringer" Unlocked-->
+<text>
+	<id>94</id>
+	<name>艾卡 “线人”
+初始装备：牛仔裤、T恤、棒球帽、记者背心、水壶、收音机。
+已解锁特长：疾跑者、侦察兵。</name>
+</text>
+
+<!--Kate "Tourist" Locked-->
+<text>
+	<id>140</id>
+	<name>凯特 “游客”
+解锁条件：在第 4 座或更靠后的岛屿上找到两辆不同的可驾驶车辆。
+“老兵”或更高难度。</name>
+</text>
+
+<!--Jasmine "Lumber" Locked-->
+<text>
+	<id>141</id>
+	<name>茉莉 “伐木工”
+解锁条件：在一次游戏内将你的业力降到 -100，再升到 +100。
+“老兵”或更高难度。</name>
+</text>
+
+<!--Aika "Stringer" Locked-->
+<text>
+	<id>142</id>
+	<name>艾卡 “线人”
+解锁条件：在一次游戏内完成 3 个幸存者任务。
+“老兵”或更高难度。</name>
+</text>
+
+<!--Neutral NPCs UI-->
+
+<text>
+	<id>138</id>
+	<name>已完成</name>
+</text>
+
+<text>
+	<id>139</id>
+	<name>任务</name>
+</text>
+
+<text>
+	<id>364</id>
+	<name>你好！我们的小队正在寻找 </name>
+</text>
+
+<text>
+	<id>365</id>
+	<name>作为奖励你将获得 </name>
+</text>
+
+<text>
+	<id>366</id>
+	<name>非常感谢！你的奖励已在地图上标记。</name>
+</text>
+
+<text>
+	<id>367</id>
+	<name>当前没有任务。</name>
+</text>
+
+<text>
+	<id>368</id>
+	<name>可驾驶车辆所在位置的坐标</name>
+</text>
+
+<text>
+	<id>369</id>
+	<name>地下地堡入口的坐标</name>
+</text>
+
+<text>
+	<id>370</id>
+	<name>一个有趣地点的坐标</name>
+</text>
+
+<text>
+	<id>371</id>
+	<name>一群幸存者正在寻找这件物品：</name>
+</text>
+
+<text>
+	<id>372</id>
+	<name>嘿，我们需要帮助！一群强盗在附近扎营。消灭他们，我们会奖励你。</name>
+</text>
+
+<text>
+	<id>373</id>
+	<name>你找到我们要找的东西了吗？</name>
+</text>
+
+<text>
+	<id>374</id>
+	<name>声望</name>
+</text>
+
+<text>
+	<id>375</id>
+	<name>打开</name>
+</text>
+
+<text>
+	<id>376</id>
+	<name>我们在东海岸看到一艘船的坐标。</name>
+</text>
+
+<text>
+	<id>377</id>
+	<name>嘿！我们遭到伏击，丢失了物资箱。如果你把它带回来，我们会奖励你。</name>
+</text>
+
+<text>
+	<id>378</id>
+	<name>先解决掉强盗，再回来吧。</name>
+</text>
+
+<text>
+	<id>379</id>
+	<name>你找到我们的物资箱了吗？</name>
+</text>
+
+<text>
+	<id>380</id>
+	<name>非常感谢！你的奖励已在地图上标记。</name>
+</text>
+
+<text>
+	<id>381</id>
+	<name>此任务的奖励是：</name>
+</text>
+
+<text>
+	<id>382</id>
+	<name>一群幸存者丢失了他们的物资箱。我可以找到并还给他们，也可以打开它偷走所有东西。</name>
+</text>
+
+<text>
+	<id>383</id>
+	<name>一群幸存者请我去对付强盗。</name>
+</text>
+
+<text>
+	<id>384</id>
+	<name>剩余时间：</name>
+</text>
+
+<text>
+	<id>385</id>
+	<name>存活天数</name>
+</text>
+
+<text>
+	<id>386</id>
+	<name>强盗已被消灭。我需要回到幸存者那里领取奖励。</name>
+</text>
+
+<text>
+	<id>387</id>
+	<name>当前任务失败。</name>
+</text>
+
+<text>
+	<id>388</id>
+	<name>开始钓鱼</name>
+</text>
+
+<text>
+	<id>389</id>
+	<name>制作鱼竿</name>
+</text>
+
+<text>
+	<id>390</id>
+	<name>解锁</name>
+</text>
+
+<text>
+	<id>391</id>
+	<name>武器</name>
+</text>
+
+<!--Unlockable firearms-->
+
+<text>
+	<id>392</id>
+	<name>MAC-10
+解锁条件：用任意手枪累计击杀 200 名感染者。
+“普通”或更高难度。
+当前进度：</name>
+</text>
+
+<text>
+	<id>393</id>
+	<name>赛加-12k
+解锁条件：用任意霰弹枪累计击杀 150 名感染者。
+“普通”或更高难度。
+当前进度：</name>
+</text>
+
+<text>
+	<id>394</id>
+	<name>AUG A1
+解锁条件：用任意全自动武器或冲锋枪累计击杀 200 名感染者。
+“普通”或更高难度。
+当前进度：</name>
+</text>
+
+<text>
+	<id>395</id>
+	<name>MAC-10
+已解锁。
+出现地点：枪店、北约车辆坠机点、地下地堡。</name>
+</text>
+
+<text>
+	<id>396</id>
+	<name>赛加-12k
+已解锁。
+出现地点：枪店、地下地堡、东方军事基地。</name>
+</text>
+
+<text>
+	<id>397</id>
+	<name>AUG A1
+已解锁。
+出现地点：北约车辆坠机点、地下地堡、北约军事基地。</name>
+</text>
+
+<text>
+	<id>398</id>
+	<name>新武器已解锁！</name>
+</text>
+
+<!--1.4.0 Content-->
+
+<text>
+	<id>416</id>
+	<name>AS-VAL
+解锁条件：在一次游戏中找到 6 个军用坠机点。
+难度要求：“传奇”或更高难度
+当前进度：</name>
+</text>
+
+<text>
+	<id>417</id>
+	<name>AS-VAL
+已解锁
+出现地点：地下地堡</name>
+</text>
+
+<text>
+	<id>418</id>
+	<name>SV-98
+解锁条件：用步枪累计爆头击杀 200 名感染者。
+（莫辛纳甘、SKS、SVD、连发步枪）。
+“老兵”或更高难度。
+当前进度：</name>
+</text>
+
+<text>
+	<id>419</id>
+	<name>SV-98
+已解锁。
+出现地点：地下地堡。</name>
+</text>
+
+<text>
+	<id>420</id>
+	<name>Milkor MGL
+解锁条件：用爆炸物击杀“坦克”3 次。
+难度要求：“传奇”或更高难度
+当前进度： </name>
+</text>
+
+<text>
+	<id>421</id>
+	<name>Milkor MGL
+已解锁
+出现地点：辐射区地堡</name>
+</text>
+
+<text>
+	<id>422</id>
+	<name>准备好迎接下一波时按下此按钮。</name>
+</text>
+
+<text>
+	<id>423</id>
+	<name>感染者正在逼近！</name>
+</text>
+
+<text>
+	<id>424</id>
+	<name>区域已清空，补给箱即将投放。</name>
+</text>
+
+<text>
+	<id>425</id>
+	<name>圣诞节</name>
+</text>
+
+<text>
+	<id>426</id>
+	<name>万圣节</name>
+</text>
+
+<text>
+	<id>427</id>
+	<name>扩展包</name>
+</text>
+
+<text>
+	<id>428</id>
+	<name>• 下雪期间会出现新的节日感染者。
+• 新外观物品：圣诞帽
+• 新物品：圣诞礼物</name>
+</text>
+
+<text>
+	<id>429</id>
+	<name>• 夜晚的商人会有独特外观。
+• 新外观物品：南瓜灯、女巫帽
+• 新地点：墓地</name>
+</text>
+
+<text>
+	<id>430</id>
+	<name>• 包含一整套扩展包功能</name>
+</text>
+
+<text>
+	<id>431</id>
+	<name>特性：等价交换
+可将某些物品类型转换为同类等价物</name>
+</text>
+
+<text>
+	<id>432</id>
+	<name>特性：物品继承
++6 额外容量
+内部物品可带入下一局游戏
+已保存： </name>
+</text>
+
+<text>
+	<id>433</id>
+	<name>特性：建造模式
+可无条件存放所有可放置建筑</name>
+</text>
+
+<text>
+	<id>434</id>
+	<name>特性：经验商店
+可用经验兑换补给</name>
+</text>
+
+<!--World Rules-->
+
+<text>
+	<id>435</id>
+	<name>• 武器、装备和载具不会损失耐久</name>
+</text>
+
+<text>
+	<id>436</id>
+	<name>• 物品无限堆叠</name>
+</text>
+
+<text>
+	<id>437</id>
+	<name>• +50% 最大生命值
+• +100% 最大饥饿和口渴</name>
+</text>
+
+<text>
+	<id>438</id>
+	<name>• 死亡后在西海岸重生</name>
+</text>
+
+<text>
+	<id>439</id>
+	<name>• 生物血条隐藏
+• 感染者数量大幅增加</name>
+</text>
+
+<text>
+	<id>440</id>
+	<name>• 普通感染者变为特殊感染者的几率更高
+• 从第 3 座岛屿起，感染者生命值和伤害提升 50%
+• 从第 5 座岛屿起，感染者生命值和伤害提升 100%（可叠加）</name>
+</text>
+
+<text>
+	<id>441</id>
+	<name>• 夜晚不睡觉会导致疲劳
+• 每 7 天出现一次血月
+• 血月期间所有感染者都能感知到你</name>
+</text>
+
+<text>
+	<id>442</id>
+	<name>• 持有自动武器的 NPC 会持续扫射</name>
+</text>
+
+<text>
+	<id>443</id>
+	<name>休闲模式下无法解锁成就</name>
+</text>
+
+<!--World Rules End-->
+
+<text>
+	<id>444</id>
+	<name>生存</name>
+</text>
+
+<text>
+	<id>445</id>
+	<name>休闲</name>
+</text>
+
+<text>
+	<id>446</id>
+	<name>开始</name>
+</text>
+
+<text>
+	<id>447</id>
+	<name>波次</name>
+</text>
+
+<!--1.7 Content-->
+
+<text>
+	<id>448</id>
+	<name>取出</name>
+</text>
+
+<text>
+	<id>449</id>
+	<name>卸下装备</name>
+</text>
+
+<text>
+	<id>450</id>
+	<name>拆分</name>
+</text>
+
+<text>
+	<id>451</id>
+	<name>收起</name>
+</text>
+
+<!--Liner headgear UI-->
+
+<text>
+	<id>452</id>
+	<name>装备</name>
+</text>
+
+<text>
+	<id>453</id>
+	<name>卸下</name>
+</text>
+
+<!--Chainsaw UI-->
+
+<text>
+	<id>454</id>
+	<name>开启</name>
+</text>
+
+<text>
+	<id>455</id>
+	<name>关闭</name>
+</text>
+
+<text>
+	<id>456</id>
+	<name>加油</name>
+</text>
+
+<text>
+	<id>457</id>
+	<name>加注燃油</name>
+</text>
+
+<text>
+	<id>458</id>
+	<name>燃油耗尽</name>
+</text>
+
+<text>
+	<id>459</id>
+	<name>转换</name>
+</text>
+
+<text>
+	<id>460</id>
+	<name>辐射区</name>
+</text>
+
+<text>
+	<id>461</id>
+	<name>建造食槽</name>
+</text>
+
+<!--Spare clothes store UI-->
+
+<text>
+	<id>462</id>
+	<name>存入背包</name>
+</text>
+
+<text>
+	<id>463</id>
+	<name>移除</name>
+</text>
+
+<text>
+	<id>464</id>
+	<name>存放</name>
+</text>
+
+<text>
+	<id>465</id>
+	<name>补充</name>
+</text>
+
+<text>
+	<id>466</id>
+	<name>制作钉刺棒</name>
+</text>
+
+<text>
+	<id>467</id>
+	<name>收入靴中</name>
+</text>
+
+<text>
+	<id>468</id>
+	<name>召回狗</name>
+</text>
+
+<text>
+	<id>469</id>
+	<name>挂载手榴弹</name>
+</text>
+
+<text>
+	<id>470</id>
+	<name>收起主武器</name>
+</text>
+
+<text>
+	<id>471</id>
+	<name>挂载烟雾弹</name>
+</text>
+
+<text>
+	<id>472</id>
+	<name>移除小刀</name>
+</text>
+
+<text>
+	<id>473</id>
+	<name>地图：不透明</name>
+</text>
+
+<text>
+	<id>474</id>
+	<name>地图：半透明</name>
+</text>
+
+<text>
+	<id>475</id>
+	<name>更换载具涂装</name>
+</text>
+
+<text>
+	<id>476</id>
+	<name>还原载具涂装</name>
+</text>
+
+<text>
+	<id>477</id>
+	<name>拆下弹鼓</name>
+</text>
+
+<text>
+	<id>478</id>
+	<name>染色</name>
+</text>
+
+<text>
+	<id>479</id>
+	<name>清除染色</name>
+</text>
+
+<text>
+	<id>480</id>
+	<name>切换</name>
+</text>
+
+<text>
+	<id>481</id>
+	<name>移除农田</name>
+</text>
+
+<text>
+	<id>482</id>
+	<name>染成黑色</name>
+</text>
+
+<text>
+	<id>483</id>
+	<name>更换地图样式</name>
+</text>
+
+<text>
+	<id>484</id>
+	<name>狗吠：关</name>
+</text>
+
+<text>
+	<id>485</id>
+	<name>狗吠：开</name>
+</text>
+
+<text>
+	<id>486</id>
+	<name>定时投掷</name>
+</text>
+
+<text>
+	<id>487</id>
+	<name>过滤湖水</name>
+</text>
+
+<text>
+	<id>488</id>
+	<name>移除夜视仪</name>
+</text>
+
+<text>
+	<id>489</id>
+	<name>安装手电筒</name>
+</text>
+
+<text>
+	<id>490</id>
+	<name>安装夜视仪</name>
+</text>
+
+<text>
+	<id>491</id>
+	<name>移除手电筒</name>
+</text>
+
+<text>
+	<id>492</id>
+	<name>释放</name>
+</text>
+
+<text>
+	<id>493</id>
+	<name>挖坟墓</name>
+</text>
+
+<text>
+	<id>494</id>
+	<name>开垦农田</name>
+</text>
+
+<text>
+	<id>495</id>
+	<name>加固载具</name>
+</text>
+
+<text>
+	<id>496</id>
+	<name>部署发电机</name>
+</text>
+
+<text>
+	<id>497</id>
+	<name>部署探照灯</name>
+</text>
+
+<text>
+	<id>498</id>
+	<name>查看普通岛屿</name>
+</text>
+
+<text>
+	<id>499</id>
+	<name>查看雪地岛屿</name>
+</text>
+
+<text>
+	<id>500</id>
+	<name>查看污染岛屿</name>
+</text>
+
+<text>
+	<id>501</id>
+	<name>密封</name>
+</text>
+
+<text>
+	<id>502</id>
+	<name>制作手榴弹</name>
+</text>
+
+<text>
+	<id>503</id>
+	<name>放入弹药盒</name>
+</text>
+
+<text>
+	<id>504</id>
+	<name>取出弹药</name>
+</text>
+
+<text>
+	<id>505</id>
+	<name>装袋鸡</name>
+</text>
+
+<text>
+	<id>506</id>
+	<name>装袋猪</name>
+</text>
+
+<text>
+	<id>507</id>
+	<name>梦魇</name>
+</text>
+
+<text>
+	<id>508</id>
+	<name>治疗队友</name>
+</text>
+
+<text>
+	<id>509</id>
+	<name>建造金属围栏</name>
+</text>
+
+<text>
+	<id>510</id>
+	<name>点射模式</name>
+</text>
+
+<text>
+	<id>511</id>
+	<name>全自动模式</name>
+</text>
+
+<text>
+	<id>512</id>
+	<name>...</name>
+</text>
+
+<text>
+	<id>513</id>
+	<name>重新部署</name>
+</text>
+
+<text>
+	<id>514</id>
+	<name>给电池充电</name>
+</text>
+
+<text>
+	<id>515</id>
+	<name>拆解</name>
+</text>
+
+<text>
+	<id>516</id>
+	<name>拆下配件</name>
+</text>
+
+<text>
+	<id>517</id>
+	<name>煎鸡蛋</name>
+</text>
+
+<text>
+	<id>518</id>
+	<name>烹饪黑椒牛排</name>
+</text>
+
+<text>
+	<id>519</id>
+	<name>烹饪北非蛋</name>
+</text>
+
+	<text>
+		<id>520</id>
+		<name>中文（原 English）</name>
+	</text>
+	<text>
+		<id>521</id>
+		<name>Français</name>
+	</text>
+	<text>
+		<id>522</id>
+		<name>Italiano</name>
+	</text>
+	<text>
+		<id>523</id>
+		<name>Deutsch</name>
+	</text>
+	<text>
+		<id>524</id>
+		<name>Español</name>
+	</text>
+	<text>
+		<id>525</id>
+		<name>Русский</name>
+	</text>
+
+	<text>
+		<id>526</id>
+		<name>Čeština</name>
+	</text>
+	<text>
+		<id>527</id>
+		<name>Português</name>
+	</text>
+<text>
+	<id>528</id>
+	<name>简体中文</name>
+</text>
+<text>
+	<id>529</id>
+	<name>繁體中文</name>
+</text>
+
+<text>
+	<id>530</id>
+	<name>要解锁成就，你必须完整游玩一局直到角色死亡。共有 3 个等级：青铜对应新手难度，白银对应普通难度，黄金对应老兵难度。选择更高难度可以解锁较低等级，但反之不行。更高等级也更难解锁。</name>
+</text>
+
+<text>
+	<id>531</id>
+	<name>统计</name>
+</text>
+
+<text>
+	<id>532</id>
+	<name>特长</name>
+</text>
+
+<text>
+	<id>533</id>
+	<name>得分</name>
+</text>
+
+<text>
+	<id>534</id>
+	<name>选项</name>
+</text>
+
+<text>
+	<id>535</id>
+	<name>排行榜</name>
+</text>
+
+<text>
+	<id>536</id>
+	<name>解锁所需得分：</name>
+</text>
+
+<text>
+	<id>537</id>
+	<name>退出</name>
+</text>
+
+<text>
+	<id>538</id>
+	<name>网络连接缓慢！</name>
+</text>
+
+<text>
+	<id>539</id>
+	<name>取消</name>
+</text>
+
+<text>
+	<id>540</id>
+	<name>确定要退出游戏吗？教程进度将不会保存。</name>
+</text>
+
+<text>
+	<id>541</id>
+	<name>确定要退出游戏吗？游戏进度将被保存。</name>
+</text>
+
+<text>
+	<id>542</id>
+	<name>你已死亡</name>
+</text>
+
+<text>
+	<id>543</id>
+	<name>保存物品</name>
+</text>
+
+<text>
+	<id>544</id>
+	<name>部署民用帐篷</name>
+</text>
+
+<text>
+	<id>545</id>
+	<name>部署铁丝网</name>
+</text>
+
+<text>
+	<id>546</id>
+	<name>部署地雷</name>
+</text>
+
+<text>
+	<id>547</id>
+	<name>部署阔剑地雷</name>
+</text>
+
+<text>
+	<id>548</id>
+	<name>部署物资箱</name>
+</text>
+
+<text>
+	<id>549</id>
+	<name>部署木质路障</name>
+</text>
+
+<text>
+	<id>550</id>
+	<name>部署金属围栏</name>
+</text>
+
+<text>
+	<id>551</id>
+	<name>部署发电机</name>
+</text>
+
+<text>
+	<id>552</id>
+	<name>部署探照灯</name>
+</text>
+
+<text>
+	<id>553</id>
+	<name>部署床铺</name>
+</text>
+
+<text>
+	<id>554</id>
+	<name>部署食槽</name>
+</text>
+
+<text>
+	<id>555</id>
+	<name>存放头饰</name>
+</text>
+
+<text>
+	<id>556</id>
+	<name>存放上衣</name>
+</text>
+
+<text>
+	<id>557</id>
+	<name>存放裤子</name>
+</text>
+
+<text>
+	<id>558</id>
+	<name>队友防御： </name>
+</text>
+
+<text>
+	<id>559</id>
+	<name>佩戴头饰</name>
+</text>
+
+<text>
+	<id>560</id>
+	<name>装备防弹衣</name>
+</text>
+
+<text>
+	<id>561</id>
+	<name>装备上衣</name>
+</text>
+
+<text>
+	<id>562</id>
+	<name>穿上裤子</name>
+</text>
+
+<text>
+	<id>563</id>
+	<name>安装到帐篷上</name>
+</text>
+
+<text>
+	<id>564</id>
+	<name>制作火把</name>
+</text>
+
+<!--Creatures WIKI-->
+<text>
+	<id>601</id>
+	<name>兔子
+常见的野兔，被靠近时会飞快逃走
+生命值：5</name>
+</text>
+
+<text>
+	<id>602</id>
+	<name>鹿
+常见的野鹿，对周围一切生物都保持警觉
+生命值：80</name>
+</text>
+
+<text>
+	<id>603</id>
+	<name>白化鹿
+极为罕见的白化鹿，雪白的毛皮与雪地完美融为一体
+生命值：80</name>
+</text>
+
+<text>
+	<id>604</id>
+	<name>狼
+危险的野外生物，常成群出没
+生命值：50</name>
+</text>
+
+<text>
+	<id>605</id>
+	<name>熊
+野外最危险的生物，体格强壮，攻击力骇人
+生命值：500</name>
+</text>
+
+<text>
+	<id>606</id>
+	<name>鸡
+曾是家禽，如今仍能在农场见到
+生命值：5
+喜爱的食物：蔓越莓、云莓、覆盆子、接骨木果、蚯蚓</name>
+</text>
+
+<text>
+	<id>607</id>
+	<name>猪
+曾是家畜，如今仍能在农场见到
+生命值：20
+喜爱的食物：番茄、苹果、香蕉、西葫芦、甜椒、橙子、蔓越莓、云莓、覆盆子、接骨木果</name>
+</text>
+
+<text>
+	<id>608</id>
+	<name>狗
+最可靠的伙伴，能提供许多帮助
+生命值：无</name>
+</text>
+
+<text>
+	<id>609</id>
+	<name>感染者
+没能从疫情中活下来的普通人，如今想撕碎眼前的每一个活物
+生命值：60 / 120（辐射区）</name>
+</text>
+
+<text>
+	<id>610</id>
+	<name>爬行者
+比普通感染者移动更快，也更危险
+生命值：80 / 160（辐射区）</name>
+</text>
+
+<text>
+	<id>611</id>
+	<name>潜伏者
+与其他感染者不同，它不会主动搜寻目标，而是躲起来给粗心的路人致命一击
+生命值：60 / 120（辐射区）</name>
+</text>
+
+<text>
+	<id>612</id>
+	<name>感染士兵
+被感染的士兵，体格比普通感染者更强壮
+生命值：100 / 200（辐射区）</name>
+</text>
+
+<text>
+	<id>613</id>
+	<name>防化服感染者
+臃肿的感染者，防护服里满是致命的腐蚀液体，死亡时会喷溅而出
+生命值：80 / 160（辐射区）</name>
+</text>
+
+<text>
+	<id>614</id>
+	<name>核生化感染者
+长期接触化学物质导致变异，移动更快，残留毒性更强
+生命值：120 / 240（辐射区）</name>
+</text>
+
+<text>
+	<id>615</id>
+	<name>尖叫者
+这种弱小的感染者伤不到你，但它会嘶吼着引来附近的感染者围攻你
+生命值：50 / 100（辐射区）</name>
+</text>
+
+<text>
+	<id>616</id>
+	<name>感染警察
+病毒保留了它开枪的本能，使它比普通感染者更危险
+生命值：100 / 200（辐射区）</name>
+</text>
+
+<text>
+	<id>617</id>
+	<name>感染军官
+感染前是一名军官，因此体格更强壮，也保留了开枪的本能
+生命值：120 / 240（辐射区）</name>
+</text>
+
+<text>
+	<id>618</id>
+	<name>防暴感染者
+这个昔日全副武装的人，如今也成了感染者
+生命值：250 / 500（辐射区）</name>
+</text>
+
+<text>
+	<id>619</id>
+	<name>跳跃者
+病毒极大强化了它的弹跳能力，使它能够扑向目标
+生命值：150 / 300（辐射区）</name>
+</text>
+
+<text>
+	<id>620</id>
+	<name>喷吐者
+病毒变异使它的口腔充满致命液体，它会试图向见到的活物喷射
+生命值：100 / 200（辐射区）</name>
+</text>
+
+<text>
+	<id>621</id>
+	<name>奔跑者
+它曾是一名出色的运动员，昔日的敏捷使它试图闪避你的远程攻击
+生命值：100 / 200（辐射区）</name>
+</text>
+
+<text>
+	<id>622</id>
+	<name>感染教官
+病毒保留了它的力量与敏捷，它会试图闪避你的远程攻击
+生命值：120 / 240（辐射区）</name>
+</text>
+
+<text>
+	<id>623</id>
+	<name>长舌者
+这种模样恶心的感染者舌头极长，会试图把生物拖向自己
+生命值：100 / 200（辐射区）</name>
+</text>
+
+<text>
+	<id>624</id>
+	<name>武装 Gorka 感染者
+装备精良的感染者，保留了开枪本能，会试图不断向活物开火
+生命值：175 / 350（辐射区）</name>
+</text>
+
+<text>
+	<id>625</id>
+	<name>重甲感染者
+装备精良的感染者，生前穿的重甲如今很好地保护着它
+生命值：无 / 1000（辐射区）</name>
+</text>
+
+<text>
+	<id>626</id>
+	<name>[来自万圣节内容包]
+女巫
+看似无害的感染者坐在地上不停地哭泣；最好别去打扰她……
+生命值：500 / 1000（辐射区）
+</name>
+</text>
+
+<text>
+	<id>627</id>
+	<name>发光者
+长期暴露在辐射中引发了可怕的变异，使它更致命、更迅捷
+生命值：无 / 500（辐射区）</name>
+</text>
+
+<text>
+	<id>628</id>
+	<name>感染研究员
+一名寻找解药的科学家，感染后被注射了失败的疫苗，发生了可怕的变异
+生命值：无 / 1000（辐射区）</name>
+</text>
+
+<text>
+	<id>629</id>
+	<name>坦克
+极其可怕的感染者，病毒极大强化了它的身体与力量。与它近战多半是愚蠢的决定
+生命值：2000 / 4000（辐射区）</name>
+</text>
+
+<text>
+	<id>630</id>
+	<name>[来自冬季内容包]
+雪人
+这只嚎叫者被人用彩灯华丽地缠了起来。感染者也得过节
+生命值：50 / 100（辐射区）</name>
+</text>
+
+<text>
+	<id>631</id>
+	<name>[来自万圣节内容包]
+女巫
+？？？
+生命值：500 / 无（辐射区）</name>
+</text>
+
+<text>
+	<id>632</id>
+	<name>幸存者
+中立幸存者：不会攻击你，可以与你交易
+敌对幸存者：攻击其他幸存者以抢夺物资
+友善幸存者：与你同行，打算一起活下去
+生命值：100</name>
+</text>
+
+<text>
+	<id>633</id>
+	<name>黑衣强盗
+末日中成群行动，持有精良的随身武器，会试图攻击其他幸存者。
+生命值：110</name>
+</text>
+
+<text>
+	<id>634</id>
+	<name>Gorka 黑衣强盗
+黑衣强盗中的头目，装备更好，也更危险
+生命值：250</name>
+</text>
+
+<text>
+	<id>635</id>
+	<name>GP-5 黑衣强盗
+黑衣强盗派往辐射区的勘探队，装备更好的武器以对付更强的感染者
+生命值：150</name>
+</text>
+
+<text>
+	<id>636</id>
+	<name>Altyn 强盗
+最危险的黑衣强盗，拥有出色的护甲和极强的攻击性
+生命值：500</name>
+</text>
+
+<text>
+	<id>637</id>
+	<name>军方
+顶级中立单位，能提供更好的交易与保护。
+生命值：300
+</name>
+</text>
+
+<text>
+	<id>638</id>
+	<name>重甲叛军
+最强大的敌方单位，拥有精良的武器和最坚固的护甲。
+生命值：600
+</name>
+</text>
+
+<text>
+	<id>639</id>
+	<name>伪装叛军
+最强大的敌方单位，拥有极高的隐蔽性和攻击能力。
+生命值：300
+</name>
+</text>
+
+<text>
+	<id>645</id>
+	<name>休闲模式：</name>
+</text>
+
+<text>
+	<id>646</id>
+	<name>突围</name>
+</text>
+
+<text>
+	<id>647</id>
+	<name>退出游戏？
+此模式的进度将不会保存</name>
+</text>
+
+<text>
+	<id>648</id>
+	<name>此模式没有地图</name>
+</text>
+
+<text>
+	<id>649</id>
+	<name>突围</name>
+</text>
+
+<text>
+	<id>650</id>
+	<name>教程</name>
+</text>
+
+<text>
+	<id>651</id>
+	<name>你可以用原木修复这艘船前往下一座岛屿。用斧头砍树获得原木。</name>
+</text>
+
+<text>
+	<id>652</id>
+	<name>这里似乎有些补给。靠近去捡起来。</name>
+</text>
+
+<text>
+	<id>653</id>
+	<name>你可以在物品栏里查看自己的物品。</name>
+</text>
+
+<text>
+	<id>654</id>
+	<name>这是你的快捷栏。即使没有装备栏也能使用。点击选择物品。</name>
+</text>
+
+<text>
+	<id>655</id>
+	<name>欢迎，幸存者。你被困在一座小岛上。前往其他岛屿的唯一办法，是在东海岸找到船或桥。</name>
+</text>
+
+<text>
+	<id>656</id>
+	<name>点击或拖动来移动你的角色。</name>
+</text>
+
+<text>
+	<id>657</id>
+	<name>使用虚拟摇杆移动。</name>
+</text>
+
+<text>
+	<id>658</id>
+	<name>选择你偏好的移动方式。随时可以在设置中更改。</name>
+</text>
+
+<text>
+	<id>659</id>
+	<name>随着击杀敌人和游戏时间增加，你会获得经验值。你可以用经验值解锁新技能。</name>
+</text>
+
+<text>
+	<id>660</id>
+	<name>选择一项技能投入点数来学习它。每项技能有两个等级。</name>
+</text>
+
+<text>
+	<id>661</id>
+	<name>按下互动按钮来拾取物品或进行互动。</name>
+</text>
+
+<text>
+	<id>662</id>
+	<name>现在你有了一把远程武器。装备后会自动瞄准。按下开火按钮射击。</name>
+</text>
+
+<text>
+	<id>663</id>
+	<name>当你有对应的弹药时，按下换弹按钮进行换弹。</name>
+</text>
+
+<text>
+	<id>664</id>
+	<name>在近战与远程武器之间切换。顺序：近战 → 主武器 → 副武器。</name>
+</text>
+
+<text>
+	<id>665</id>
+	<name>你在流血。
+找到绷带，或把你的T恤撕成碎布来包扎。</name>
+</text>
+
+<text>
+	<id>666</id>
+	<name>你的生命值已耗尽。在教程中，你将被治疗至满值以继续。</name>
+</text>
+
+<text>
+	<id>667</id>
+	<name>你可以拖动物品来整理物品栏。</name>
+</text>
+
+<text>
+	<id>668</id>
+	<name>那是一把枪。枪械通常能在军事基地和枪店找到。</name>
+</text>
+
+<text>
+	<id>669</id>
+	<name>前方有一名感染者。靠近时你的角色会自动攻击。</name>
+</text>
+
+<text>
+	<id>670</id>
+	<name>那是狼。常成群出现，相当危险。</name>
+</text>
+
+<text>
+	<id>671</id>
+	<name>那是水泵。你可以直接饮用，也可以给容器装水。</name>
+</text>
+
+<text>
+	<id>672</id>
+	<name>那是一辆报废的汽车。你可以搜查后备箱找补给。</name>
+</text>
+
+<text>
+	<id>673</id>
+	<name>你可以猎鹿，用刀取得鹿肉。</name>
+</text>
+
+<text>
+	<id>674</id>
+	<name>你可以猎兔，用刀取得兔肉。</name>
+</text>
+
+<text>
+	<id>675</id>
+	<name>你可以四处看看，从一些灌木丛上采摘浆果。</name>
+</text>
+
+</list>

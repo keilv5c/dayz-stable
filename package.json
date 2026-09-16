@@ -15,7 +15,10 @@
     "sync:android": "cap sync android",
     "sync:ios": "cap sync ios",
     "open:ios": "cap open ios",
-    "open:android": "cap open android"
+    "open:android": "cap open android",
+    "sp:sync": "powershell -NoProfile -ExecutionPolicy Bypass -File sp/scripts/sync-game.ps1",
+    "sp:prepare": "powershell -NoProfile -ExecutionPolicy Bypass -File sp/scripts/prepare.ps1",
+    "sp:web": "python -m http.server 8774 --directory sp/ios/App/App/public"
   },
   "dependencies": {
     "@capacitor-mlkit/barcode-scanning": "^8.2.1",

@@ -1,0 +1,2048 @@
+<?xml version="1.0" ?>
+
+<list>
+
+<!--INVENTORY ITEMS-->
+
+<item>
+	<id>0</id>
+	<name></name>
+</item>
+
+<item>
+	<id>1</id>
+	<name>豆子罐头</name>
+</item>
+
+<item>
+	<id>2</id>
+	<name>金枪鱼罐头</name>
+</item>
+
+<item>
+	<id>3</id>
+	<name>战术培根</name>
+</item>
+
+<item>
+	<id>4</id>
+	<name>大米</name>
+</item>
+
+<item>
+	<id>5</id>
+	<name>番茄</name>
+</item>
+
+<item>
+	<id>6</id>
+	<name>苹果</name>
+</item>
+
+<item>
+	<id>7</id>
+	<name>香蕉</name>
+</item>
+
+<item>
+	<id>8</id>
+	<name>Pipsi</name>
+</item>
+
+<item>
+	<id>9</id>
+	<name>Spite</name>
+</item>
+
+<item>
+	<id>10</id>
+	<name>格瓦斯</name>
+</item>
+
+<item>
+	<id>11</id>
+	<name>5.56×45 子弹</name>
+</item>
+
+<item>
+	<id>12</id>
+	<name>.45 ACP 子弹</name>
+</item>
+
+<item>
+	<id>13</id>
+	<name>7.62×54R 子弹</name>
+</item>
+
+<item>
+	<id>14</id>
+	<name>7.62×39 子弹</name>
+</item>
+
+<item>
+	<id>15</id>
+	<name>5.45×39 子弹</name>
+</item>
+
+<item>
+	<id>16</id>
+	<name>.357 子弹</name>
+</item>
+
+<item>
+	<id>17</id>
+	<name>12 Cal 子弹</name>
+</item>
+
+<item>
+	<id>18</id>
+	<name>绷带</name>
+</item>
+
+<item>
+	<id>19</id>
+	<name>血袋</name>
+</item>
+
+<item>
+	<id>20</id>
+	<name>信号棒</name>
+</item>
+
+<item>
+	<id>21</id>
+	<name>F1 手榴弹</name>
+</item>
+
+<item>
+	<id>22</id>
+	<name>9V 电池</name>
+</item>
+
+<item>
+	<id>23</id>
+	<name>篝火工具包</name>
+</item>
+
+<item>
+	<id>24</id>
+	<name>火柴</name>
+</item>
+
+<item>
+	<id>25</id>
+	<name>威士忌</name>
+</item>
+
+<item>
+	<id>26</id>
+	<name>碎布</name>
+</item>
+
+<item>
+	<id>27</id>
+	<name>蔓越莓</name>
+</item>
+
+<item>
+	<id>28</id>
+	<name>生理盐水袋</name>
+</item>
+
+<item>
+	<id>29</id>
+	<name>维生素</name>
+</item>
+
+<item>
+	<id>30</id>
+	<name>诺塔可乐</name>
+</item>
+
+<item>
+	<id>31</id>
+	<name>西葫芦</name>
+</item>
+
+<item>
+	<id>32</id>
+	<name>甜椒</name>
+</item>
+
+<item>
+	<id>33</id>
+	<name>橙子</name>
+</item>
+
+<item>
+	<id>34</id>
+	<name>暖手宝</name>
+</item>
+
+<item>
+	<id>35</id>
+	<name>针线包</name>
+</item>
+
+<item>
+	<id>36</id>
+	<name>清洁工具</name>
+</item>
+
+<item>
+	<id>37</id>
+	<name>白蜡木棍</name>
+</item>
+
+<item>
+	<id>38</id>
+	<name>木棍</name>
+</item>
+
+<item>
+	<id>39</id>
+	<name>胶带</name>
+</item>
+
+<item>
+	<id>40</id>
+	<name>麻袋</name>
+</item>
+
+<item>
+	<id>41</id>
+	<name>绳子</name>
+</item>
+
+<item>
+	<id>42</id>
+	<name>猎刀</name>
+</item>
+
+<item>
+	<id>43</id>
+	<name>军刀</name>
+</item>
+
+<item>
+	<id>44</id>
+	<name>屠宰刀</name>
+</item>
+
+<item>
+	<id>45</id>
+	<name>肾上腺素</name>
+</item>
+
+<item>
+	<id>46</id>
+	<name>四环素</name>
+</item>
+
+<item>
+	<id>47</id>
+	<name>番茄种子包</name>
+</item>
+
+<item>
+	<id>48</id>
+	<name>辣椒种子包</name>
+</item>
+
+<item>
+	<id>49</id>
+	<name>报纸</name>
+</item>
+
+<item>
+	<id>50</id>
+	<name>木堆</name>
+</item>
+
+<item>
+	<id>51</id>
+	<name>自制箭矢</name>
+</item>
+
+<item>
+	<id>52</id>
+	<name>复合箭矢</name>
+</item>
+
+<item>
+	<id>53</id>
+	<name>汽油</name>
+</item>
+
+<item>
+	<id>54</id>
+	<name>水瓶</name>
+</item>
+
+<item>
+	<id>55</id>
+	<name>水壶</name>
+</item>
+
+<item>
+	<id>56</id>
+	<name>地雷</name>
+</item>
+
+<item>
+	<id>57</id>
+	<name>捕兽夹</name>
+</item>
+
+<item>
+	<id>58</id>
+	<name>.22 LR 子弹</name>
+</item>
+
+<item>
+	<id>59</id>
+	<name>汽车工具包</name>
+</item>
+
+<item>
+	<id>60</id>
+	<name>生肉</name>
+</item>
+
+<item>
+	<id>61</id>
+	<name>烤肉</name>
+</item>
+
+<item>
+	<id>62</id>
+	<name>核子可乐</name>
+</item>
+
+<item>
+	<id>63</id>
+	<name>能量饮料</name>
+</item>
+
+<item>
+	<id>64</id>
+	<name>等价交换</name>
+</item>
+
+<item>
+	<id>65</id>
+	<name>物品继承</name>
+</item>
+
+<item>
+	<id>66</id>
+	<name>建造模式</name>
+</item>
+
+<item>
+	<id>67</id>
+	<name>经验商店</name>
+</item>
+
+<item>
+	<id>68</id>
+	<name>西葫芦种子</name>
+</item>
+
+<item>
+	<id>69</id>
+	<name>9×19 子弹</name>
+</item>
+
+<item>
+	<id>70</id>
+	<name>铁丝网</name>
+</item>
+
+<item>
+	<id>71</id>
+	<name>生兔肉</name>
+</item>
+
+<item>
+	<id>72</id>
+	<name>烤兔肉</name>
+</item>
+
+<item>
+	<id>73</id>
+	<name>云莓</name>
+</item>
+
+<item>
+	<id>74</id>
+	<name>越橘</name>
+</item>
+
+<item>
+	<id>75</id>
+	<name>收音机</name>
+</item>
+
+<item>
+	<id>76</id>
+	<name>RDS 红点瞄准镜</name>
+</item>
+
+<item>
+	<id>77</id>
+	<name>PU 瞄准镜</name>
+</item>
+
+<item>
+	<id>78</id>
+	<name>PSO-1 瞄准镜</name>
+</item>
+
+<item>
+	<id>79</id>
+	<name>ACOG 瞄准镜</name>
+</item>
+
+<item>
+	<id>80</id>
+	<name>5.45 消音器</name>
+</item>
+
+<item>
+	<id>81</id>
+	<name>5.56 消音器</name>
+</item>
+
+<item>
+	<id>82</id>
+	<name>钢锯</name>
+</item>
+
+<item>
+	<id>83</id>
+	<name>弹带</name>
+</item>
+
+<item>
+	<id>85</id>
+	<name>MRE 口粮</name>
+</item>
+
+<item>
+	<id>86</id>
+	<name>纺车轮鱼竿</name>
+</item>
+
+<item>
+	<id>87</id>
+	<name>简易鱼竿</name>
+</item>
+
+<item>
+	<id>88</id>
+	<name>防护箱</name>
+</item>
+
+<item>
+	<id>89</id>
+	<name>Magpul 助拉器</name>
+</item>
+
+<item>
+	<id>90</id>
+	<name>缩口器</name>
+</item>
+
+<item>
+	<id>91</id>
+	<name>鲱鱼</name>
+</item>
+
+<item>
+	<id>92</id>
+	<name>鲑鱼</name>
+</item>
+
+<item>
+	<id>93</id>
+	<name>梅花鲈</name>
+</item>
+
+<item>
+	<id>94</id>
+	<name>河鲈</name>
+</item>
+
+<item>
+	<id>95</id>
+	<name>小份烤鱼排</name>
+</item>
+
+<item>
+	<id>96</id>
+	<name>大份烤鱼排</name>
+</item>
+
+<item>
+	<id>97</id>
+	<name>致幻菇🍄</name>
+</item>
+
+<item>
+	<id>98</id>
+	<name>远距离瞄准镜</name>
+</item>
+
+<item>
+	<id>99</id>
+	<name>阔剑地雷</name>
+</item>
+
+<item>
+	<id>100</id>
+	<name>9×18 子弹</name>
+</item>
+
+<item>
+	<id>101</id>
+	<name>9×39 子弹</name>
+</item>
+
+<item>
+	<id>102</id>
+	<name>燃烧瓶</name>
+</item>
+
+<item>
+	<id>103</id>
+	<name>信号枪</name>
+</item>
+
+<item>
+	<id>104</id>
+	<name>50 BMG 弹药箱</name>
+</item>
+
+<item>
+	<id>105</id>
+	<name>40mm 榴弹</name>
+</item>
+
+<item>
+	<id>106</id>
+	<name>VOG-25 榴弹</name>
+</item>
+
+<item>
+	<id>107</id>
+	<name>M203 榴弹发射器</name>
+</item>
+
+<item>
+	<id>108</id>
+	<name>GP-25 榴弹发射器</name>
+</item>
+
+<item>
+	<id>109</id>
+	<name>静脉输液包</name>
+</item>
+
+<item>
+	<id>110</id>
+	<name>磨刀石</name>
+</item>
+
+<item>
+	<id>111</id>
+	<name>AK 握把</name>
+</item>
+
+<item>
+	<id>112</id>
+	<name>导轨握把</name>
+</item>
+
+<item>
+	<id>113</id>
+	<name>地图笔记</name>
+</item>
+
+<item>
+	<id>114</id>
+	<name>接骨木果</name>
+</item>
+
+<item>
+	<id>115</id>
+	<name>望远镜</name>
+</item>
+
+<item>
+	<id>116</id>
+	<name>侦察手册</name>
+</item>
+
+<item>
+	<id>117</id>
+	<name>帆布</name>
+</item>
+
+<item>
+	<id>118</id>
+	<name>创可贴</name>
+</item>
+
+<item>
+	<id>119</id>
+	<name>M18 烟雾弹</name>
+</item>
+
+<item>
+	<id>120</id>
+	<name>香烟</name>
+</item>
+
+<item>
+	<id>121</id>
+	<name>啤酒</name>
+</item>
+
+<item>
+	<id>122</id>
+	<name>环氧胶</name>
+</item>
+
+<item>
+	<id>123</id>
+	<name>化肥</name>
+</item>
+
+<item>
+	<id>124</id>
+	<name>激光瞄准器</name>
+</item>
+
+<item>
+	<id>125</id>
+	<name>打火机</name>
+</item>
+
+<item>
+	<id>126</id>
+	<name>军官钥匙卡</name>
+</item>
+
+<item>
+	<id>127</id>
+	<name>自制消音器</name>
+</item>
+
+<item>
+	<id>128</id>
+	<name>AN/PVS-4 瞄准镜</name>
+</item>
+
+<item>
+	<id>129</id>
+	<name>1PN51 瞄准镜</name>
+</item>
+
+<item>
+	<id>130</id>
+	<name>C-MAG 5.56 弹鼓</name>
+</item>
+
+<item>
+	<id>131</id>
+	<name>7.62×39 弹鼓</name>
+</item>
+
+<item>
+	<id>132</id>
+	<name>煎锅</name>
+</item>
+
+<item>
+	<id>133</id>
+	<name>防毒面具</name>
+</item>
+
+<item>
+	<id>134</id>
+	<name>巴拉克拉瓦头套</name>
+</item>
+
+<item>
+	<id>135</id>
+	<name>GP-5 防毒面具</name>
+</item>
+
+<item>
+	<id>136</id>
+	<name>小丑面具</name>
+</item>
+
+<item>
+	<id>137</id>
+	<name>战术手套</name>
+</item>
+
+<item>
+	<id>138</id>
+	<name>.308 Win 子弹</name>
+</item>
+
+<item>
+	<id>139</id>
+	<name>运动鞋</name>
+</item>
+
+<item>
+	<id>140</id>
+	<name>林地靴</name>
+</item>
+
+<item>
+	<id>141</id>
+	<name>突击靴</name>
+</item>
+
+<item>
+	<id>142</id>
+	<name>步枪背带</name>
+</item>
+
+<item>
+	<id>143</id>
+	<name>活性炭片</name>
+</item>
+
+<item>
+	<id>144</id>
+	<name>喷灯</name>
+</item>
+
+<item>
+	<id>145</id>
+	<name>吉利服</name>
+</item>
+
+<item>
+	<id>146</id>
+	<name>下挂手电</name>
+</item>
+
+<item>
+	<id>147</id>
+	<name>AK 激光握把</name>
+</item>
+
+<item>
+	<id>148</id>
+	<name>导轨激光握把</name>
+</item>
+
+<item>
+	<id>700</id>
+	<name>防化靴</name>
+</item>
+
+<item>
+	<id>701</id>
+	<name>防化手套</name>
+</item>
+
+<item>
+	<id>702</id>
+	<name>化学防护服</name>
+</item>
+
+<item>
+	<id>703</id>
+	<name>全封闭防化服</name>
+</item>
+
+<item>
+	<id>704</id>
+	<name>12 Cal 弹鼓</name>
+</item>
+
+<item>
+	<id>705</id>
+	<name>染料桶🌈</name>
+</item>
+
+<item>
+	<id>706</id>
+	<name>头灯</name>
+</item>
+
+<item>
+	<id>707</id>
+	<name>夜视仪</name>
+</item>
+
+<item>
+	<id>708</id>
+	<name>AI-2 急救包</name>
+</item>
+
+<item>
+	<id>709</id>
+	<name>狗舍</name>
+</item>
+
+<item>
+	<id>710</id>
+	<name>兴奋剂</name>
+</item>
+
+<item>
+	<id>711</id>
+	<name>核生化防护服</name>
+</item>
+
+<item>
+	<id>712</id>
+	<name>航海图</name>
+</item>
+
+<item>
+	<id>713</id>
+	<name>防化服</name>
+</item>
+
+<item>
+	<id>714</id>
+	<name>鹿皮</name>
+</item>
+
+<item>
+	<id>715</id>
+	<name>C-MAG 5.45 弹鼓</name>
+</item>
+
+<item>
+	<id>716</id>
+	<name>尖刺项圈</name>
+</item>
+
+<item>
+	<id>717</id>
+	<name>马鞍包</name>
+</item>
+
+<item>
+	<id>718</id>
+	<name>鸡蛋</name>
+</item>
+
+<item>
+	<id>719</id>
+	<name>生鸡肉</name>
+</item>
+
+<item>
+	<id>720</id>
+	<name>熟鸡肉</name>
+</item>
+
+<item>
+	<id>721</id>
+	<name>微型瞄具</name>
+</item>
+
+<item>
+	<id>722</id>
+	<name>小口径消音器</name>
+</item>
+
+<item>
+	<id>723</id>
+	<name>手枪手电</name>
+</item>
+
+<item>
+	<id>724</id>
+	<name>煎蛋</name>
+</item>
+
+<item>
+	<id>725</id>
+	<name>黑椒牛排</name>
+</item>
+
+<item>
+	<id>726</id>
+	<name>北非蛋</name>
+</item>
+
+<item>
+	<id>727</id>
+	<name>探照灯</name>
+</item>
+
+<item>
+	<id>728</id>
+	<name>蚯蚓</name>
+</item>
+
+<item>
+	<id>729</id>
+	<name>VOG-25 改造手雷</name>
+</item>
+
+<item>
+	<id>730</id>
+	<name>FNX 45 手枪</name>
+</item>
+
+<item>
+	<id>731</id>
+	<name>柯尔特 1911</name>
+</item>
+
+<item>
+	<id>732</id>
+	<name>马格南</name>
+</item>
+
+<item>
+	<id>733</id>
+	<name>Amphibia S 手枪</name>
+</item>
+
+<item>
+	<id>734</id>
+	<name>格洛克</name>
+</item>
+
+<item>
+	<id>735</id>
+	<name>截短 IZh-43</name>
+</item>
+
+<item>
+	<id>736</id>
+	<name>截短莫辛</name>
+</item>
+
+<item>
+	<id>737</id>
+	<name>雕花柯尔特</name>
+</item>
+
+<item>
+	<id>738</id>
+	<name>马腿枪</name>
+</item>
+
+<item>
+	<id>739</id>
+	<name>PM 手枪</name>
+</item>
+
+<item>
+	<id>740</id>
+	<name>PB 手枪</name>
+</item>
+
+<item>
+	<id>741</id>
+	<name>沙漠之鹰</name>
+</item>
+
+<item>
+	<id>742</id>
+	<name>M79 榴弹发射器</name>
+</item>
+
+<item>
+	<id>743</id>
+	<name>截短 Blaze</name>
+</item>
+
+<item>
+	<id>744</id>
+	<name>长角牛手枪</name>
+</item>
+
+<item>
+	<id>745</id>
+	<name>MAC-10 冲锋枪</name>
+</item>
+
+<item>
+	<id>746</id>
+	<name>Mini-UZI 冲锋枪</name>
+</item>
+
+<item>
+	<id>747</id>
+	<name>C-4 炸药</name>
+</item>
+
+<item>
+	<id>748</id>
+	<name>圣诞帽</name>
+</item>
+
+<item>
+	<id>749</id>
+	<name>圣诞礼物</name>
+</item>
+
+<item>
+	<id>750</id>
+	<name>人肉</name>
+</item>
+
+<item>
+	<id>751</id>
+	<name>烤人肉</name>
+</item>
+
+<item>
+	<id>752</id>
+	<name>挎包</name>
+</item>
+
+<item>
+	<id>753</id>
+	<name>军用挎包</name>
+</item>
+
+<item>
+	<id>754</id>
+	<name>医疗挎包</name>
+</item>
+
+<item>
+	<id>755</id>
+	<name>武器箱</name>
+</item>
+
+<item>
+	<id>756</id>
+	<name>手枪枪套</name>
+</item>
+
+<item>
+	<id>757</id>
+	<name>工作手套</name>
+</item>
+
+<item>
+	<id>758</id>
+	<name>12.7×108 子弹</name>
+</item>
+
+<item>
+	<id>759</id>
+	<name>滤水器（良好）</name>
+</item>
+
+<item>
+	<id>760</id>
+	<name>滤水器（空）</name>
+</item>
+
+<item>
+	<id>761</id>
+	<name>弹药箱</name>
+</item>
+
+<item>
+	<id>762</id>
+	<name>弹药箱</name>
+</item>
+
+<item>
+	<id>763</id>
+	<name>弹药箱</name>
+</item>
+
+<item>
+	<id>764</id>
+	<name>弹药箱</name>
+</item>
+
+<item>
+	<id>765</id>
+	<name>弹药箱</name>
+</item>
+
+<item>
+	<id>766</id>
+	<name>弹药箱</name>
+</item>
+
+<item>
+	<id>767</id>
+	<name>弹药箱</name>
+</item>
+
+<item>
+	<id>768</id>
+	<name>弹药箱</name>
+</item>
+
+<item>
+	<id>769</id>
+	<name>弹药箱</name>
+</item>
+
+<item>
+	<id>770</id>
+	<name>弹药箱</name>
+</item>
+
+<item>
+	<id>771</id>
+	<name>弹药箱</name>
+</item>
+
+<item>
+	<id>772</id>
+	<name>弹药箱</name>
+</item>
+
+<item>
+	<id>773</id>
+	<name>弹药箱</name>
+</item>
+
+<item>
+	<id>774</id>
+	<name>弹药箱</name>
+</item>
+
+<item>
+	<id>775</id>
+	<name>弹药箱</name>
+</item>
+
+<item>
+	<id>776</id>
+	<name>弹药箱</name>
+</item>
+
+<item>
+	<id>777</id>
+	<name>梨</name>
+</item>
+
+<item>
+	<id>778</id>
+	<name>麻袋（鸡）</name>
+</item>
+
+<item>
+	<id>779</id>
+	<name>麻袋（猪）</name>
+</item>
+
+<item>
+	<id>780</id>
+	<name>生狼肉</name>
+</item>
+
+<item>
+	<id>781</id>
+	<name>烤狼肉</name>
+</item>
+
+<item>
+	<id>782</id>
+	<name>生熊肉</name>
+</item>
+
+<item>
+	<id>783</id>
+	<name>烤熊肉</name>
+</item>
+
+<item>
+	<id>784</id>
+	<name>熊皮</name>
+</item>
+
+<item>
+	<id>785</id>
+	<name>Romero 77 短柄斧</name>
+</item>
+
+<item>
+	<id>786</id>
+	<name>南瓜灯</name>
+</item>
+
+<item>
+	<id>787</id>
+	<name>女巫帽</name>
+</item>
+
+<item>
+	<id>788</id>
+	<name>圣诞彩灯</name>
+</item>
+
+<item>
+	<id>999</id>
+	<name>
+</name>
+</item>
+
+<!--Weapons-->
+
+<item>
+	<id>151</id>
+	<name>FNX 45 手枪</name>
+</item>
+
+<item>
+	<id>152</id>
+	<name>柯尔特 1911</name>
+</item>
+
+<item>
+	<id>153</id>
+	<name>马格南</name>
+</item>
+
+<item>
+	<id>154</id>
+	<name>IZh-43 霰弹枪</name>
+</item>
+
+<item>
+	<id>155</id>
+	<name>雷明顿 870</name>
+</item>
+
+<item>
+	<id>156</id>
+	<name>莫辛纳甘</name>
+</item>
+
+<item>
+	<id>157</id>
+	<name>SKS 半自动步枪</name>
+</item>
+
+<item>
+	<id>158</id>
+	<name>M4A1 突击步枪</name>
+</item>
+
+<item>
+	<id>159</id>
+	<name>AKM 突击步枪</name>
+</item>
+
+<item>
+	<id>160</id>
+	<name>AK-74 突击步枪</name>
+</item>
+
+<item>
+	<id>161</id>
+	<name>AKs-74u 短突击步枪</name>
+</item>
+
+<item>
+	<id>162</id>
+	<name>L85A2 突击步枪</name>
+</item>
+
+<item>
+	<id>163</id>
+	<name>自制弓</name>
+</item>
+
+<item>
+	<id>164</id>
+	<name>十字弩</name>
+</item>
+
+<item>
+	<id>165</id>
+	<name>Amphibia S 手枪</name>
+</item>
+
+<item>
+	<id>166</id>
+	<name>.22 运动步枪</name>
+</item>
+
+<item>
+	<id>167</id>
+	<name>M92 连发步枪</name>
+</item>
+
+<item>
+	<id>168</id>
+	<name>SVD 狙击步枪</name>
+</item>
+
+<item>
+	<id>169</id>
+	<name>MP5K 冲锋枪</name>
+</item>
+
+<item>
+	<id>170</id>
+	<name>格洛克 17</name>
+</item>
+
+<item>
+	<id>171</id>
+	<name>截短 IZh-43</name>
+</item>
+
+<item>
+	<id>172</id>
+	<name>截短莫辛</name>
+</item>
+
+<item>
+	<id>173</id>
+	<name>UMP-45 冲锋枪</name>
+</item>
+
+<item>
+	<id>174</id>
+	<name>RPK 轻机枪</name>
+</item>
+
+<item>
+	<id>175</id>
+	<name>FN-FAL 战斗步枪</name>
+</item>
+
+<item>
+	<id>176</id>
+	<name>雕花柯尔特</name>
+</item>
+
+<item>
+	<id>177</id>
+	<name>AUG A1 突击步枪</name>
+</item>
+
+<item>
+	<id>178</id>
+	<name>赛加 12k</name>
+</item>
+
+<item>
+	<id>179</id>
+	<name>MAC-10 冲锋枪</name>
+</item>
+
+<item>
+	<id>180</id>
+	<name>马腿枪</name>
+</item>
+
+<item>
+	<id>181</id>
+	<name>PM 手枪</name>
+</item>
+
+<item>
+	<id>182</id>
+	<name>PB 手枪</name>
+</item>
+
+<item>
+	<id>183</id>
+	<name>PP-19 Bizon 冲锋枪</name>
+</item>
+
+<item>
+	<id>184</id>
+	<name>OTs-14 Groza 突击步枪</name>
+</item>
+
+<item>
+	<id>185</id>
+	<name>VSS Vintorez 狙击步枪</name>
+</item>
+
+<item>
+	<id>186</id>
+	<name>SV-98 狙击步枪</name>
+</item>
+
+<item>
+	<id>187</id>
+	<name>麦德森机枪</name>
+</item>
+
+<item>
+	<id>188</id>
+	<name>AN-94 突击步枪</name>
+</item>
+
+<item>
+	<id>189</id>
+	<name>沙漠之鹰</name>
+</item>
+
+<item>
+	<id>190</id>
+	<name>消音雷明顿</name>
+</item>
+
+<item>
+	<id>191</id>
+	<name>M16A2 突击步枪</name>
+</item>
+
+<item>
+	<id>192</id>
+	<name>KRISS Vector 冲锋枪</name>
+</item>
+
+<item>
+	<id>193</id>
+	<name>M4A1 突击步枪</name>
+</item>
+
+<item>
+	<id>194</id>
+	<name>AKM 突击步枪</name>
+</item>
+
+<item>
+	<id>195</id>
+	<name>M70 Tundra 猎枪</name>
+</item>
+
+<item>
+	<id>196</id>
+	<name>赛加 12k</name>
+</item>
+
+<item>
+	<id>197</id>
+	<name>RPK 轻机枪</name>
+</item>
+
+<item>
+	<id>198</id>
+	<name>M16A2 突击步枪</name>
+</item>
+
+<item>
+	<id>199</id>
+	<name>AUG A1 突击步枪</name>
+</item>
+
+<item>
+	<id>230</id>
+	<name>Milkor MGL 榴弹发射器</name>
+</item>
+
+<item>
+	<id>231</id>
+	<name>Blaze 双管猎枪</name>
+</item>
+
+<item>
+	<id>232</id>
+	<name>FAMAS F1 突击步枪</name>
+</item>
+
+<item>
+	<id>233</id>
+	<name>Mini-14</name>
+</item>
+
+<item>
+	<id>234</id>
+	<name>M79</name>
+</item>
+
+<item>
+	<id>235</id>
+	<name>截短版 Blaze</name>
+</item>
+
+<item>
+	<id>236</id>
+	<name>Longhorn</name>
+</item>
+
+<item>
+	<id>237</id>
+	<name>AK-74</name>
+</item>
+
+<item>
+	<id>238</id>
+	<name>AKs-74u</name>
+</item>
+
+<item>
+	<id>239</id>
+	<name>Mini-UZI</name>
+</item>
+
+<item>
+	<id>240</id>
+	<name>AS-VAL 突击步枪</name>
+</item>
+
+<item>
+	<id>241</id>
+	<name>M249 班用机枪</name>
+</item>
+
+<item>
+	<id>242</id>
+	<name>OSV-96 狙击步枪</name>
+</item>
+
+<item>
+	<id>243</id>
+	<name>M-40 火焰喷射器</name>
+</item>
+
+<item>
+	<id>244</id>
+	<name>Romero 77 斧头</name>
+</item>
+
+<item>
+	<id>245</id>
+	<name>M134 转管机枪</name>
+</item>
+
+<item>
+	<id>246</id>
+	<name>PKM</name>
+</item>
+
+<!--Meele-->
+
+<item>
+	<id>200</id>
+	<name>管钳</name>
+</item>
+
+<item>
+	<id>201</id>
+	<name>铁锹</name>
+</item>
+
+<item>
+	<id>202</id>
+	<name>短柄斧</name>
+</item>
+
+<item>
+	<id>203</id>
+	<name>棒球棍</name>
+</item>
+
+<item>
+	<id>204</id>
+	<name>消防斧</name>
+</item>
+
+<item>
+	<id>205</id>
+	<name>撬棍</name>
+</item>
+
+<item>
+	<id>206</id>
+	<name>镐</name>
+</item>
+
+<item>
+	<id>207</id>
+	<name>干草叉</name>
+</item>
+
+<item>
+	<id>208</id>
+	<name>大锤</name>
+</item>
+
+<item>
+	<id>209</id>
+	<name>剑</name>
+</item>
+
+<item>
+	<id>210</id>
+	<name>平底锅</name>
+</item>
+
+<item>
+	<id>211</id>
+	<name>武士刀</name>
+</item>
+
+<item>
+	<id>212</id>
+	<name>带刺球棒</name>
+</item>
+
+<item>
+	<id>213</id>
+	<name>链锯</name>
+</item>
+
+<item>
+	<id>214</id>
+	<name>发电机</name>
+</item>
+
+<item>
+	<id>215</id>
+	<name>金属板</name>
+</item>
+
+<item>
+	<id>216</id>
+	<name>火把</name>
+</item>
+
+<!--Headwear-->
+
+<item>
+	<id>250</id>
+	<name>防毒面具</name>
+</item>
+
+<item>
+	<id>251</id>
+	<name>军盔</name>
+</item>
+
+<item>
+	<id>252</id>
+	<name>摩托车头盔</name>
+</item>
+
+<item>
+	<id>253</id>
+	<name>摩托车头盔</name>
+</item>
+
+<item>
+	<id>254</id>
+	<name>保暖帽</name>
+</item>
+
+<item>
+	<id>255</id>
+	<name>贝雷帽</name>
+</item>
+
+<item>
+	<id>256</id>
+	<name>棒球帽</name>
+</item>
+
+<item>
+	<id>257</id>
+	<name>巴拉克拉瓦头套</name>
+</item>
+
+<item>
+	<id>258</id>
+	<name>护耳帽</name>
+</item>
+
+<item>
+	<id>259</id>
+	<name>安全帽</name>
+</item>
+
+<item>
+	<id>260</id>
+	<name>头灯</name>
+</item>
+
+<item>
+	<id>261</id>
+	<name>牛仔帽</name>
+</item>
+
+<item>
+	<id>262</id>
+	<name>焊接面罩</name>
+</item>
+
+<item>
+	<id>263</id>
+	<name>Gorka 头盔</name>
+</item>
+
+<item>
+	<id>264</id>
+	<name>警帽</name>
+</item>
+
+<item>
+	<id>265</id>
+	<name>夜视仪</name>
+</item>
+
+<item>
+	<id>266</id>
+	<name>头巾</name>
+</item>
+
+<item>
+	<id>267</id>
+	<name>头盔</name>
+</item>
+
+<item>
+	<id>268</id>
+	<name>飞行员头盔</name>
+</item>
+
+<item>
+	<id>269</id>
+	<name>Altyn 头盔</name>
+</item>
+
+<item>
+	<id>270</id>
+	<name>Rys-T 头盔</name>
+</item>
+
+<item>
+	<id>271</id>
+	<name>GP-5 防毒面具</name>
+</item>
+
+<item>
+	<id>272</id>
+	<name>小丑面具</name>
+</item>
+
+<item>
+	<id>273</id>
+	<name>突击头盔</name>
+</item>
+
+<item>
+	<id>274</id>
+	<name>突击头盔</name>
+</item>
+
+<item>
+	<id>275</id>
+	<name>突击头盔</name>
+</item>
+
+<item>
+	<id>276</id>
+	<name>突击头盔</name>
+</item>
+
+<item>
+	<id>277</id>
+	<name>夜视 Altyn 头盔</name>
+</item>
+
+<!--Pants-->
+
+<item>
+	<id>300</id>
+	<name>牛仔裤</name>
+</item>
+
+<item>
+	<id>301</id>
+	<name>工装裤</name>
+</item>
+
+<item>
+	<id>302</id>
+	<name>运动裤</name>
+</item>
+
+<item>
+	<id>303</id>
+	<name>Gorka 裤</name>
+</item>
+
+<item>
+	<id>304</id>
+	<name>奥廖尔裤</name>
+</item>
+
+<item>
+	<id>305</id>
+	<name>医护裤</name>
+</item>
+
+<item>
+	<id>306</id>
+	<name>猎装裤</name>
+</item>
+
+<item>
+	<id>307</id>
+	<name>消防裤</name>
+</item>
+
+
+<!--Top-Wear-->
+
+<item>
+	<id>350</id>
+	<name>T恤</name>
+</item>
+
+<item>
+	<id>351</id>
+	<name>衬衫</name>
+</item>
+
+<item>
+	<id>352</id>
+	<name>衬衫</name>
+</item>
+
+<item>
+	<id>353</id>
+	<name>雨衣</name>
+</item>
+
+<item>
+	<id>354</id>
+	<name>夹克</name>
+</item>
+
+<item>
+	<id>355</id>
+	<name>Gorka 夹克</name>
+</item>
+
+<item>
+	<id>356</id>
+	<name>连帽衫</name>
+</item>
+
+<item>
+	<id>357</id>
+	<name>连帽衫</name>
+</item>
+
+<item>
+	<id>358</id>
+	<name>风衣</name>
+</item>
+
+<item>
+	<id>359</id>
+	<name>医护夹克</name>
+</item>
+
+<item>
+	<id>360</id>
+	<name>奥廖尔夹克</name>
+</item>
+
+<item>
+	<id>361</id>
+	<name>运动夹克</name>
+</item>
+
+<item>
+	<id>362</id>
+	<name>连衣裙</name>
+</item>
+
+<item>
+	<id>363</id>
+	<name>羽绒服</name>
+</item>
+
+<item>
+	<id>364</id>
+	<name>猎装夹克</name>
+</item>
+
+<item>
+	<id>365</id>
+	<name>毛衣</name>
+</item>
+
+<item>
+	<id>366</id>
+	<name>炫酷连帽衫</name>
+</item>
+
+<item>
+	<id>367</id>
+	<name>消防夹克</name>
+</item>
+
+<item>
+	<id>368</id>
+	<name>十字军护甲</name>
+</item>
+
+<!--Vests-->
+
+<item>
+	<id>400</id>
+	<name>防弹背心</name>
+</item>
+
+<item>
+	<id>401</id>
+	<name>记者背心</name>
+</item>
+
+<item>
+	<id>402</id>
+	<name>突击背心</name>
+</item>
+
+<item>
+	<id>403</id>
+	<name>扩容背心</name>
+</item>
+
+<item>
+	<id>404</id>
+	<name>凯夫拉背心</name>
+</item>
+
+<item>
+	<id>405</id>
+	<name>苏式背心</name>
+</item>
+
+<item>
+	<id>406</id>
+	<name>围裙</name>
+</item>
+
+<item>
+	<id>407</id>
+	<name>吉利服</name>
+</item>
+
+<item>
+	<id>408</id>
+	<name>军用重型防弹衣</name>
+</item>
+
+<item>
+	<id>409</id>
+	<name>化学防护服</name>
+</item>
+
+<item>
+	<id>410</id>
+	<name>军用凯夫拉防生化服</name>
+</item>
+
+<item>
+	<id>411</id>
+	<name>军用重型防生化服</name>
+</item>
+
+<item>
+	<id>412</id>
+	<name>军用吉利防生化服</name>
+</item>
+
+<item>
+	<id>413</id>
+	<name>防化服</name>
+</item>
+
+<item>
+	<id>414</id>
+	<name>三防服</name>
+</item>
+
+<item>
+	<id>415</id>
+	<name>防生化服</name>
+</item>
+
+<!--Backpacks-->
+
+<item>
+	<id>450</id>
+	<name>Taloon 背包</name>
+</item>
+
+<item>
+	<id>451</id>
+	<name>狩猎背包</name>
+</item>
+
+<item>
+	<id>452</id>
+	<name>登山背包</name>
+</item>
+
+<item>
+	<id>453</id>
+	<name>书包</name>
+</item>
+
+<item>
+	<id>454</id>
+	<name>自制布袋</name>
+</item>
+
+<item>
+	<id>455</id>
+	<name>自制背包</name>
+</item>
+
+<item>
+	<id>456</id>
+	<name>民用帐篷</name>
+</item>
+
+<item>
+	<id>457</id>
+	<name>Tortilla 背包</name>
+</item>
+
+<item>
+	<id>458</id>
+	<name>挎包</name>
+</item>
+
+<item>
+	<id>459</id>
+	<name>军用挎包</name>
+</item>
+
+<item>
+	<id>460</id>
+	<name>医疗挎包</name>
+</item>
+
+<item>
+	<id>461</id>
+	<name>物资箱</name>
+</item>
+
+<item>
+	<id>462</id>
+	<name>燃油包</name>
+</item>
+
+</list>

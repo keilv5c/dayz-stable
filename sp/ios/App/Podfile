@@ -1,0 +1,47 @@
+platform :ios, '15.5'
+
+require_relative 'node_modules/@capacitor/ios/scripts/pods_helpers'
+
+# ============================================================================
+#  Mini DAYZ 单机版 —— iOS Podfile（刻意保持极简）
+# ----------------------------------------------------------------------------
+#  为什么只有一个 pod：
+#    这是**单机版**，没有联机、没有扫码。联机版那套需要条码扫描插件
+#    （Google 的 ML 套件）—— 那条链要求 Xcode >= 16、要下几百 MB 的 pod，
+#    而且平台下限被抬到 iOS 15.5。
+#    单机版把插件全部去掉，只留 Capacitor 本体：
+#      · pod install 从"几分钟"变成"几秒"
+#      · 不再受那个 ML 套件的 Xcode 版本要求牵制
+#      · 安装包更小
+#
+#  路径说明：
+#    node_modules/@capacitor/ios 由 sp/scripts/prepare.ps1 从仓库根
+#    node_modules 复制过来（不提交进 git，随用随生成）。
+#    所以引用是 './node_modules/...'，不是联机版那种 '../../node_modules/...'。
+#
+#  ⚠️ platform 必须留在第一行：Capacitor CLI 会用正则重写本文件的
+#     pods 定义块，一旦注释里先出现那串触发字符，匹配起点会前移，
+#     把 platform / use_frameworks! / install! 一起吃掉。
+#     （联机版 Podfile 里有这条血泪教训的完整记录；单机版虽然不跑
+#       cap update，但保持同样写法以防以后有人接 CLI。）
+#  ❌ 不要在本文件（含注释）里写出那串完整触发字符。
+# ============================================================================
+
+use_frameworks!
+
+# 避免 Xcode 缓存 Pods（换插件后需要 Clean Build Folder）
+install! 'cocoapods', :disable_input_output_paths => true
+
+def capacitor_pods
+  pod 'Capacitor', :path => 'node_modules/@capacitor/ios'
+  pod 'CapacitorCordova', :path => 'node_modules/@capacitor/ios'
+end
+
+target 'App' do
+  capacitor_pods
+  # 单机版无需任何额外插件
+end
+
+post_install do |installer|
+  assertDeploymentTarget(installer)
+end

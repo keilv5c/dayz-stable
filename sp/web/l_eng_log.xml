@@ -1,0 +1,1136 @@
+<?xml version="1.0" ?>
+
+<list>
+
+<!--Player feedback-->
+
+<text>
+	<id>0</id>
+	<name></name>
+</text>
+
+<text>
+	<id>1</id>
+	<name>我不再流血了。</name>
+</text>
+
+<text>
+	<id>2</id>
+	<name>我感觉很健康。</name>
+</text>
+
+<text>
+	<id>3</id>
+	<name>我能感觉到血在滴。</name>
+</text>
+
+<text>
+	<id>4</id>
+	<name>我要冻僵了。</name>
+</text>
+
+<text>
+	<id>5</id>
+	<name>我要饿死了。</name>
+</text>
+
+<text>
+	<id>6</id>
+	<name>我要脱水而死了。</name>
+</text>
+
+<text>
+	<id>7</id>
+	<name>我在这个后备箱里找到了些东西。</name>
+</text>
+
+<text>
+	<id>8</id>
+	<name>后备箱是空的。</name>
+</text>
+
+<!--Player phrase: when no ammo for reloading-->
+<text>
+	<id>9</id>
+	<name>我没弹药了！</name>
+</text>
+
+<!--Player phrase: when ranged weapon is empited-->
+<text>
+	<id>10</id>
+	<name>弹匣空了。</name>
+</text>
+
+<text>
+	<id>11</id>
+	<name>武器损坏了！</name>
+</text>
+
+<text>
+	<id>12</id>
+	<name>水泵没水了。</name>
+</text>
+
+<text>
+	<id>13</id>
+	<name>我不渴了。</name>
+</text>
+
+<text>
+	<id>14</id>
+	<name>我吃了一块生肉排。</name>
+</text>
+
+<text>
+	<id>15</id>
+	<name>我需要一个水泵才行。</name>
+</text>
+
+<text>
+	<id>16</id>
+	<name>我已经用水泵灌满了。</name>
+</text>
+
+<text>
+	<id>17</id>
+	<name>我吃了 </name>
+</text>
+
+<text>
+	<id>18</id>
+	<name>我喝了 </name>
+</text>
+
+<text>
+	<id>19</id>
+	<name>我使用了 </name>
+</text>
+
+<text>
+	<id>32</id>
+	<name>武器已完全装填。</name>
+</text>
+
+<text>
+	<id>33</id>
+	<name>弹药已装填。</name>
+</text>
+
+<!--Player log: when trying to load wrong ammo-->
+
+<text>
+	<id>34</id>
+	<name>放不进去。</name>
+</text>
+
+<text>
+	<id>35</id>
+	<name>我给自己包扎好了。</name>
+</text>
+
+<text>
+	<id>36</id>
+	<name>我没有在流血。</name>
+</text>
+
+<text>
+	<id>37</id>
+	<name>输血完成。</name>
+</text>
+
+<!--Player log: when trying to load battery in NVG/headlamp❓-->
+
+<text>
+	<id>38</id>
+	<name>已经充能了。</name>
+</text>
+
+<text>
+	<id>39</id>
+	<name>我需要头灯或夜视仪。</name>
+</text>
+
+<text>
+	<id>40</id>
+	<name>我需要在地上放置一个篝火工具包。</name>
+</text>
+
+<text>
+	<id>41</id>
+	<name>我喝了威士忌。</name>
+</text>
+
+<text>
+	<id>42</id>
+	<name>生理盐水输液完成。</name>
+</text>
+
+<text>
+	<id>43</id>
+	<name>我服用了维生素。</name>
+</text>
+
+<text>
+	<id>44</id>
+	<name>武器损坏了！</name>
+</text>
+
+<text>
+	<id>45</id>
+	<name>武器已清洁。</name>
+</text>
+
+<text>
+	<id>46</id>
+	<name>我服用了四环素。</name>
+</text>
+
+<text>
+	<id>47</id>
+	<name>载具已加满燃油。</name>
+</text>
+
+<text>
+	<id>48</id>
+	<name>我需要一辆可驾驶的车辆。</name>
+</text>
+
+<text>
+	<id>49</id>
+	<name>瓶子空了。</name>
+</text>
+
+<text>
+	<id>50</id>
+	<name>我喝了水瓶里的水。</name>
+</text>
+
+<text>
+	<id>51</id>
+	<name>水壶空了。</name>
+</text>
+
+<text>
+	<id>52</id>
+	<name>我喝了水壶里的水。</name>
+</text>
+
+<text>
+	<id>53</id>
+	<name>地雷已布设。</name>
+</text>
+
+<text>
+	<id>54</id>
+	<name>捕兽夹已布设。</name>
+</text>
+
+<text>
+	<id>55</id>
+	<name>车辆已修复。</name>
+</text>
+
+<text>
+	<id>56</id>
+	<name>我烤了些肉。</name>
+</text>
+
+<text>
+	<id>57</id>
+	<name>我需要一个点燃的篝火。</name>
+</text>
+
+<text>
+	<id>58</id>
+	<name>我吃了些烤肉。</name>
+</text>
+
+<text>
+	<id>59</id>
+	<name>我喝了诺塔可乐……感觉真棒！</name>
+</text>
+
+<text>
+	<id>60</id>
+	<name>猎物已被剥皮。</name>
+</text>
+
+<text>
+	<id>61</id>
+	<name>没有可以剥皮的东西。</name>
+</text>
+
+<text>
+	<id>62</id>
+	<name>没有空位了。</name>
+</text>
+
+<text>
+	<id>63</id>
+	<name>刀损坏了。</name>
+</text>
+
+<text>
+	<id>64</id>
+	<name>我需要更多木棍。</name>
+</text>
+
+<text>
+	<id>65</id>
+	<name>头灯没电了。</name>
+</text>
+
+<text>
+	<id>66</id>
+	<name>夜视仪没电了。</name>
+</text>
+
+<text>
+	<id>67</id>
+	<name>我喝了格瓦斯。</name>
+</text>
+
+<text>
+	<id>68</id>
+	<name>这需要镐、干草叉或铁锹。</name>
+</text>
+
+<text>
+	<id>69</id>
+	<name>这里不能挖。</name>
+</text>
+
+<text>
+	<id>70</id>
+	<name>已种植。</name>
+</text>
+
+<text>
+	<id>71</id>
+	<name>已布设。</name>
+</text>
+
+<text>
+	<id>72</id>
+	<name>我需要一把刀来剥皮猎物。</name>
+</text>
+
+<!--When trying to switch to firearm and you dont have any-->
+
+<text>
+	<id>73</id>
+	<name>我没有远程武器。</name>
+</text>
+
+<text>
+	<id>74</id>
+	<name>点击选择信号棒投掷位置。</name>
+</text>
+
+<text>
+	<id>75</id>
+	<name>点击选择手榴弹投掷位置。</name>
+</text>
+
+<text>
+	<id>76</id>
+	<name>已经满了。</name>
+</text>
+
+<text>
+	<id>77</id>
+	<name>我喝了水泵里的水。</name>
+</text>
+
+<text>
+	<id>78</id>
+	<name>我想吃点东西。</name>
+</text>
+
+<text>
+	<id>79</id>
+	<name>我想喝点什么。</name>
+</text>
+
+<text>
+	<id>80</id>
+	<name>我好冷。</name>
+</text>
+
+<text>
+	<id>81</id>
+	<name>我要冻死了！</name>
+</text>
+
+<text>
+	<id>82</id>
+	<name>我在暖和起来。</name>
+</text>
+
+<text>
+	<id>83</id>
+	<name>我需要更多电量。</name>
+</text>
+
+<text>
+	<id>84</id>
+	<name>附近似乎没有军事坠机点。</name>
+</text>
+
+<text>
+	<id>85</id>
+	<name>附近似乎有一个军事坠机点。</name>
+</text>
+
+<!--Friend bots phrase: on health lower than 50%-->
+
+<text>
+	<id>100</id>
+	<name>该死，我受了重伤。</name>
+</text>
+
+<!--Friend bots phrases: when player get into house, bot starts patroling entrance-->
+<text>
+	<id>101</id>
+	<name>好，我帮你盯着背后，伙计。</name>
+</text>
+
+<text>
+	<id>102</id>
+	<name>你搜刮时我来掩护。</name>
+</text>
+
+<!--Friend bots phrase: when player gets on firing line-->
+<text>
+	<id>103</id>
+	<name>你挡住目标了！</name>
+</text>
+
+<!-- Friend bots phrase: when meeting player-->
+<text>
+	<id>104</id>
+	<name>嘿！你……我们组队吧。</name>
+</text>
+
+<!-- Enemy Melee bot phrases on getting hit from firearm-->
+
+<text>
+	<id>105</id>
+	<name>妈的……！</name>
+</text>
+
+<text>
+	<id>106</id>
+	<name>该死！那混蛋有枪！</name>
+</text>
+
+<text>
+	<id>107</id>
+	<name>妈的！</name>
+</text>
+
+<!--Enemy Bot with firearm when spots player-->
+
+<text>
+	<id>108</id>
+	<name>过来这里！</name>
+</text>
+
+<text>
+	<id>109</id>
+	<name>吃子弹吧！</name>
+</text>
+
+<text>
+	<id>110</id>
+	<name>我看到你了！</name>
+</text>
+
+<text>
+	<id>111</id>
+	<name>逮住这混蛋了！</name>
+</text>
+
+<text>
+	<id>112</id>
+	<name>就是这混蛋！</name>
+</text>
+
+<!--Additional player phrases -->
+
+<text>
+	<id>125</id>
+	<name>我很友善。</name>
+</text>
+
+<text>
+	<id>126</id>
+	<name>好的。</name>
+</text>
+
+<text>
+	<id>127</id>
+	<name>谢谢你们帮我们修好了船。</name>
+</text>
+
+<!-- Update 1.2.0 addings -->
+
+<text>
+	<id>86</id>
+	<name>这把步枪不能锯短。</name>
+</text>
+
+<text>
+	<id>87</id>
+	<name>这扇门已经完全损坏了。</name>
+</text>
+
+<text>
+	<id>88</id>
+	<name>周围有毒气！我需要防毒面具。</name>
+</text>
+
+<!-- Update 1.3.0 addings -->
+
+<text>
+	<id>89</id>
+	<name>我需要一辆可驾驶的车辆。</name>
+</text>
+
+<text>
+	<id>90</id>
+	<name>我在车里做不了这个。</name>
+</text>
+
+<text>
+	<id>91</id>
+	<name>这辆车状态已经很好了。</name>
+</text>
+
+<text>
+	<id>92</id>
+	<name>这辆车已经加满油了。</name>
+</text>
+
+<!--Quests-->
+
+<text>
+	<id>131</id>
+	<name>我没什么跟你说的。</name>
+</text>
+
+<text>
+	<id>132</id>
+	<name>我需要待在湖边或海边。</name>
+</text>
+
+<text>
+	<id>133</id>
+	<name>附近没看到鱼。</name>
+</text>
+
+<text>
+	<id>135</id>
+	<name>我没有生病。</name>
+</text>
+
+<text>
+	<id>136</id>
+	<name>再次感谢你的帮助。我们很快就走。</name>
+</text>
+
+<text>
+	<id>137</id>
+	<name>有一张纸条，上面有地图上一些地点的信息。</name>
+</text>
+
+<text>
+	<id>138</id>
+	<name>谢谢！你的奖励已经标在地图上了。</name>
+</text>
+
+<text>
+	<id>140</id>
+	<name>钓到好东西了！</name>
+</text>
+
+<text>
+	<id>141</id>
+	<name>又空军了！</name>
+</text>
+
+<!--1.7 content-->
+
+<text>
+	<id>142</id>
+	<name>该物品无法安装。</name>
+</text>
+
+<text>
+	<id>143</id>
+	<name>我没有可切换的武器。</name>
+</text>
+
+<text>
+	<id>144</id>
+	<name>装不下了。</name>
+</text>
+
+<text>
+	<id>145</id>
+	<name>我没有背包。</name>
+</text>
+
+<text>
+	<id>146</id>
+	<name>燃油耗尽。</name>
+</text>
+
+<text>
+	<id>147</id>
+	<name>不能戴在内衬外面。</name>
+</text>
+
+<text>
+	<id>148</id>
+	<name>油桶空了。</name>
+</text>
+
+<text>
+	<id>149</id>
+	<name>没有可加油的东西。</name>
+</text>
+
+<text>
+	<id>150</id>
+	<name>我需要去加油站加油。</name>
+</text>
+
+<text>
+	<id>151</id>
+	<name>加油站没油了。</name>
+</text>
+
+<text>
+	<id>152</id>
+	<name>发电机没油了。</name>
+</text>
+
+<text>
+	<id>153</id>
+	<name>武器、装备和载具不会损失耐久。</name>
+</text>
+
+<text>
+	<id>154</id>
+	<name>过滤水需要附近有湖。</name>
+</text>
+
+<text>
+	<id>155</id>
+	<name>我从湖里过滤了些水。</name>
+</text>
+
+<text>
+	<id>156</id>
+	<name>点击选择 C4 放置位置。</name>
+</text>
+
+<text>
+	<id>157</id>
+	<name>我受到辐射，还在不停流血！！！</name>
+</text>
+
+<text>
+	<id>158</id>
+	<name>我没有狗……</name>
+</text>
+
+<text>
+	<id>159</id>
+	<name>死亡后，在西海岸重生。</name>
+</text>
+
+<text>
+	<id>160</id>
+	<name>防雨：免疫潮湿和酸雨。</name>
+</text>
+
+<text>
+	<id>161</id>
+	<name>免疫化学和生化危害。</name>
+</text>
+
+<text>
+	<id>162</id>
+	<name>无视搜刮惩罚。</name>
+</text>
+
+<text>
+	<id>163</id>
+	<name>免疫生化污染水洼。</name>
+</text>
+
+<text>
+	<id>164</id>
+	<name>附近没有可转换的东西。</name>
+</text>
+
+<text>
+	<id>165</id>
+	<name>它已经装了这个。</name>
+</text>
+
+<text>
+	<id>166</id>
+	<name>潮湿：移动速度 -5%，体温 -2</name>
+</text>
+
+<text>
+	<id>167</id>
+	<name>我浑身湿透了……</name>
+</text>
+
+<text>
+	<id>168</id>
+	<name>生病：生命值持续下降，饥饿和口渴流失加快。</name>
+</text>
+
+<text>
+	<id>169</id>
+	<name>我已算好前往下座岛屿的航线……</name>
+</text>
+
+<text>
+	<id>170</id>
+	<name>抗辐射、防生化接触，并能隔绝电流。</name>
+</text>
+
+<text>
+	<id>171</id>
+	<name>毒气污染：生命值持续流失，5 秒后中毒。</name>
+</text>
+
+<text>
+	<id>172</id>
+	<name>车里放不下这个。</name>
+</text>
+
+<text>
+	<id>173</id>
+	<name>这里是辐射区……我最好穿上核生化防护服或其他高级防护服！</name>
+</text>
+
+<text>
+	<id>174</id>
+	<name>不能再挂更多手榴弹了。</name>
+</text>
+
+<text>
+	<id>175</id>
+	<name>我的声望不够高。</name>
+</text>
+
+<text>
+	<id>176</id>
+	<name>可堆叠物品无限堆叠。</name>
+</text>
+
+<text>
+	<id>177</id>
+	<name>这艘船应该能开过去，但我得先加油。</name>
+</text>
+
+<text>
+	<id>178</id>
+	<name>未装备防毒面具。</name>
+</text>
+
+<text>
+	<id>179</id>
+	<name>我做不到。</name>
+</text>
+
+<text>
+	<id>180</id>
+	<name>你至少需要 200 点经验值才能启用此功能。</name>
+</text>
+
+<text>
+	<id>181</id>
+	<name>耐久已满。</name>
+</text>
+
+<!--Unfinished-->
+<text>
+	<id>182</id>
+	<name>生物血条隐藏，感染者数量增加。</name>
+</text>
+
+<text>
+	<id>183</id>
+	<name>让死者安息……</name>
+</text>
+
+<text>
+	<id>184</id>
+	<name>我感觉不舒服！</name>
+</text>
+
+<text>
+	<id>185</id>
+	<name>我快死了！！！</name>
+</text>
+
+<text>
+	<id>186</id>
+	<name>没有可存放的枪械。</name>
+</text>
+
+<text>
+	<id>187</id>
+	<name>生命值条增加 50%；饥饿和口渴条增加 100%</name>
+</text>
+
+<text>
+	<id>188</id>
+	<name>我不能再穿了。</name>
+</text>
+
+<text>
+	<id>189</id>
+	<name>我中毒了，难受极了，身体正在恶化！</name>
+</text>
+
+<!--Headgear hide/show-->
+<text>
+	<id>190</id>
+	<name>我把头部装备戴在了外层。</name>
+</text>
+
+<text>
+	<id>191</id>
+	<name>我把头部装备戴在了内层。</name>
+</text>
+
+<text>
+	<id>192</id>
+	<name>当前感染者生命值与伤害倍率： </name>
+</text>
+
+<text>
+	<id>193</id>
+	<name>我的身体麻木了！</name>
+</text>
+
+<text>
+	<id>194</id>
+	<name>我需要一具人类尸体才能这么做。</name>
+</text>
+
+<text>
+	<id>195</id>
+	<name>这个油桶是满的。</name>
+</text>
+
+<text>
+	<id>196</id>
+	<name>这狗在干嘛？！</name>
+</text>
+
+<text>
+	<id>197</id>
+	<name>可堆叠物品不能放在那里。</name>
+</text>
+
+<text>
+	<id>198</id>
+	<name>这台发电机的油箱空了。</name>
+</text>
+
+<text>
+	<id>199</id>
+	<name>快跑！</name>
+</text>
+
+<text>
+	<id>200</id>
+	<name>现在无法使用。</name>
+</text>
+
+<text>
+	<id>201</id>
+	<name>距离下次血月： </name>
+</text>
+
+<text>
+	<id>202</id>
+	<name>持有自动武器的 NPC 会持续扫射，无需换弹。</name>
+</text>
+
+<text>
+	<id>203</id>
+	<name>这辆载具无法再加固了。</name>
+</text>
+
+<text>
+	<id>204</id>
+	<name>这是一座新岛屿！</name>
+</text>
+
+<text>
+	<id>205</id>
+	<name>我看不清！</name>
+</text>
+
+<text>
+	<id>206</id>
+	<name>我需要一块金属板</name>
+</text>
+
+<text>
+	<id>207</id>
+	<name>我需要同伴在我身边。</name>
+</text>
+
+<text>
+	<id>208</id>
+	<name>过去已成过去，现在才是现在！ </name>
+</text>
+
+<text>
+	<id>209</id>
+	<name>你是谁啊，伙计？！一只流浪狗……</name>
+</text>
+
+<text>
+	<id>210</id>
+	<name>已启用全自动。</name>
+</text>
+
+<text>
+	<id>211</id>
+	<name>已启用半自动。</name>
+</text>
+
+<text>
+	<id>212</id>
+	<name>附近没有已布设的装置。</name>
+</text>
+
+<text>
+	<id>213</id>
+	<name>电池已充满。</name>
+</text>
+
+<text>
+	<id>214</id>
+	<name>我给它加满了燃油。</name>
+</text>
+
+<text>
+	<id>215</id>
+	<name>附近没有可拆解的东西。</name>
+</text>
+
+<text>
+	<id>216</id>
+	<name>防火。</name>
+</text>
+
+<text>
+	<id>217</id>
+	<name> 船没油了。</name>
+</text>
+
+<text>
+	<id>218</id>
+	<name> 船的油箱已满。</name>
+</text>
+
+<text>
+	<id>219</id>
+	<name>耐久太低了。</name>
+</text>
+
+<text>
+	<id>220</id>
+	<name>我需要更多碎布。</name>
+</text>
+
+<text>
+	<id>221</id>
+	<name> 天后送达。</name>
+</text>
+
+<text>
+	<id>222</id>
+	<name>血月出现了！……感染者现在能在一英里外嗅到血腥味！！！</name>
+</text>
+
+<text>
+	<id>223</id>
+	<name>已架设两脚架，后坐力大幅降低。</name>
+</text>
+
+<text>
+	<id>224</id>
+	<name>我正搬着重物，做不了这个！</name>
+</text>
+
+<text>
+	<id>225</id>
+	<name>我身上没有这件装备。</name>
+</text>
+
+<text>
+	<id>226</id>
+	<name>此处只能存放刀具、点火器、信号棒和盛水容器。</name>
+</text>
+
+<text>
+	<id>227</id>
+	<name>此处只能存放药品、医疗用品和绷带。</name>
+</text>
+
+<text>
+	<id>228</id>
+	<name>此处只能存放胶带、环氧胶和针线包。</name>
+</text>
+
+<text>
+	<id>229</id>
+	<name>电池电量不足。</name>
+</text>
+
+<text>
+	<id>230</id>
+	<name>我发现了地下地堡的位置。</name>
+</text>
+
+<text>
+	<id>231</id>
+	<name>这扇防爆门似乎没电了，需要通电才能运作。</name>
+</text>
+
+<text>
+	<id>232</id>
+	<name>我需要附近有发电机。</name>
+</text>
+
+<text>
+	<id>233</id>
+	<name>这块电池已充满。</name>
+</text>
+
+<text>
+	<id>234</id>
+	<name>我进入了毒气污染区！</name>
+</text>
+
+<text>
+	<id>235</id>
+	<name>我进入了辐射区！</name>
+</text>
+
+<text>
+	<id>236</id>
+	<name>我需要一个篝火和一个煎锅。</name>
+</text>
+
+<text>
+	<id>237</id>
+	<name>我煎了个蛋。</name>
+</text>
+
+<text>
+	<id>238</id>
+	<name>我做好了胡椒牛排。</name>
+</text>
+
+<text>
+	<id>239</id>
+	<name>我做好了沙克舒卡。</name>
+</text>
+
+<text>
+	<id>240</id>
+	<name>点击切换，背包打开时长按移除，背包关闭时长按投掷。</name>
+</text>
+
+<text>
+	<id>241</id>
+	<name>今晚感觉不对劲！我睡不着……</name>
+</text>
+
+<text>
+	<id>242</id>
+	<name>剩余数量： </name>
+</text>
+
+<text>
+	<id>243</id>
+	<name>疲劳：格挡几率 -20%，移动速度 -10%</name>
+</text>
+
+<text>
+	<id>244</id>
+	<name>此槽位缺少核生化手套。</name>
+</text>
+
+<text>
+	<id>245</id>
+	<name>此槽位缺少核生化靴。</name>
+</text>
+
+<text>
+	<id>246</id>
+	<name>附近没有这种物品。</name>
+</text>
+
+<text>
+	<id>247</id>
+	<name>我需要 </name>
+</text>
+
+<text>
+	<id>248</id>
+	<name>经验值</name>
+</text>
+
+<text>
+	<id>249</id>
+	<name>附近没有这种生物。</name>
+</text>
+
+<text>
+	<id>250</id>
+	<name>已存放在建造模式中。</name>
+</text>
+
+<text>
+	<id>251</id>
+	<name>缺少燃油包！</name>
+</text>
+
+<text>
+	<id>252</id>
+	<name>燃油包是满的。</name>
+</text>
+
+<text>
+	<id>253</id>
+	<name>我需要靠近帐篷。</name>
+</text>
+
+<text>
+	<id>254</id>
+	<name>我该晚上再来这里！</name>
+</text>
+
+<text>
+	<id>255</id>
+	<name>这把枪没电了。</name>
+</text>
+
+</list>

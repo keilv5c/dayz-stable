@@ -31,6 +31,18 @@ ios/App/output/
 *.ipa
 *.xcarchive
 
+# ---- 单机版（sp/）构建线 ----
+# 构建产物：由 sp/scripts/prepare.ps1 生成，不入库
+sp/ios/App/App/public/
+sp/ios/App/App/capacitor.config.json
+sp/ios/App/Pods/
+sp/ios/App/Podfile.lock
+sp/ios/App/App.xcworkspace/
+sp/ios/App/App.xcworkspace/xcuserdata/
+sp/ios/App/App.xcodeproj/xcuserdata/
+sp/ios/App/node_modules/
+# ⚠️ sp/web/ 必须提交（那是 CI 唯一能看到的游戏本体来源，见 sp/scripts/sync-game.ps1）
+
 # 打包好的成品（体积大，单独分发，不入库）
 dist/
 
