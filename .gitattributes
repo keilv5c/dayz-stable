@@ -25,7 +25,10 @@ sp/web/**            -text
 web/**               -text
 
 # ---- iOS 工程与构建脚本 ----
+# 联机版 ios/ 与单机版 sp/ios/ 都要保护：project.pbxproj 是行敏感的工程文件，
+# Podfile 还会被 cap sync 用正则重写，两边都不希望 checkout 时被塞进 CR。
 sp/ios/**            -text
+ios/**               -text
 *.ps1                -text
 
 # ---- 其余按正常文本处理（让 git 自己决定）----
@@ -34,6 +37,5 @@ sp/ios/**            -text
 *.json               text
 *.ts                 text
 *.rb                 text
-Podfile              text
 .gitignore           text
 .gitattributes       text

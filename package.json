@@ -11,6 +11,7 @@
     "test:core": "node test/mdz_core.test.js",
     "test:rtc": "node test/mdz_rtc.test.js",
     "test:ui": "node test/mdz_ui.test.js",
+    "verify:bars": "node tools/verify-bars.js",
     "sync": "cap sync android",
     "sync:android": "cap sync android",
     "sync:ios": "cap sync ios",

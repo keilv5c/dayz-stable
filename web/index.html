@@ -159,15 +159,11 @@
     <script>MDZP2P.install(window);</script>
     <script src="lan_bridge.js"></script>
     <script src="mdz_ui.js"></script>
-    <!-- 本快照是「联机精简版」：只保留联机三件套 mdz_core / mdz_p2p / mdz_ui。
-         已移除的 6 个补丁模块（它们的功能与踩坑记录都保留在完整版里）：
-           mdz_cfg.js     配置中枢（稳定/省电 + 逐模块开关）
-           mdz_diag.js    诊断（接 MOD 的 MDZTrace）
-           mdz_island.js  跨岛止损（检测 + 断开提示重连）
-           mdz_hitfix.js  命中修复（客机打不到怪）
-           mdz_players.js 客机角色/背包自保
-           mdz_storm.js   交互风暴刹车（治发热）
-         需要这些功能请取完整版：本仓库 git 标签 stable-2026-09-11。 -->
+    <!-- 本快照只保留联机三件套 mdz_core / mdz_p2p / mdz_ui。
+         历史上曾有 6 个补丁模块（mdz_cfg 配置中枢 / mdz_diag 诊断 / mdz_island 跨岛止损 /
+         mdz_hitfix 命中修复 / mdz_players 客机自保 / mdz_storm 交互风暴刹车），
+         经确认不再需要，已全部移除且不再引用 —— 不要按旧文档去找它们。
+         当前定位是朋友间小范围互玩，已知限制见 README-DEV.md。 -->
 
     <script>
       /* ===================================================================
@@ -175,7 +171,7 @@
          如果控制台没有 "[MDZ] build …"，那这个页面是被 Service Worker
          或浏览器 HTTP 缓存住的旧 index.html（旧页面根本没有联机面板）。
          =================================================================== */
-      window.MDZ_BUILD = 'mdz-webrtc-web-5-lite';
+      window.MDZ_BUILD = 'mdz-webrtc-web-6-lite';
       console.log('%c[MDZ] build ' + window.MDZ_BUILD + ' 已加载（联机面板应出现在右上角）',
         'color:#3fb950;font-weight:bold');
 

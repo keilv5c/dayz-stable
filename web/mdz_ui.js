@@ -14,7 +14,7 @@
 (function () {
   'use strict';
 
-  var BUILD = 'mdz-ui-5-lite';
+  var BUILD = 'mdz-ui-6-lite';
 
   /** 面板起不来时也要让用户"看得见"错误，而不是界面上一片空白 */
   function fatal(msg, detail) {
@@ -165,7 +165,8 @@
   }
   function clampPos(el, x, y) {
     var w = (el && el.offsetWidth) || 340, h = (el && el.offsetHeight) || 240;
-    var vw = window.innerWidth || 800, vh = window.innerHeight || 600;
+    // 用真实视口：面板是 position:fixed，可以停在黑边区域上，不受黑边影响
+    var vw = realVW() || 800, vh = realVH() || 600;
     // 允许拖到边缘、甚至大半移出屏幕（游戏按钮常在小角落），但至少留 52px 能抓回来
     x = Math.min(Math.max(x, 52 - w), vw - 52);
     y = Math.min(Math.max(y, 0), Math.max(0, vh - 40));
@@ -248,6 +249,128 @@
     handle.addEventListener('touchstart', down, { passive: true });
     handle.style.cursor = 'move';
   }
+
+  /* ------------------------------------------- 画面黑边（挖孔屏 / 灵动岛）
+     问题：游戏是 Construct 2 的 fullscreen_mode = 1（crop，裁切铺满），画面会顶到
+     屏幕左右两端，于是挖孔 / 灵动岛正好压在边缘的游戏 UI 上。
+     做法：让运行时"以为"窗口变窄了，它自己就会按新视口重新缩放布局，然后我们把
+     画布整体右移「左黑边」的宽度 —— 高度一点都不动。
+       1) 覆盖 window.innerWidth 的 getter，返回「真实宽度 - 左黑边 - 右黑边」。
+          c2runtime 每帧都在比对 window.innerWidth 与 lastWindowWidth，一旦不等
+          就自己调 setSize()，所以只要改这个值就够了，不需要手动去驱动运行时；
+          旋转屏幕 / 改变黑边宽度都会在下一帧自动生效。
+       2) #c2canvasdiv 的 margin-left 是 setSize 写的内联样式（crop 模式下恒为 0），
+          用带 !important 的样式表规则盖掉它，把画布推到左黑边之后。
+       3) 页面背景本来就是纯黑（index.html 里 html,body{background:#000}），
+          所以没被画布盖住的两条边天然就是黑边，不需要额外画东西。
+     兜底：万一某些内核不允许覆盖 innerWidth，就整体不生效（只是没有黑边，
+     不影响游戏与联机），原因写进日志。                                        */
+  var BARS_KEY = 'mdz.ui.bars.v1';
+  var BAR_MAX = 400;                 // 单边最多 400px，再大就没意义了
+  var bars = { left: 0, right: 0 };
+  var barsSupported = null;          // null = 未探测
+  var rawInnerWidth = null;          // 被覆盖前抓住的原始 getter
+
+  function clampBar(v) {
+    v = parseInt(v, 10);
+    if (!isFinite(v) || v < 0) v = 0;
+    return Math.min(BAR_MAX, v);
+  }
+  function loadBars() {
+    try {
+      var s = localStorage.getItem(BARS_KEY);
+      if (!s) return;
+      var o = JSON.parse(s) || {};
+      bars.left = clampBar(o.left);
+      bars.right = clampBar(o.right);
+    } catch (e) { /* 配置坏了就当 0 */ }
+  }
+  function saveBars() {
+    try { localStorage.setItem(BARS_KEY, JSON.stringify({ left: bars.left, right: bars.right })); } catch (e) {}
+  }
+
+  /* 真实视口尺寸：window.innerWidth 已被我们改写，所以这里读 documentElement，
+     拿不到时退回被覆盖前抓住的原始 getter —— 绝不会绕回自己造成递归。 */
+  function realVW() {
+    var w = (document.documentElement && document.documentElement.clientWidth) || 0;
+    if (!w && rawInnerWidth) w = rawInnerWidth();
+    return w || 0;
+  }
+  function realVH() {
+    var h = (document.documentElement && document.documentElement.clientHeight) || 0;
+    if (!h) h = window.innerHeight || 0;
+    return h || 0;
+  }
+
+  /** 实际生效的黑边：无论如何至少给游戏留 240px 宽，避免用户把画面压没 */
+  function effectiveBars() {
+    var vw = realVW();
+    var l = clampBar(bars.left), r = clampBar(bars.right);
+    if (vw > 0) {
+      var min = Math.min(240, Math.floor(vw * 0.5));
+      var over = l + r - (vw - min);
+      if (over > 0) {
+        var total = l + r || 1;
+        l = Math.max(0, Math.round(l - over * (l / total)));
+        r = Math.max(0, Math.round(r - over * (r / total)));
+      }
+    }
+    return { left: l, right: r };
+  }
+
+  /** 接管 window.innerWidth 并注入画布定位规则；返回是否成功 */
+  function installBarsSupport() {
+    if (barsSupported !== null) return barsSupported;
+    try {
+      var proto = (typeof Window !== 'undefined' && Window.prototype) || window;
+      var d = Object.getOwnPropertyDescriptor(proto, 'innerWidth') ||
+              Object.getOwnPropertyDescriptor(window, 'innerWidth');
+      if (d && d.get) rawInnerWidth = function () { return d.get.call(window); };
+      else rawInnerWidth = function () { return (document.documentElement && document.documentElement.clientWidth) || 0; };
+
+      Object.defineProperty(window, 'innerWidth', {
+        configurable: true,
+        get: function () {
+          var b = effectiveBars();
+          var w = rawInnerWidth() - b.left - b.right;
+          return w > 0 ? w : 0;
+        }
+      });
+      var st = document.createElement('style');
+      st.id = 'mdz-bars-style';
+      // crop 模式下 setSize 会把 margin-left 写成内联的 0，必须用 !important 盖掉
+      st.textContent = '#c2canvasdiv{margin-left:var(--mdz-bar-left,0px) !important;}';
+      (document.head || document.documentElement).appendChild(st);
+      barsSupported = true;
+    } catch (e) {
+      barsSupported = false;
+      console.warn('[MDZ-UI] 无法接管 window.innerWidth，黑边功能不可用', e);
+    }
+    return barsSupported;
+  }
+
+  /** 把当前黑边值同步到页面与控件上（运行时会在下一帧自动重新布局） */
+  function applyBars() {
+    var b = effectiveBars();
+    try { document.documentElement.style.setProperty('--mdz-bar-left', b.left + 'px'); } catch (e) {}
+    if (ui.barLeft) ui.barLeft.value = String(b.left);
+    if (ui.barRight) ui.barRight.value = String(b.right);
+    if (ui.barLeftRange) ui.barLeftRange.value = String(b.left);
+    if (ui.barRightRange) ui.barRightRange.value = String(b.right);
+    return b;
+  }
+
+  function setBars(left, right, quiet) {
+    bars.left = clampBar(left);
+    bars.right = clampBar(right);
+    saveBars();
+    var b = applyBars();
+    if (!quiet) {
+      setStatus('黑边：左 ' + b.left + 'px / 右 ' + b.right + 'px（高度不变）', '#7bd88f');
+    }
+    return b;
+  }
+  function resetBars() { setBars(0, 0); }
 
   /* ------------------------------------------------------------ 面板构建 */
 
@@ -398,6 +521,55 @@
     show(ui.textBox, false);
     panel.appendChild(ui.textBox);
 
+    // 画面黑边（挖孔屏 / 灵动岛）：只收左右，高度不变
+    ui.barBox = el('div', 'margin:8px 0 0;padding-top:6px;border-top:1px solid rgba(255,255,255,0.12)');
+    ui.barBox.appendChild(el('div', 'opacity:.85', '画面黑边（避开挖孔 / 灵动岛，高度不变）'));
+    ui.barBox.appendChild(el('div', 'font-size:11px;opacity:.6;margin:2px 0 4px',
+      '拖动滑杆即时生效；设置会记住，下次打开还在。'));
+
+    function barRow(label, side) {
+      var row = el('div', 'display:flex;align-items:center;gap:6px;margin:3px 0');
+      row.appendChild(el('span', 'width:22px;flex:none;opacity:.85', label));
+      var num = el('input', 'width:58px;flex:none;box-sizing:border-box;background:#0b0f14;color:#e8eef5;' +
+        'border:1px solid rgba(255,255,255,0.22);border-radius:6px;padding:3px 5px;' +
+        'font:12px/1.4 Consolas,monospace');
+      num.type = 'number'; num.min = '0'; num.max = String(BAR_MAX); num.step = '1';
+      var rng = el('input', 'flex:1;min-width:0;margin:0');
+      rng.type = 'range'; rng.min = '0'; rng.max = String(BAR_MAX); rng.step = '1';
+      // 滑杆实时生效；数字框只在 change（回车/失焦）时生效，免得打字打到一半被回写打断
+      rng.oninput = function () {
+        if (side === 'left') setBars(rng.value, bars.right, true);
+        else setBars(bars.left, rng.value, true);
+      };
+      rng.onchange = function () {
+        if (side === 'left') setBars(rng.value, bars.right, false);
+        else setBars(bars.left, rng.value, false);
+      };
+      num.onchange = function () {
+        if (side === 'left') setBars(num.value, bars.right, false);
+        else setBars(bars.left, num.value, false);
+      };
+      row.appendChild(num);
+      row.appendChild(rng);
+      if (side === 'left') { ui.barLeft = num; ui.barLeftRange = rng; }
+      else { ui.barRight = num; ui.barRightRange = rng; }
+      return row;
+    }
+    ui.barBox.appendChild(barRow('左', 'left'));
+    ui.barBox.appendChild(barRow('右', 'right'));
+
+    var barBtns = el('div', 'margin:2px 0 0');
+    [[40, '对称 40'], [80, '对称 80']].forEach(function (p) {
+      var q = el('button', BTN2_CSS, p[1]);
+      q.onclick = function () { setBars(p[0], p[0]); };
+      barBtns.appendChild(q);
+    });
+    ui.btnResetBars = el('button', BTN2_CSS, '重置黑边');
+    ui.btnResetBars.onclick = resetBars;
+    barBtns.appendChild(ui.btnResetBars);
+    ui.barBox.appendChild(barBtns);
+    panel.appendChild(ui.barBox);
+
     // 底部：日志 + 统计
     var foot = el('div', 'margin-top:6px');
     ui.btnStats = el('button', BTN2_CSS, '连接统计');
@@ -476,7 +648,8 @@
     ov.style.display = 'flex';
     if (ui.btnShowQr) show(ui.btnShowQr, false);
 
-    var vw = window.innerWidth || 800, vh = window.innerHeight || 600;
+    // 二维码浮层是 position:fixed inset:0，铺满整个窗口（含黑边），所以按真实视口算尺寸
+    var vw = realVW() || 800, vh = realVH() || 600;
     // 横屏手机高度很小（约 400px）：这时把标题/提示/按钮全部收起来，
     // 只留一个角上的关闭按钮，把整屏高度让给二维码本身。
     var compact = vh < 620;
@@ -781,7 +954,8 @@
   /** 启动后 8 秒还没有识别到就给出可操作的提示，并亮出"换个扫码方式"按钮 */
   function isDesktop() {
     var touch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
-    return !touch && (window.innerWidth || 0) >= 900;
+    // 用真实宽度判断：黑边会让 window.innerWidth 变小，不能拿它来认"是不是桌面"
+    return !touch && realVW() >= 900;
   }
   function startScanWatchdog(purpose) {
     if (state.scanWatchdog) clearTimeout(state.scanWatchdog);
@@ -1188,6 +1362,9 @@
           console.log('[MDZ-UI] 已请求隐藏状态栏（全屏）');
         }
       } catch (e) { console.warn('[MDZ-UI] 隐藏状态栏失败', e); }
+      // 黑边必须在 buildPanel 之前装好：面板里的控件要按"是否支持"决定显不显示
+      loadBars();
+      var barsOk = installBarsSupport();
       buildPanel();
       subscribe();
       switchMode(canScan() ? 'qr' : 'text');
@@ -1197,6 +1374,21 @@
       try { state.useBarcodeDetector = !isNative() && (typeof window.BarcodeDetector === 'function'); } catch (e) {}
       P.setMode(state.mode);
       refreshButtons();
+      if (barsOk) {
+        var bb = applyBars();
+        if (bb.left || bb.right) {
+          log('画面黑边已生效：左 ' + bb.left + 'px / 右 ' + bb.right + 'px（高度不变）', '#9fe8ff');
+        }
+        // 旋转 / 窗口变化后有效宽度会变（可能触发上限裁剪），重新同步一次；
+        // 游戏画面本身由运行时自己按新的 window.innerWidth 重排，不用我们插手。
+        window.addEventListener('resize', function () { applyBars(); });
+        window.addEventListener('orientationchange', function () {
+          setTimeout(function () { applyBars(); }, 300);
+        });
+      } else {
+        show(ui.barBox, false);
+        log('本环境不支持接管视口宽度，黑边功能已隐藏（不影响联机）', '#ffcc66');
+      }
       log('面板就绪。扫码能力：' + (nativeScanner() ? '原生插件' : (webScannerAvailable() ? 'html5-qrcode' : '不可用')), '#9fe8ff');
       log('面板可用手指/鼠标拖动标题栏移动位置（挡住游戏按钮时拖开即可）', '#9fe8ff');
       console.log('[MDZ-UI] 调试提示：MDZP2P.stats() 看统计；MDZP2P.setFastLane(false) 关闭副通道；MDZP2P.CFG.DEBUG=false 关日志');
@@ -1214,6 +1406,13 @@
     canScan: canScan,
     switchMode: switchMode,
     startScan: startScan,
+    // 画面黑边（挖孔屏适配）：供自测页与调试使用
+    setBars: setBars,
+    resetBars: resetBars,
+    getBars: function () { return effectiveBars(); },
+    barsSupported: function () { return barsSupported === true; },
+    // 真实视口（不受黑边影响）：页面自身的布局计算都必须用这个，而不是 window.innerWidth
+    viewport: function () { return { w: realVW(), h: realVH() }; },
     // 供外部（调试/自测页）使用：把进度打到面板状态行与日志里
     log: log,
     setStatus: setStatus,

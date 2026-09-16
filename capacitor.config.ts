@@ -16,8 +16,9 @@ const config: CapacitorConfig = {
   webDir: 'web',
   bundledWebRuntime: false,
   android: {
-    // 调试期打开，方便 chrome://inspect 看控制台；正式发版建议改 false
-    webContentsDebuggingEnabled: true,
+    // 已关闭：本包面向朋友间小范围互玩，不对外提供调试入口。
+    // 需要看控制台时临时改回 true 重新构建，或改用 chrome://inspect 前先确认这是自用包。
+    webContentsDebuggingEnabled: false,
     allowMixedContent: false,
     // 强制 WebView 允许内联媒体播放（对摄像头预览有益）
     captureInput: true

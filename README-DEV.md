@@ -3,12 +3,18 @@
 > 本目录是**副本**，原版目录 `D:\game_hack\minidayz\Minidayz-Multiplayer-main\Minidayz-Multiplayer-main` 一个字节都没有改。
 > 校验方法见文末"原版未被改动的证明"。
 >
-> ⚠️ **本副本是「联机精简版」**：只保留联机三件套 `mdz_core.js` / `mdz_p2p.js` / `mdz_ui.js`。
-> 已移除 6 个补丁模块 —— `mdz_cfg`（配置中枢）、`mdz_diag`（诊断）、`mdz_island`（跨岛止损）、
-> `mdz_hitfix`（命中修复）、`mdz_players`（角色自保）、`mdz_storm`（风暴刹车）—— 以及它们的 5 个测试套件。
-> 下面文档中凡是提到这些模块的地方（尤其第四节历史坑 #9 / #10）都属于**完整版**：
-> 完整版就在本仓库的 git 标签 `stable-2026-09-11` 上，`git checkout stable-2026-09-11` 即可取回。
-> 精简版的说明见 `稳定版说明.md`。
+> **当前形态**：只保留联机三件套 `mdz_core.js` / `mdz_p2p.js` / `mdz_ui.js`。
+> 历史上曾有 6 个补丁模块 —— `mdz_cfg`（配置中枢）、`mdz_diag`（诊断）、`mdz_island`（跨岛止损）、
+> `mdz_hitfix`（命中修复）、`mdz_players`（角色自保）、`mdz_storm`（风暴刹车）——
+> **经确认不再需要，已连同它们的测试套件一并删除**，代码里也不再引用（`test/mdz_invariants.test.js` 会守住这一点）。
+>
+> **定位与已知问题**：本包面向**朋友间小范围互玩**（PvE），不追求公开发布。
+> 因为删掉了上面那些补丁模块，第四节历史坑 #9 / #10 描述的现象在本快照里**仍然是存在的**，
+> 属于已知限制，不要在联机时做跨岛 / 依赖客机命中的玩法。
+> 黑边（挖孔屏适配）与联机相关的能力见第三节与第五节。
+>
+> 👉 **给测试者看的那份**在 **`测试者须知.md`**（怎么装、怎么连、哪些是已知问题、出问题怎么反馈）。
+> 本文件是开发向的。
 
 ---
 
@@ -35,7 +41,7 @@
    conn : send(obj) / open / on('open'|'data'|'close'|'error') / close() / bufferSize
    ```
 
-   我们提供 `window.Peer` 顶替 PeerJS，于是 `lan_bridge.js` 和 8 个 `mp_*.js` **一行都不用改**。
+   我们提供 `window.Peer` 顶替 PeerJS，于是 `lan_bridge.js` 和 7 个 `mp_*.js` **一行都不用改**。
 
 2. **`conn.bufferSize` 是隐藏契约。** `mp_join.js` 里用
    `if (typeof conn.bufferSize === "number") return conn.bufferSize;` 做世界快照分块的**背压**。
@@ -100,7 +106,8 @@ npm run web
 如果你之前用旧页面打开过这个地址，之后刷新拿到的还是**旧 index.html**——
 表现就是：游戏能玩、原版面板（Room ID / HOST / JOIN）在，但**右上角没有我们的联机面板**。
 
-判断方法：按 F12 看控制台，**没有 `[MDZ] build mdz-webrtc-web-1 已加载` 就是缓存住了**。
+判断方法：按 F12 看控制台，**没有 `[MDZ] build mdz-webrtc-web-… 已加载` 就是缓存住了**
+（具体版本号见 `web/index.html` 里的 `MDZ_BUILD`，面板标题栏上也会显示同一个号）。
 
 三种解法（任选）：
 
@@ -127,6 +134,35 @@ npm run web
 
 自测页在**同一个页面**里开两个 RTCPeerConnection，跑完整握手 + 双通道 + 收发 + 大消息分块，
 不需要第二台设备就能确认传输层是否正常（会打印 PASS/FAIL 列表）。
+
+### 画面被挖孔 / 灵动岛挡住？调「画面黑边」
+
+游戏是 Construct 2 的 **crop（裁切铺满）** 模式（`data.js` 里 `fullscreen_mode = 1`），
+画面会顶到屏幕左右两端，所以挖孔 / 灵动岛正好压住边缘的游戏 UI。
+
+面板底部有 **「画面黑边（避开挖孔 / 灵动岛，高度不变）」**：
+
+- 「左」「右」各一条滑杆 + 数字框，范围 0–400px，**拖动即时生效**
+- 快捷按钮：`对称 40` / `对称 80` / `重置黑边`
+- 设置存在 `localStorage`（`mdz.ui.bars.v1`），下次打开还在
+- **只收左右，高度一点都不动**（不是等比缩放）
+
+实现方式（改动都在 `web/mdz_ui.js`，没碰游戏本体）：
+
+1. 接管 `window.innerWidth` 的 getter，返回 `真实宽度 - 左黑边 - 右黑边`。
+   `c2runtime` **每帧**都在比对 `window.innerWidth` 与 `lastWindowWidth`，一旦不等就自己调
+   `setSize()` —— 所以只要改这个值，运行时就会按新视口重新缩放布局，旋转屏幕也会自动跟上。
+2. `#c2canvasdiv` 的 `margin-left` 是 `setSize()` 写的内联样式（crop 模式下恒为 0），
+   用一条带 `!important` 的样式表规则盖掉它，把画布推到左黑边之后。
+3. 页面背景本来就是纯黑（`html,body{background:#000}`），没被画布盖住的两条边天然就是黑边。
+
+> 保护：单边最多 400px，且无论怎么设都**至少给游戏留 240px 宽**，不会把画面压没。
+> 页面自身的其它视口计算（面板拖动边界、二维码浮层尺寸、桌面判定）一律走"真实宽度"
+> （`MDZUI.viewport()`），不会被黑边影响。
+> 万一某些内核不允许覆盖 `innerWidth`，功能会整体失效并在日志里说明原因 ——
+> 只是没有黑边，不影响游戏与联机。
+>
+> 调试入口：`MDZUI.setBars(左, 右)` / `MDZUI.resetBars()` / `MDZUI.getBars()` / `MDZUI.viewport()`。
 
 ### 两台设备实测联机
 
@@ -178,18 +214,27 @@ Android 已加好的权限（`android/app/src/main/AndroidManifest.xml`）：
 
 ---
 
-## 五、测试（`npm test`，共 308 项断言 + 24 个工作流 shell 块，当前全绿）
+## 五、测试（`npm test`，13 个套件 + 工作流 shell 块，当前全绿）
 
-| 套件 | 跑什么 | 结果 |
-|---|---|---|
-| `test/mdz_core.test.js` | SDP 打包/解包（含换行/截断/校验和损坏）、裁剪失败降级、候选分类（mDNS/内网/CGNAT/link-local）、代理对安全切片、分块乱序重组、消息分流、握手串体积实测 | **46/46** |
-| `test/mdz_rtc.test.js` | 用 `node-datachannel` 跑**同一份** `mdz_p2p.js`：模式A/模式B 真实握手、双向收发、副通道、60000 字符分块、`bufferSize`、**完全照抄 lan_bridge.js 调用顺序驱动垫片**、漏调 `clientBegin` 的容错、模式切换状态隔离 | **34/34** |
-| `test/mdz_ui.test.js` | 两个 jsdom"设备"按 index.html 顺序加载脚本，模拟 lan_bridge 的 `startHost/joinGame`，用 UI 按钮走完文本 SDP 全流程，验证游戏包双向互通；外加**走游戏原面板 HOST/JOIN 入口**也能拉起我们的面板 | **32/32** |
-| `test/mdz_selftest.test.js` | **测自测页本身**：把 `mdz_selftest.html` 装进 jsdom、点"运行自测"、读页面上的 PASS/FAIL，确保页面自己跑得通 | **13/13** |
-| `test/mdz_page.test.js` | **按 index.html 的真实脚本顺序**做页面集成检查：所有 script 都能加载、`window.Peer` 被垫片接管、构建标记存在、联机面板真的出现在页面上、SW 已被禁用、**可点击性审计（pointer-events 继承）**、收起→再打开、**mDNS 兜底按钮真的会申请摄像头** | **26/26** |
-| `test/mdz_scan.test.js` | **App 内扫码三级链路**：WebView 内嵌扫码 → 原生 `startScan`（捆绑模型）→ 才切文本模式；并验证"原生报 GMS 模块缺失时不会再掉进模式B" | **16/16** |
+> 下表**不写死通过数**（每次加断言都要回来改，已经踩过一次）。要具体数字直接跑 `npm test`。
 
-单独跑：`npm run test:core` / `test:rtc` / `test:ui`；自测页：`node test/mdz_selftest.test.js`；页面集成：`node test/mdz_page.test.js`；看握手细节：`set MDZ_VERBOSE=1 && node test/mdz_rtc.test.js`。
+| 套件 | 跑什么 |
+|---|---|
+| `test/mdz_core.test.js` | SDP 打包/解包（含换行/截断/校验和损坏）、裁剪失败降级、候选分类（mDNS/内网/CGNAT/link-local）、代理对安全切片、分块乱序重组、消息分流、握手串体积实测 |
+| `test/mdz_rtc.test.js` | 用 `node-datachannel` 跑**同一份** `mdz_p2p.js`：模式A/模式B 真实握手、双向收发、副通道、60000 字符分块、`bufferSize`、**完全照抄 lan_bridge.js 调用顺序驱动垫片**、漏调 `clientBegin` 的容错、模式切换状态隔离 |
+| `test/mdz_handshake.test.js` | 握手状态机：重复回码 / 陈旧回码 / 文本模式完整 SDP |
+| `test/mdz_fix_audit.test.js` | 真机故障修复点审计：闩锁、1080p、变焦、权限、扫码投票门槛、构建标记自洽 |
+| `test/mdz_ui.test.js` | 两个 jsdom"设备"按 index.html 顺序加载脚本，模拟 lan_bridge 的 `startHost/joinGame`，用 UI 按钮走完文本 SDP 全流程，验证游戏包双向互通；外加**走游戏原面板 HOST/JOIN 入口**也能拉起我们的面板 |
+| `test/mdz_selftest.test.js` | **测自测页本身**：把 `mdz_selftest.html` 装进 jsdom、点"运行自测"、读页面上的 PASS/FAIL，确保页面自己跑得通 |
+| `test/mdz_page.test.js` | **按 index.html 的真实脚本顺序**做页面集成检查：所有 script 都能加载、`window.Peer` 被垫片接管、构建标记存在且与面板一致、联机面板真的出现在页面上、SW 已被禁用、**可点击性审计（pointer-events 继承）**、收起→再打开、**mDNS 兜底按钮真的会申请摄像头** |
+| `test/mdz_scan.test.js` | **App 内扫码三级链路**：WebView 内嵌扫码 → 原生 `startScan`（捆绑模型）→ 才切文本模式；并验证"原生报 GMS 模块缺失时不会再掉进模式B" |
+| `test/mdz_chunk_guard.test.js` | **分块重组的资源上限**：信封形状校验、并发组数上限、单组/总量字节上限、超时清扫、同 id 换分块方案视为伪造（防对端撑爆内存） |
+| `test/mdz_bars.test.js` | **自定义左右黑边**：接管 `window.innerWidth`、画布定位规则带 `!important`、单边上限与"至少留 240px 画面"的保护、持久化、损坏配置不崩、页面其它视口计算仍走真实宽度 |
+| `test/mdz_invariants.test.js` | **工程不变量**：`tools/*.ps1` 必须 UTF-8 with BOM、`sp/scripts/*.ps1` 必须纯 ASCII、`.gitattributes` 覆盖字节敏感路径、调试开关为 false、构建标记同版本、`<script src>` 无 404、已删的 6 个补丁模块不再被引用 |
+| `test/tool_mobileprovision.test.js` | 证书体检工具：Bundle ID / 类型 / 有效期 / UDID |
+| `test/ios_config.test.js` | iOS 工程配置：部署目标 ≥15.5、权限项、共享 scheme、Podfile 不被 `cap sync` 改坏 |
+
+单独跑：`npm run test:core` / `test:rtc` / `test:ui`；其余直接 `node test/<套件>.test.js`；看握手细节：`set MDZ_VERBOSE=1 && node test/mdz_rtc.test.js`。
 
 > 历史坑（都已修，且都有回归测试守着）：
 > 1. `mdz_selftest.html` 曾漏掉 `MDZP2P.clientBegin()` 就直接 `clientAcceptHost()`，浏览器里点"运行自测"会报 `当前没有等待握手的客机会话`。现在 API 层会自动补建客机会话，页面也改成标准顺序。
@@ -202,6 +247,45 @@ Android 已加好的权限（`android/app/src/main/AndroidManifest.xml`）：
 3. Capacitor App 内原生扫码插件
 4. 异地（跨 NAT）模式B 的成功率 —— 没有 TURN，对称 NAT 下会失败
 
+### 黑边功能：已在真实 Chrome 里端到端验证过
+
+上面这 4 条与黑边无关。黑边功能**不需要真机就能验证到底**，因为它的关键机制
+（覆盖 `window.innerWidth` → c2runtime 自己调 `setSize()` → 画布 div 被推到左黑边之后）
+只有在真实浏览器里跑起 c2runtime 才看得见。所以有一个可重复执行的工具：
+
+```bash
+npm run verify:bars                 # 自带静态服务 + 启动无头 Chrome + 跑完自动清理
+npm run verify:bars -- --headful    # 想看画面时用
+npm run verify:bars -- --hold 60    # 验证完再多观察 60 秒
+npm run verify:bars -- --chrome "C:\path\to\chrome.exe"
+```
+
+`tools/verify-bars.js` **零 npm 依赖**（用 Node 22 自带的 `http` 与 `WebSocket` 直连 CDP，
+不需要装 playwright / agent-browser 那几百 MB 的浏览器）。
+找不到浏览器时它会以退出码 2 跳过，不会误报失败。
+
+实测结果：
+
+| 检查项 | 实测结果 |
+|---|---|
+| 运行时真的起来了（jsdom 做不到） | ✅ `fullscreen_mode = 1`（crop），与 `data.js` 里读出的值一致 |
+| 基线（无黑边） | 画布 div 宽 = `innerWidth`，`margin-left: 0px` |
+| 设 左60 / 右40 后 | `innerWidth` 收窄 100；**运行时自己也认了**（`rtWidth`/`lastWindowWidth` 同步）；画布位图跟着变；`margin-left: 60px` |
+| 高度是否被改动 | ❌ 没动：`innerHeight` 与 `rtHeight` 都不变 |
+| 页面自身布局是否被带偏 | ❌ 没偏：`documentElement.clientWidth` 与 `MDZUI.viewport()` 仍是真实值 |
+| 极端值保护 | 9999/9999 → 夹到 400/400 且留 ≥240px，运行时没崩 |
+| 重置 | `innerWidth`/`margin-left`/画布宽度全部复原 |
+| 持久化 | 重载页面后自动按已保存值收窄 |
+| **会不会被运行时抢回去** | ✅ 连续采样 15 秒 / 上千帧，`margin-left` 稳定不变 —— 这条 `!important` 规则是关键，已验证 |
+| 有没有引入运行时报错 | 无未捕获异常、无 `console.error` |
+| **是否影响加载/性能** | 对照实验：不开黑边 tick 增量 1472，开黑边 1483（差 1%）；两组都从 `Loading` 走到 `Menu` |
+
+结论：**黑边不影响游戏运行**，可以在真机上放心用。真机只需要确认一件事 ——
+你机型的挖孔位置对应调多宽合适（这个只能肉眼判断）。
+
+> 截图对比（`.workbuddy-ai/verify/`）：不开黑边时游戏顶到左右两端（左上角的 `MDZ☆START` 按钮、
+> 左边缘图标列、顶部 `MDZ v1.2` 正好落在挖孔会盖住的位置）；设 160/160 后这些内容全部内收、画面正常居中。
+
 ---
 
 ## 六、已知限制 / 后续可做
@@ -209,8 +293,27 @@ Android 已加好的权限（`android/app/src/main/AndroidManifest.xml`）：
 1. **没有 TURN**：异地联机在对称 NAT 下会打洞失败。要稳定就自建 coturn，然后在 `mdz_p2p.js` 的 `CFG.STUN_TEXT` 旁边加 `turn:` 配置。
 2. **单侧扫码依赖摄像头权限**：模式A 房主侧若只有 mDNS 候选且连不上，可让房主也允许一次摄像头权限（面板会申请）拿真实内网 IP。
 3. **服务端零依赖**：原来的 `mdz-server/node` 信令服务器**在这套方案里完全不需要**了，可以不启动。
-4. `web/peerjs.min.js` 文件仍在目录里，但 `index.html` 已不再加载它（保留是为了对照/回退）。
+4. `web/peerjs.min.js` 文件仍在目录里，但 `index.html` 已不再加载它。**不要删**：它是原版清单
+   （`_original_manifest.csv`）里的文件，删掉就破坏了"游戏本体逐字节未改"这条不变量。
+   同理 `web/cordova.js` / `cordova_plugins.js` / `plugins/**` 也保留原样，Capacitor 打包时会自动排除一部分，不影响功能。
 5. `capacitor.config.ts` 会触发一条 `MODULE_TYPELESS_PACKAGE_JSON` 警告，属正常现象（加 `"type":"module"` 会破坏 CommonJS 测试脚本，故不加）。
+6. **删掉补丁模块带来的已知现象**（本包面向朋友间小范围互玩，这些不打算修）：
+   - 客机（非房主）打怪可能不结算伤害（原 `mdz_hitfix` 负责的领域）
+   - 跨岛时可能出现世界快照重推，导致客机拿到房主的角色/背包（原 `mdz_island` 负责的领域）
+   - 长时间高交互可能发热偏高（原 `mdz_storm` 负责的领域）
+   → 规避方式：别在联机时跨岛；客机以探索/协作玩法为主。
+7. **安全边界**：二维码 / SDP 就是准入凭证，没有口令，也没有 PvP 开关（原版的"PvP 关闭"是服务端行为，
+   零服务器方案下没有代码在保证它）。**只和信得过的人联机**。
+   分块重组器已经加了并发组数 / 单组字节 / 总量字节三重上限与超时清扫
+   （`mdz_core.js` 的 `CHUNK_LIMITS`），但不要因此把它当成"能随便连陌生人"的东西。
+
+### 黑边功能的边界
+
+- 只做左右，**不做上下**（需求就是避让挖孔/灵动岛，高度不变）。
+- 依赖能覆盖 `window.innerWidth`：Chromium / WKWebView 都支持；万一某个内核不允许，
+  功能会整体失效并写日志（不影响游戏与联机），面板上的设置区会被隐藏。
+- 只对**联机版 App**（`web/` + `android/` + `ios/`）生效。`sp/` 单机版是另一套 web 与入口，
+  没有 `mdz_ui.js`，目前不含这个功能。
 
 ---
 
@@ -220,15 +323,22 @@ Android 已加好的权限（`android/app/src/main/AndroidManifest.xml`）：
 
 | 项 | 值 |
 |---|---|
-| APK | `Minidayz-WebRTC\dist\Minidayz-WebRTC-debug.apk`（同时保留在 `android\app\build\outputs\apk\debug\app-debug.apk`） |
-| 大小 | **51.3 MB** |
-| SHA256 | `C942A84A9E80CD02563B78F209B89226A74AEFBC046585F83BA0797FBDA0230E` |
+| APK | `dist/Minidayz-WebRTC-debug.apk`（同时保留在 `android/app/build/outputs/apk/debug/app-debug.apk`） |
+| 大小 | **50.0 MB**（52,440,621 字节） |
+| SHA256 | `E05AD5A048E39FBE15BD8F1B8A798674E33661CE23B006A986CB4D6D51CCC196` |
+| 构建标记 | `mdz-webrtc-web-6-lite` / `mdz-ui-6-lite`（含自定义左右黑边 + 分块资源上限） |
 | 包名 / 标签 | `com.mdz.webrtcmp` / 「Mini DAYZ 联机版」 |
 | minSdk / targetSdk | 24 / 36（compileSdk 36） |
 | 屏幕方向 | `android:screenOrientation="sensorLandscape"`（横屏锁定）+ 主题 `windowFullscreen` + `viewport-fit=cover` |
 | 插件 | barcode-scanning 8.2.1 / camera 8.2.4 / status-bar 8.0.3 |
+| WebView 调试 | **已关闭**（`webContentsDebuggingEnabled: false`，`test/mdz_invariants.test.js` 守着） |
 | 签名 | Android Debug 证书（可正常安装，不能上架） |
-| 构建耗时 | 首次 12m17s；增量 1m06s |
+| 构建耗时 | 首次 12m17s；本次增量 6m37s（187 tasks，含 3 个 Capacitor 插件子工程） |
+
+> 本次构建环境：worktree 内 `npm ci` → `npx cap sync android` → 直接用工具链跑 `./gradlew assembleDebug`
+> （JDK 21 + Android SDK 36 在 `D:\game_hack\minidayz\tools`）。
+> 注：`tools/build-apk.ps1` 内部依赖 `cmd /c`，在受限的 PowerShell 会话里可能跑不起来，
+> 直接用 gradlew 更省事（见本节末尾的等价命令）。
 
 ### App 内扫码的三级链路（真机 bug 修复）
 
@@ -325,12 +435,30 @@ powershell -File tools\build-apk.ps1                 # 每次改完代码：cap 
 powershell -File tools\build-apk.ps1 -Variant Release # 出 release（未签名，需自己配 keystore）
 ```
 
+**工具链不在项目目录里时的等价命令**（本次构建就是这么跑的）：
+`build-apk.ps1` 会去 `<项目上级>\tools\env.ps1` 找 JDK/SDK；如果工具链在别处，
+要么加 `-ToolchainRoot <含 env.ps1 的目录>`，要么绕开脚本直接跑 gradlew
+（注意：脚本内部用 `cmd /c` 包原生命令，某些受限的 PowerShell 会话里没有 `cmd`，这时只能走下面这条路）：
+
+```bash
+cd android
+export JAVA_HOME="<工具链>/jdk21/jdk-21.0.12.1+1"
+export ANDROID_HOME="<工具链>/android-sdk"
+export ANDROID_SDK_ROOT="$ANDROID_HOME"
+export PATH="$JAVA_HOME/bin:$PATH"
+"$JAVA_HOME/bin/java" -version          # 确认是 21
+./gradlew assembleDebug --no-daemon --console=plain
+# 产物：android/app/build/outputs/apk/debug/app-debug.apk
+```
+
+前置（只需在改完 `web/` 之后跑一次）：`npm ci` → `npx cap sync android`。
+
 ### 产物校验结果（脚本自动做）
 
 - `uses-permission`: INTERNET / ACCESS_NETWORK_STATE / **CAMERA**
 - `uses-feature-not-required: android.hardware.camera` → 没有摄像头的设备也能装（会自动退化到模式B）
 - APK 内 `assets/public/`：**1940 个文件 / 29.0 MB**，`media/` 489 个、`images/` 1368 个
-- `assets/public/index.html` 内含构建标记 `mdz-webrtc-web-1` → 确认打进去的是新代码，不是被缓存的旧页面
+- `assets/public/index.html` 内含构建标记（形如 `mdz-webrtc-web-6-lite`，以 `web/index.html` 的 `MDZ_BUILD` 为准）→ 确认打进去的是新代码，不是被缓存的旧页面
 - `mdz_core.js` / `mdz_p2p.js` / `mdz_ui.js` / `lan_bridge.js` / `vendor/*` 全部在包内
 
 > **一个容易误判的坑**：用 .NET `ZipFile` 或 `tar` 对比文件名时，会发现 51 个西里尔名字（`перс1.png`、`город.png`…）
@@ -365,14 +493,22 @@ adb install -r "D:\game_hack\minidayz\Minidayz-WebRTC\dist\Minidayz-WebRTC-debug
 ## 八、iOS / IPA
 
 **`.ipa` 只能在 macOS + Xcode 上编译签名**（Apple 工具链只有 macOS 版），Windows 上无法产出二进制。
-但仓库里已经准备好除"按编译键"以外的全部内容，完整步骤见 **`tools/build-ios.md`**：
+所以**在 Windows 上"重新生成 IPA"这件事本身不成立** —— 能做的只有：把代码准备好 → 推到 GitHub → 让 Actions 的
+macOS 机器产出未签名 IPA → 回 Windows 用 Sideloadly 签名安装。完整步骤见 **`tools/build-ios.md`**：
 
 | 项 | 位置 | 说明 |
 |---|---|---|
 | iOS 工程 | `ios/App/App.xcodeproj` | 用 **CocoaPods** 生成（扫码插件只有 podspec，SPM 会跳过它） |
 | 依赖清单 | `ios/App/Podfile` | 含 Capacitor / MlkitBarcodeScanning / Camera / StatusBar，**`platform :ios, '15.5'`**（不能是 15.0，见下） |
 | 权限与显示 | `ios/App/App/Info.plist` | 相机、**本地网络**、Bonjour、横屏锁定、全屏 |
-| 云构建 | `.github/workflows/ios-unsigned-ipa.yml` | GitHub 的 macOS 机器产出未签名 IPA |
+| 云构建 | `.github/workflows/ios-unsigned-ipa.yml` | GitHub 的 macOS 机器产出未签名 IPA（`workflow_dispatch` 手动触发） |
+
+**iOS 侧不需要为本次改动做任何额外配置**：黑边功能与分块上限都在 `web/mdz_ui.js` / `web/mdz_core.js` 里，
+与 Android 共用同一份代码；工作流会在 CI 里自己跑 `npm ci` + `cap sync ios` 把最新的 `web/` 拷进工程。
+只要 `web/` 里是新的构建标记（`mdz-webrtc-web-6-lite` / `mdz-ui-6-lite`），产出的 IPA 就带上了这些改动。
+
+> iOS 上 `window.innerWidth` 的覆盖同样有效（WKWebView 支持在实例上定义同名属性遮蔽原型上的 getter），
+> 所以黑边在 iPhone 上一样能用；挖孔/灵动岛被遮时把对应一侧调宽即可。
 
 三条路线：
 
@@ -479,7 +615,9 @@ Podfile 修好之后，CI 的失败点从第 10 步推进到了第 14 步 `xcode
 连带新增：`diagnose()` 一句话诊断（握手后 20 秒没连上就直接打在面板上）、
 `test/mdz_handshake.test.js`（26 项，用行为一致的假 RTCPeerConnection）与
 `test/mdz_fix_audit.test.js`（25 项，逐条钉住上面的修法）。
-构建号升到 `mdz-webrtc-web-2` / `mdz-ui-2` —— 手机上打开面板要能看到 `mdz-ui-2`，否则装的是旧包。
+构建号当时升到 `mdz-webrtc-web-2` / `mdz-ui-2`（历史值）—— 手机上打开面板要能看到当前构建号，否则装的是旧包。
+当前构建号以 `web/index.html` 的 `MDZ_BUILD` 与 `web/mdz_ui.js` 的 `BUILD` 为准，两处必须同版本
+（`test/mdz_invariants.test.js` 会守住这条，`test/mdz_page.test.js` 还会检查面板标题上真的显示了它）。
 
 > ⚠️ 这些修复都在 **web 资源**里，而 Capacitor 是把 web 资源打进安装包的：
 > 改完必须**重新构建 + 重装**（安卓 `tools/build-apk.ps1`，iOS 跑 CI 再重签），
@@ -507,13 +645,17 @@ MOD 本来有保护（载入前存"你自己的角色检查点"、载入后恢�
 而"卸不下来"是**归属**问题：那批物品在房主的授权账本里不属于客机，
 任何移除都被判未授权（`inventory_replacement_not_authorized` / `remoteOwnsItem`）→ 回滚。
 
-**现在的做法（路线1）**：`mdz_island.js` 只做**检测**（两端比对 `MDZ.fingerprint()` 的 `mapHash`），
+**曾经的做法（路线1，已随 `mdz_island.js` 一并删除）**：那个模块只做**检测**（两端比对 `MDZ.fingerprint()` 的 `mapHash`），
 一旦判定跨岛就 **广播再见 + 断开联机 + 明确提示重连**：
 
 > 跨岛了：联机已断开。请和房主到同一个岛后重新连接 —— 房主点「①创建房间」，客机点「①加入房间」
 
+⚠️ **本快照已经没有这层保护了**（6 个补丁模块按需求删除）。所以在当前版本里跨岛
+就是历史坑 #9 描述的现象本身：**客机可能拿到房主的角色/背包且卸不下来**。
+规避方式只有一个 —— 联机时别跨岛；真要跨岛就断开重连，并接受存档被污染的风险。
+下面这条设计结论仍然成立，留给以后想真正解决它的人：
+
 重新加入走的是**正规加入流程**，客机自己的角色/装备会被正确恢复（这是加入流程本来就设计好的）。
-`test/mdz_island.test.js` 里有一条硬断言：**跨岛模块源码里不允许出现 `sendSnapshot`**。
 
 > 想做到"无缝跟岛"（不重连）只有一条正路：让客机**本地**用同一个种子重新生成世界
 > （`MDZ.setSeed` + 各岛确定性种子），完全不传世界快照。前提是先攻下"如何触发本地换岛" ——
@@ -540,7 +682,7 @@ MOD 本来有保护（载入前存"你自己的角色检查点"、载入后恢�
 而"怪打客机"走另一条路：房主算好直接下发 `{type:'damage', source:'zombie'}`，**没有任何客户端校验**
 → 所以永远生效。这就是那个不对称的根源（近战更彻底：近战不产生子弹实例，连 `mp_entity_hit` 都发不出去）。
 
-**现在的做法**：新增 `web/mdz_hitfix.js`（外挂式，不改 `mp_*.js`）：
+**现在的做法**（已随 `mdz_hitfix.js` 删除）：那个模块是外挂式的，不改 `mp_*.js`：
 
 1. 缓存房主同步过来的实体权威坐标（`mp_entity_add/state/death/reconcile` 都带 x/y）；
 2. 客机发 `mp_entity_hit` 时把 x/y **校正成房主侧坐标** → 120px 校验必然通过；
@@ -549,14 +691,42 @@ MOD 本来有保护（载入前存"你自己的角色检查点"、载入后恢�
 4. **逐条打印判定结果**（`✅ 已结算` / `❌ 被房主拒绝` / `房主宣布死亡…` / `你被僵尸打了…`），
    下次复现点「复制日志」就能一眼看出是哪一条挂了。
 
+⚠️ **本快照没有这层修复**。表现为：**客机（非房主）打怪可能不结算伤害**（近战更彻底）。
+规避方式：客机以探索/协作玩法为主，或让房主来打。
+面板上的「复制日志」仍然可用 —— 排查时把完整日志发出来就能看出是哪一条校验挂了。
+
+---
+
 ## 九、原版未被改动的证明
 
-```powershell
-# 重新计算原版哈希并与清单比对
-$src='D:\game_hack\minidayz\Minidayz-Multiplayer-main\Minidayz-Multiplayer-main'
-$man=Import-Csv 'D:\game_hack\minidayz\Minidayz-WebRTC\_original_manifest.csv'
-$now=Get-ChildItem $src -Recurse -File | Get-FileHash -Algorithm SHA256 |
-     Select-Object @{n='rel';e={$_.Path.Substring($src.Length+1)}},Hash
-Compare-Object $man $now -Property rel,Hash
-# 无输出 = 原版 1964 个文件全部与建副本时一致
+清单 `_original_manifest.csv` 是**相对路径 + SHA256**，所以可以直接拿来校验 `web/` 副本
+（不需要原版目录；早期文档里的脚本指向本机的原版路径，别人跑不了）：
+
+```bash
+# 在项目根目录执行：逐个比对 web/ 与清单
+# 清单里的子目录用反斜杠（plugins\xxx\yyy.js），所以统一换成 / 再拼路径，跨平台都能跑
+python - <<'PY'
+import csv, hashlib, os
+man = {r['rel']: r['Hash'] for r in csv.DictReader(open('_original_manifest.csv', encoding='utf-8-sig'))}
+def sha(p):
+    h = hashlib.sha256()
+    with open(p, 'rb') as f:
+        for b in iter(lambda: f.read(1 << 20), b''): h.update(b)
+    return h.hexdigest().upper()
+diff = []
+for rel, want in man.items():
+    p = os.path.join('web', rel.replace('\\', '/'))
+    if not os.path.exists(p) or sha(p) != want:
+        diff.append(rel)
+print('清单条目', len(man), '| 不一致', len(diff))
+for r in diff: print('  差异:', r)
+PY
 ```
+
+**当前实测结果：清单 1964 项里 1963 项与 `web/` 完全一致，唯一差异是 `index.html`**（有意修改：
+去掉 `peerjs.min.js`、加入 `mdz_*` 与新脚本）。也就是说「游戏本体逐字节未改」这条承诺是成立的、可机器验证的。
+
+> 注意：清单用**反斜杠**做子目录分隔（`plugins\xxx\yyy.js`），在 Linux/macOS 上比对时要把 `\` 换成 `/`。
+> 另外这条校验目前是**手动**跑的。要把它变成 CI 不变量，就在 `test/` 下加一个套件读清单比对
+> `web/`（排除 `index.html`、`mdz_*.js`、`vendor/`、`mdz_selftest.html` 这些新增/改动文件）。
+> 有了它，"这是 MOD 的 bug 还是资源被改了"这类扯皮可以直接排除。

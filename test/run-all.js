@@ -15,6 +15,9 @@ const suites = [
   ['mdz_selftest（自测页本身：点按钮读页面 PASS/FAIL）', 'mdz_selftest.test.js'],
   ['mdz_page（按 index.html 真实脚本顺序做页面集成检查）', 'mdz_page.test.js'],
   ['mdz_scan（App 内扫码三级链路：WebView -> 原生捆绑模型 -> 文本）', 'mdz_scan.test.js'],
+  ['mdz_chunk_guard（分块重组的资源上限：并发组/单组/总量/超时）', 'mdz_chunk_guard.test.js'],
+  ['mdz_bars（自定义左右黑边：改写视口 / 持久化 / 上限保护）', 'mdz_bars.test.js'],
+  ['mdz_invariants（工程不变量：编码约束 / 调试开关 / 版本标识 / 脚本引用完整性）', 'mdz_invariants.test.js'],
   ['tool_mobileprovision（证书体检：Bundle ID / 类型 / 有效期 / UDID）', 'tool_mobileprovision.test.js'],
   ['ios_config（iOS 工程配置：部署目标 ≥15.5 / 权限 / 共享 scheme）', 'ios_config.test.js']
 ];

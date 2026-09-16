@@ -300,24 +300,114 @@
     return out;
   }
 
-  /** 分块重组器：按 id 聚合，处理乱序/重复/超时丢弃 */
+  /* 分块重组器：按 id 聚合，处理乱序/重复/超时丢弃
+     --------------------------------------------------------------------------
+     为什么要有上限：信封里的字段（尤其 meta.t = 分块总数）**全部由对端控制**。
+     早期实现直接 new Array(meta.t)，而且 buffers 没有任何并发上限 ——
+     对端只要不停换 id 发分块、或者报一个很大的 t，就能让内存无限增长
+     （联机时房主是被动接收方，会被直接撑爆）。
+     现在四道闸门 + 一次清扫：
+       maxParts       单组分片数上限（t 必须落在 [1, maxParts]）
+       maxGroupBytes  单组累计字符上限
+       maxPending     同时在收的分块组数上限（超出先淘汰最旧的）
+       maxTotalBytes  所有组累计字符上限（超出继续淘汰最旧的）
+     超时组不再只靠"同一个 id 再来一块"才被清理：每次 push 都顺手清扫一遍。
+     pending 数有上限，所以清扫是 O(maxPending) 的常数开销，不需要定时器。   */
+  var CHUNK_LIMITS = {
+    maxParts: 256,                 // 12K 码元/块 -> 单条消息最多约 3MB
+    maxGroupBytes: 4 * 1024 * 1024,
+    maxPending: 8,
+    maxTotalBytes: 8 * 1024 * 1024
+  };
+
+  /** 分块信封的形状校验：字段全来自对端，必须逐个验 */
+  function isValidChunkMeta(meta, maxParts) {
+    if (!meta || typeof meta !== 'object') return false;
+    var id = meta.id, i = meta.i, t = meta.t;
+    if (typeof id !== 'number' && typeof id !== 'string') return false;
+    if (typeof id === 'string' && (id.length === 0 || id.length > 64)) return false;
+    if (typeof t !== 'number' || !isFinite(t) || t !== Math.floor(t) || t < 1 || t > maxParts) return false;
+    if (typeof i !== 'number' || !isFinite(i) || i !== Math.floor(i) || i < 0 || i >= t) return false;
+    return true;
+  }
+
   function ChunkReassembler(opts) {
     opts = opts || {};
     this.timeoutMs = opts.timeoutMs || 30000;
+    this.maxParts = Math.max(1, opts.maxParts || CHUNK_LIMITS.maxParts);
+    this.maxGroupBytes = Math.max(1, opts.maxGroupBytes || CHUNK_LIMITS.maxGroupBytes);
+    this.maxPending = Math.max(1, opts.maxPending || CHUNK_LIMITS.maxPending);
+    this.maxTotalBytes = Math.max(1, opts.maxTotalBytes || CHUNK_LIMITS.maxTotalBytes);
     this.buffers = {};
+    this.bytes = 0;        // 当前所有未完成组累计的字符数
+    this.dropped = 0;      // 因超限/形状非法被丢弃的组数（或非法信封数）
   }
-  ChunkReassembler.prototype.push = function (meta, data) {
-    var b = this.buffers[meta.id];
-    if (!b || (Date.now() - b.at) > this.timeoutMs) {
-      b = this.buffers[meta.id] = { parts: new Array(meta.t), got: 0, total: meta.t, at: Date.now() };
+
+  ChunkReassembler.prototype._drop = function (id) {
+    var b = this.buffers[id];
+    if (!b) return;
+    this.bytes -= b.bytes;
+    if (this.bytes < 0) this.bytes = 0;
+    delete this.buffers[id];
+    this.dropped++;
+  };
+
+  /** 找出 at 最小的（最旧的）组 id */
+  ChunkReassembler.prototype._oldest = function () {
+    var keys = Object.keys(this.buffers), best = null;
+    for (var i = 0; i < keys.length; i++) {
+      if (best === null || this.buffers[keys[i]].at < this.buffers[best].at) best = keys[i];
     }
+    return best;
+  };
+
+  /** 清扫：先扔超时的，再按"最旧优先"扔到并发数与总量都不超限为止 */
+  ChunkReassembler.prototype._sweep = function (needBytes) {
+    var now = Date.now(), keys = Object.keys(this.buffers), i, id;
+    for (i = 0; i < keys.length; i++) {
+      var b = this.buffers[keys[i]];
+      if (b && (now - b.at) > this.timeoutMs) this._drop(keys[i]);
+    }
+    while (Object.keys(this.buffers).length >= this.maxPending) {
+      id = this._oldest();
+      if (id === null) break;
+      this._drop(id);
+    }
+    while (this.bytes + (needBytes || 0) > this.maxTotalBytes) {
+      id = this._oldest();
+      if (id === null) break;
+      this._drop(id);
+    }
+  };
+
+  ChunkReassembler.prototype.push = function (meta, data) {
+    if (!isValidChunkMeta(meta, this.maxParts)) { this.dropped++; return null; }
+    if (typeof data !== 'string') { this.dropped++; return null; }
+    if (data.length > this.maxGroupBytes) { this.dropped++; return null; }
+
+    var id = meta.id;
+    var b = this.buffers[id];
+    if (b && (Date.now() - b.at) > this.timeoutMs) { this._drop(id); b = null; }
+    // 同一个 id 换了分块方案（t 变了）说明对端在复用/伪造 id，旧组作废
+    if (b && b.total !== meta.t) { this._drop(id); b = null; }
+    if (b && b.bytes + data.length > this.maxGroupBytes) { this._drop(id); return null; }
+
+    if (!b) {
+      this._sweep(data.length);
+      b = this.buffers[id] = { parts: new Array(meta.t), got: 0, total: meta.t, bytes: 0, at: Date.now() };
+    }
+
     if (b.parts[meta.i] === undefined) {
       b.parts[meta.i] = data;
       b.got++;
+      b.bytes += data.length;
+      this.bytes += data.length;
     }
     b.at = Date.now();
     if (b.got === b.total) {
-      delete this.buffers[meta.id];
+      this.bytes -= b.bytes;
+      if (this.bytes < 0) this.bytes = 0;
+      delete this.buffers[id];
       return b.parts.join('');
     }
     return null;
@@ -325,7 +415,7 @@
   ChunkReassembler.prototype.stats = function () {
     var n = 0, keys = Object.keys(this.buffers);
     for (var i = 0; i < keys.length; i++) n += this.buffers[keys[i]].got;
-    return { pending: keys.length, parts: n };
+    return { pending: keys.length, parts: n, bytes: this.bytes, dropped: this.dropped };
   };
 
   /* --------------------------------------------------------- 消息分流策略 */
@@ -466,6 +556,8 @@
     splitStringSafely: splitStringSafely,
     makeChunks: makeChunks,
     ChunkReassembler: ChunkReassembler,
+    CHUNK_LIMITS: CHUNK_LIMITS,
+    isValidChunkMeta: isValidChunkMeta,
 
     classifyMessage: classifyMessage,
     FAST_TYPES: FAST_TYPES,

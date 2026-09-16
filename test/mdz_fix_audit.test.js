@@ -90,8 +90,16 @@ ok('--check 通过（两个平台的投票门槛都已是 3）', patchOk, patchO
 
 /* --------------------------------------------------- 构建标记（可验证版本） */
 section('G. 构建标记（手机上要能看到打开的是新版本）');
-ok('index.html 构建号已升到 web-5-lite（联机精简版）', /MDZ_BUILD = 'mdz-webrtc-web-5-lite'/.test(html));
-ok('面板构建号已升到 ui-5-lite', /var BUILD = 'mdz-ui-5-lite'/.test(ui));
+// 注意：这里刻意**不**钉死具体版本号。以前写死 'web-5-lite' / 'ui-5-lite'，
+// 结果每次升版本号都要来改测试。改成只验证"存在 + 两处版本号一致"。
+const buildHtml = (/MDZ_BUILD = '([^']+)'/.exec(html) || [])[1] || '';
+const buildUi = (/var BUILD = '([^']+)'/.exec(ui) || [])[1] || '';
+ok('index.html 有构建标记', buildHtml.length > 0, buildHtml);
+ok('面板有构建标记', buildUi.length > 0, buildUi);
+ok('两处构建标记的版本号一致',
+  !!buildHtml && !!buildUi &&
+  (buildHtml.match(/(\d+)/) || [])[1] === (buildUi.match(/(\d+)/) || [])[1],
+  buildHtml + ' / ' + buildUi);
 ok('面板提供「复制日志」（真机排查要把完整日志发出来）', /复制日志/.test(ui));
 ok('已移除的 6 个补丁模块不再以 <script> 形式出现在 index.html（本快照 = 联机精简版）',
   !/<script src="mdz_(cfg|diag|island|hitfix|players|storm)\.js"><\/script>/.test(html));

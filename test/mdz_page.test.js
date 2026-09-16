@@ -85,8 +85,10 @@ if (skipped.length) console.log('  --  ' + skipped.join(', ') + '（需要 C2 �
   ok('window.MDZP2P 已就绪', typeof w.MDZP2P === 'object');
   ok('window.Peer 已被我们的垫片接管（不再需要 PeerJS）',
     typeof w.Peer === 'function' && w.Peer === w.MDZP2P.MdzPeer);
+  // 刻意不钉死具体版本号：只验证"标记存在"，以及面板上的构建号与页面构建号同版本。
+  // （以前写死 'mdz-webrtc-web-5-lite'，每次升版本号都要回来改测试。）
   ok('构建标记存在（用来分辨是否被缓存住旧页面）',
-    w.MDZ_BUILD === 'mdz-webrtc-web-5-lite', String(w.MDZ_BUILD));
+    typeof w.MDZ_BUILD === 'string' && w.MDZ_BUILD.length > 0, String(w.MDZ_BUILD));
   ok('lan_bridge.js 已加载并暴露游戏入口',
     typeof w.startHost === 'function' && typeof w.joinGame === 'function' && typeof w.leaveRoom === 'function');
   ok('vendor/pako 已就绪', typeof w.pako === 'object' && typeof w.pako.deflateRaw === 'function');
@@ -100,7 +102,13 @@ if (skipped.length) console.log('  --  ' + skipped.join(', ') + '（需要 C2 �
   ok('面板上有"房主：创建房间"按钮', panelBtns.some(t => t.indexOf('房主：创建房间') >= 0));
   ok('面板上有"客机：加入房间"按钮', panelBtns.some(t => t.indexOf('客机：加入房间') >= 0));
   ok('面板上有"取消 / 断开"按钮', panelBtns.some(t => t.indexOf('取消 / 断开') >= 0));
-  ok('面板标题带构建号', w.document.body.textContent.indexOf('mdz-ui-5-lite') >= 0);
+  const bodyText = w.document.body.textContent || '';
+  const uiMark = (/mdz-ui-\d+[a-z-]*/.exec(bodyText) || [])[0] || '';
+  ok('面板标题带构建号', uiMark.length > 0, uiMark);
+  ok('面板构建号与页面构建号同版本',
+    !!uiMark && !!w.MDZ_BUILD &&
+    (uiMark.match(/(\d+)/) || [])[1] === (String(w.MDZ_BUILD).match(/(\d+)/) || [])[1],
+    uiMark + ' / ' + w.MDZ_BUILD);
   ok('没有出现红色致命错误条', w.document.body.textContent.indexOf('联机面板没能启动') < 0);
 
   console.log('\n=== 3. 我们的脚本没有在加载期报错 ===');
