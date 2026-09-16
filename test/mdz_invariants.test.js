@@ -97,15 +97,17 @@ if (mHtml && mUi) {
 ok('README 里的构建标记与代码一致（或不再写死具体版本号）',
   !/mdz-webrtc-web-1\b/.test(readText('README-DEV.md')));
 
-// 测试者向的文档里也写了构建号，最容易忘同步 —— 一起守住
-ok('测试者须知.md 存在', fs.existsSync(path.join(ROOT, '测试者须知.md')));
-if (fs.existsSync(path.join(ROOT, '测试者须知.md'))) {
-  const testerDoc = readText('测试者须知.md');
-  ok('测试者须知.md 写的是当前构建标记',
-    !!mHtml && testerDoc.indexOf(mHtml[1]) >= 0,
+// 面向人的文档里也写了构建号，最容易忘同步 —— 一起守住。
+// README.md 是仓库首页入口（给测试者与访客），测试者须知.md 是给参与测试的朋友。
+for (const doc of ['README.md', '测试者须知.md']) {
+  ok(doc + ' 存在', fs.existsSync(path.join(ROOT, doc)));
+  if (!fs.existsSync(path.join(ROOT, doc))) continue;
+  const text = readText(doc);
+  ok(doc + ' 写的是当前构建标记',
+    !!mHtml && text.indexOf(mHtml[1]) >= 0,
     '文档里应出现 ' + (mHtml ? mHtml[1] : '?'));
-  ok('测试者须知.md 写的是当前面板构建标记',
-    !!mUi && testerDoc.indexOf(mUi[1]) >= 0,
+  ok(doc + ' 写的是当前面板构建标记',
+    !!mUi && text.indexOf(mUi[1]) >= 0,
     '文档里应出现 ' + (mUi ? mUi[1] : '?'));
 }
 
