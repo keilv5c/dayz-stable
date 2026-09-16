@@ -2,6 +2,13 @@
 
 > 本目录是**副本**，原版目录 `D:\game_hack\minidayz\Minidayz-Multiplayer-main\Minidayz-Multiplayer-main` 一个字节都没有改。
 > 校验方法见文末"原版未被改动的证明"。
+>
+> ⚠️ **本副本是「联机精简版」**：只保留联机三件套 `mdz_core.js` / `mdz_p2p.js` / `mdz_ui.js`。
+> 已移除 6 个补丁模块 —— `mdz_cfg`（配置中枢）、`mdz_diag`（诊断）、`mdz_island`（跨岛止损）、
+> `mdz_hitfix`（命中修复）、`mdz_players`（角色自保）、`mdz_storm`（风暴刹车）—— 以及它们的 5 个测试套件。
+> 下面文档中凡是提到这些模块的地方（尤其第四节历史坑 #9 / #10）都属于**完整版**：
+> 完整版就在本仓库的 git 标签 `stable-2026-09-11` 上，`git checkout stable-2026-09-11` 即可取回。
+> 精简版的说明见 `稳定版说明.md`。
 
 ---
 

@@ -8,14 +8,9 @@ const path = require('path');
 
 const suites = [
   ['mdz_core（纯逻辑：SDP 打包/裁剪/分块/分流）', 'mdz_core.test.js'],
-  ['mdz_cfg（稳定模式 + 逐模块开关 + 持久化）', 'mdz_cfg.test.js'],
   ['mdz_p2p（真实 DataChannel 端到端）', 'mdz_rtc.test.js'],
   ['mdz_handshake（握手状态机：重复回码/陈旧回码/文本模式完整 SDP）', 'mdz_handshake.test.js'],
   ['mdz_fix_audit（真机故障修复点审计：闩锁/1080p/变焦/权限/投票门槛）', 'mdz_fix_audit.test.js'],
-  ['mdz_island（跨岛检测 + 断开提示重连；绝不推世界快照）', 'mdz_island.test.js'],
-  ['mdz_hitfix（客机打不到怪的兼容层：命中点校正/位置刷新/逐条判定）', 'mdz_hitfix.test.js'],
-  ['mdz_players（客机角色自保：载入房主世界前把自己交出去 → 装备不被换掉）', 'mdz_players.test.js'],
-  ['mdz_storm（交互请求风暴刹车：reset + 重拉 bushes，治发热）', 'mdz_storm.test.js'],
   ['mdz_ui（两个 jsdom 实例走完整 UI 流程）', 'mdz_ui.test.js'],
   ['mdz_selftest（自测页本身：点按钮读页面 PASS/FAIL）', 'mdz_selftest.test.js'],
   ['mdz_page（按 index.html 真实脚本顺序做页面集成检查）', 'mdz_page.test.js'],

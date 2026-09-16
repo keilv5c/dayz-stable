@@ -14,7 +14,7 @@
 (function () {
   'use strict';
 
-  var BUILD = 'mdz-ui-4';
+  var BUILD = 'mdz-ui-5-lite';
 
   /** 面板起不来时也要让用户"看得见"错误，而不是界面上一片空白 */
   function fatal(msg, detail) {
@@ -408,53 +408,7 @@
         (s.iceStats ? s.iceStats.total : 0) + '，收发 ' + s.tx.txMsgs + '/' + s.tx.rxMsgs) : '当前没有会话', '#9fe8ff');
     };
     foot.appendChild(ui.btnStats);
-    // 跨岛：**不做热同步**（搬整张世界会把房主的角色/背包一起带过来），只提供"断开并重连"
-    ui.btnResync = el('button', BTN2_CSS, '跨岛后重连');
-    ui.btnResync.onclick = function () {
-      var I = window.MDZIsland;
-      if (!I || typeof I.reconnectNow !== 'function') {
-        setStatus('跨岛模块没加载（web/mdz_island.js 缺失？）', '#ff6b6b');
-        return;
-      }
-      var s = (typeof I.state === 'function') ? I.state() : {};
-      if (!s.role) { setStatus('还没联机：先创建/加入房间', '#ffcc66'); return; }
-      setStatus('正在断开联机…到同一个岛后重新连接（房主点①创建房间，客机点①加入房间）', '#ffcc66');
-      I.reconnectNow('手动点「跨岛后重连」');
-    };
-    foot.appendChild(ui.btnResync);
 
-    // —— 稳定模式 / 模块开关（存 localStorage，改动立即生效，不用重装）——
-    var CFGM = window.MDZCFG;
-    var cfgBox = el('div', 'margin-top:6px;padding-top:5px;border-top:1px solid #2b3541;font-size:12px');
-    cfgBox.appendChild(el('div', 'opacity:.85;margin-bottom:3px', '稳定模式 / 模块开关（改动立即生效，不用重装）'));
-    if (!CFGM) {
-      cfgBox.appendChild(el('div', 'color:#ff9955', '配置模块没加载（web/mdz_cfg.js 缺失）'));
-    } else {
-      var cfgBoxes = {};
-      var cfgRow = el('div', '');
-      ['stable', 'island', 'diag', 'hitfix', 'players', 'storm'].forEach(function (k) {
-        var box = el('input'); box.type = 'checkbox';
-        box.checked = CFGM.isOn(k);
-        var lab = el('label', 'margin-right:9px;cursor:pointer;display:inline-block');
-        lab.appendChild(box);
-        lab.appendChild(el('span', '', ' ' + (CFGM.LABELS[k] || k)));
-        box.onchange = function () {
-          CFGM.set(k, box.checked);
-          setStatus('已' + (box.checked ? '开启' : '关闭') + '「' + (CFGM.LABELS[k] || k) + '」　当前：' + CFGM.describe(), '#9fe8ff');
-        };
-        cfgBoxes[k] = box;
-        cfgRow.appendChild(lab);
-      });
-      cfgBox.appendChild(cfgRow);
-      ui.btnCfgReset = el('button', BTN2_CSS, '恢复默认设置');
-      ui.btnCfgReset.onclick = function () {
-        var changed = CFGM.reset();
-        for (var k in cfgBoxes) if (cfgBoxes.hasOwnProperty(k)) cfgBoxes[k].checked = CFGM.isOn(k);
-        setStatus((changed.length ? '已恢复默认设置：' : '本来就是默认设置：') + CFGM.describe(), '#9fe8ff');
-      };
-      cfgBox.appendChild(ui.btnCfgReset);
-    }
-    panel.appendChild(cfgBox);
     ui.btnLog = el('button', BTN2_CSS, '清空日志');
     ui.btnLog.onclick = function () { state.log = []; if (ui.logBox) ui.logBox.textContent = ''; };
     foot.appendChild(ui.btnLog);
@@ -1206,7 +1160,7 @@
         setStatus('摄像头权限被拒绝，已切到文本模式（用复制粘贴完成握手）', '#ff6b6b');
       }
       if (s.channel === 'closed') { setStatus('连接已断开', '#ff6b6b'); state.stage = 'idle'; refreshButtons(); }
-      // 跨岛/手动断开：把面板恢复成"可以重新创建/加入"的状态，
+      // 手动断开：把面板恢复成"可以重新创建/加入"的状态，
       // 否则用户会卡在"已联机"的旧界面里点不动按钮。
       if (s.stage === 'cancelled') {
         stopScan();
@@ -1260,7 +1214,7 @@
     canScan: canScan,
     switchMode: switchMode,
     startScan: startScan,
-    // 给 mdz_island.js（跨岛同步协调器）用：把进度打到面板状态行与日志里
+    // 供外部（调试/自测页）使用：把进度打到面板状态行与日志里
     log: log,
     setStatus: setStatus,
     _ui: ui

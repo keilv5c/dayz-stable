@@ -98,7 +98,10 @@ section('4. Podfile 与 Capacitor CLI 正则的兼容性（CI 连红三次的那
     now.join(' | ') || '无问题');
 
   const rep = podTool.replay(podfileRaw);
-  ok('重放 cap sync/update 后 Podfile 逐字节不变', rep.ok && rep.text === podfileRaw);
+  // 注意：Capacitor CLI 的正则把结尾写死成 "\nend"，所以在 CRLF 检出的 Podfile 上，
+  // 连真实的 cap sync/update 也会少一个 \r —— 逐字节比较会误报。这里比"内容"（折掉行尾）。
+  ok('重放 cap sync/update 后 Podfile 内容不变（行尾差异不计）',
+    rep.ok && rep.text.replace(/\r\n/g, '\n') === podfileRaw.replace(/\r\n/g, '\n'));
   const after = podTool.inspect(rep.text);
   ok('重放后体检仍通过', after.length === 0, after.join(' | ') || '无问题');
 

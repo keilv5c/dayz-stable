@@ -90,63 +90,11 @@ ok('--check 通过（两个平台的投票门槛都已是 3）', patchOk, patchO
 
 /* --------------------------------------------------- 构建标记（可验证版本） */
 section('G. 构建标记（手机上要能看到打开的是新版本）');
-ok('index.html 构建号已升到 web-4', /MDZ_BUILD = 'mdz-webrtc-web-4'/.test(html));
-ok('面板构建号已升到 ui-4', /var BUILD = 'mdz-ui-4'/.test(ui));
-ok('跨岛检测模块已挂进 index.html', /<script src="mdz_island\.js"><\/script>/.test(html));
-ok('诊断钩子已挂进 index.html', /<script src="mdz_diag\.js"><\/script>/.test(html));
-ok('命中兼容层已挂进 index.html', /<script src="mdz_hitfix\.js"><\/script>/.test(html));
+ok('index.html 构建号已升到 web-5-lite（联机精简版）', /MDZ_BUILD = 'mdz-webrtc-web-5-lite'/.test(html));
+ok('面板构建号已升到 ui-5-lite', /var BUILD = 'mdz-ui-5-lite'/.test(ui));
 ok('面板提供「复制日志」（真机排查要把完整日志发出来）', /复制日志/.test(ui));
-{
-  const diag = fs.readFileSync(path.join(ROOT, 'web', 'mdz_diag.js'), 'utf8');
-  ok('诊断模块会接上 window.MDZTrace', /window\.MDZTrace\s*=/.test(diag));
-  ok('诊断模块会汇报计数器变化', /snapshot\(\)/.test(diag) && /\[统计\]/.test(diag));
-  ok('诊断模块会镜像游戏内提示消息（character checkpoint restored 等）',
-    /mirrorMessages/.test(diag) && /window\.appendMsg/.test(diag));
-
-  const island = fs.readFileSync(path.join(ROOT, 'web', 'mdz_island.js'), 'utf8');
-  ok('★ 跨岛模块**不再**重推世界快照（推快照会把房主的角色/背包带给客机，实测串装备）',
-    !/sendSnapshot/.test(island));
-  ok('跨岛模块改成"断开并提示重连"', /reconnectNow/.test(island) && /MDZP2P\.cancel/.test(island));
-  ok('跨岛模块在加载时就挂事件监听（不依赖 DOMContentLoaded）',
-    /window\.addEventListener\('mdz-mp-world-ready'/.test(island));
-
-  const hit = fs.readFileSync(path.join(ROOT, 'web', 'mdz_hitfix.js'), 'utf8');
-  ok('命中兼容层会把客机切到「房主裁决伤害」模式（否则命中不上报）',
-    /hostArbitratedDamage/.test(hit) && /setLocalDamage\(false\)/.test(hit));
-  const ply = fs.readFileSync(path.join(ROOT, 'web', 'mdz_players.js'), 'utf8');
-  ok('客机角色自保层已挂进 index.html', /<script src="mdz_players\.js"><\/script>/.test(html));
-  ok('角色自保层用 capture + checkpoint 把自己的角色交给房主存档',
-    /MPPlayers|players\(\)/.test(ply) && /capture\(\)/.test(ply) && /checkpoint\(true, st\.mine\)/.test(ply));
-  ok('角色自保层在"载入前"同步执行（不能延后到世界载入之后）',
-    /mdz-mp-before-client-snapshot[\s\S]{0,220}?pushMyState\(\)/.test(ply));
-  const storm = fs.readFileSync(path.join(ROOT, 'web', 'mdz_storm.js'), 'utf8');
-  ok('风暴刹车模块已挂进 index.html', /<script src="mdz_storm\.js"><\/script>/.test(html));
-  ok('风暴刹车用 reset + setSender 重新拉取全量 bushes',
-    /reset\(\)/.test(storm) && /setSender/.test(storm) && /mp_bush_request/.test(storm));
-  ok('风暴刹车只在客机侧动手', /st\.role !== 'client'/.test(storm));
-
-  const cfg = fs.readFileSync(path.join(ROOT, 'web', 'mdz_cfg.js'), 'utf8');
-  ok('配置中枢已挂进 index.html 且排在功能模块之前',
-    html.indexOf('mdz_cfg.js') > 0 && html.indexOf('mdz_cfg.js') < html.indexOf('mdz_island.js'));
-  ok('配置中枢支持稳定模式 + 逐模块开关 + localStorage',
-    /stable: true/.test(cfg) && /localStorage/.test(cfg) && /onChange/.test(cfg));
-  ok('五个功能模块都受配置中枢控制（isOn/isStable）',
-    /MDZCFG\.isOn\('island'\)/.test(island) && /MDZCFG\.isOn\('diag'\)/.test(diag) &&
-    /MDZCFG\.isOn\('hitfix'\)/.test(hit) && /MDZCFG\.isOn\('players'\)/.test(ply) &&
-    /MDZCFG\.isOn\('storm'\)/.test(storm));
-  ok('面板有稳定模式/模块开关与恢复默认',
-    /恢复默认设置/.test(ui) && /稳定模式 \/ 模块开关/.test(ui));
-  ok('自己的轮询有省电档（稳定模式用更长间隔）',
-    /stableIntervalMs: 8000/.test(island) && /stableIntervalMs: 20000/.test(diag));
-  ok('命中日志已聚合节流（不再每条刷屏）',
-    /hitLogThrottleMs/.test(hit) && /flushHitAgg/.test(hit));
-  ok('命中兼容层含 29 种弹种白名单判断', /WHITELIST/.test(hit) && /t192/.test(hit) && /t881/.test(hit));
-  ok('命中兼容层会校正命中点到房主权威坐标', /repairHitCoords/.test(hit) && /msg\.x = p\.x/.test(hit));
-  ok('命中兼容层会在房主侧补刷新客机位置（绕开 3 秒过期全拒）',
-    /refreshHostStalePos/.test(hit) && /MPEntities\.observe/.test(hit));
-  ok('面板的跨岛按钮改成"断开重连"而不是重推快照',
-    /跨岛后重连/.test(ui) && /reconnectNow/.test(ui));
-}
+ok('已移除的 6 个补丁模块不再以 <script> 形式出现在 index.html（本快照 = 联机精简版）',
+  !/<script src="mdz_(cfg|diag|island|hitfix|players|storm)\.js"><\/script>/.test(html));
 
 console.log('\n--------------------------------------------------');
 console.log(`结果: ${pass} 通过 / ${fail} 失败`);
