@@ -164,6 +164,69 @@ npm run web
 >
 > 调试入口：`MDZUI.setBars(左, 右)` / `MDZUI.resetBars()` / `MDZUI.getBars()` / `MDZUI.viewport()`。
 
+### 手机发热 / 掉帧？调「画面清晰度」
+
+**根因实测**（真 Chrome，同一份代码，只改渲染倍率）：
+
+| 渲染倍率 | 画布像素 | 实测 FPS |
+|---|---|---|
+| 1x | 227 万 | **60.2** |
+| 1.5x | 510 万 | **35.4** |
+| 3x | 2041 万 | **12.0** |
+
+单帧**逻辑**耗时始终约 4ms 不变 —— 掉帧全部来自「画布像素数」，不是游戏逻辑。
+
+手机屏 dpr 普遍 2.5~3.5，而 C2 的 `useHighDpi` 会把画布按 dpr 放大，像素数是 CSS 尺寸的
+6~12 倍。但游戏原始分辨率只有 1024x768，放大 2~3 倍不会多出任何细节，纯烧 GPU。
+
+面板底部有 **「画面清晰度」**，三档（把渲染倍率封顶，浏览器负责放大回屏幕）：
+
+| 档位 | 封顶倍率 | 说明 |
+|---|---|---|
+| 高（最清晰） | 2.0x | 文字最锐利 |
+| **中（均衡，默认）** | 1.5x | 手机上的推荐值 |
+| 低（最省电） | 1.0x | 最流畅、最凉 |
+
+设置存 `localStorage`（`mdz.ui.render.v1`），下次打开还在。桌面端 dpr 本来就是 1，三档等效，不受影响。
+
+> 为什么默认是中：上面那张表是无头**软件渲染**、且视口是桌面尺寸（2314px 宽）测的，
+> 属于最坏情况。手机 CSS 视口只有 ~800px 宽，1.5x 时画布约 65 万像素，
+> 比表里 60fps 那一行（227 万）还小 3 倍多 —— 所以手机上中档就能跑满 60。
+> 如果某台机器仍然卡，直接切低档。
+
+实现要点（`web/mdz_ui.js` 的 `applyRenderLevel`）：
+
+- 只改 `runtime.devicePixelRatio`（= `min(真实 dpr, 档位上限)`）再 `setSize()` 重排。
+- **`isRetina` 必须保持 `true`**：它同时决定 C2 要不要给 canvas 写 CSS 尺寸，
+  置 false 会让画布按位图尺寸显示、直接溢出屏幕（实测踩过）。
+
+### 主菜单上两个遗留入口已被移除
+
+游戏主菜单左右两侧原本各有一个入口：
+
+| 位置 | 文字 | 点击后 |
+|---|---|---|
+| 左 | `MDZ☆START` / `MDZ◇START` | 跳 `t.me/likefreefun` |
+| 右 | `MINI DayZ 2` | 跳 `store.bistudio.com` 的商店页 |
+
+现在它们**在视觉上完全消失、点击也不再跳转**，且**没有改动游戏本体**（`web/` 仍与原版逐字节一致）。
+
+做法（`web/mdz_ui.js` 的 `hideLegacyEntries` / `blockLegacyLinks`）：
+
+1. **隐藏**：Menu 布局 `menu_elements` 层上，按文本匹配 `t415`/`t1056` 的实例并置为 invisible；
+   再把它**位置重合、尺寸相近**的实例一起隐藏 —— 入口除了文字还有一块底色板，
+   而那块板是**另一种类型**的对象（按文本、按同类实例都匹配不到，实测确认）。
+   尺寸护栏（6 倍面积差）用来排除覆盖全屏的背景对象，否则会把整个菜单干掉。
+2. **拦跳转**：这里有个坑 —— C2 的 `Browser.GoToURL` 用的是 **`window.location = url`**，
+   而 `location` 是 unforgeable 的、JS 覆盖不了它的 setter。所以只能在
+   **动作函数的原型**（`Object.getPrototypeOf(cr.plugins_.Browser.prototype.acts)`）上包一层；
+   `GoToURLWindow` 走 `window.open`，两条都拦。只拦这两个域名，其它外链照常放行。
+   > 只包实例（`acts.GoToURL = ...`）是不够的 —— 运行时仍可能拿到原型上的原函数。
+3. 菜单会滚动、文字会在 ☆/◇ 之间变，所以用一个 1 秒的轻量巡检兜底，只在 Menu 布局上跑。
+
+> 验证：`npm run verify:bars` 会检查这两个入口的实例是否 invisible、
+> 直接调用 `GoToURL` 是否被拦、以及点原位置是否还会跳走。
+
 ### 两台设备实测联机
 
 **先用两个浏览器在本机做一次冒烟测试**（不需要第二台设备，能验证 90% 的链路）：
@@ -326,7 +389,7 @@ npm run verify:bars -- --chrome "C:\path\to\chrome.exe"
 | APK | `dist/Minidayz-WebRTC-debug.apk`（同时保留在 `android/app/build/outputs/apk/debug/app-debug.apk`） |
 | 大小 | **50.0 MB**（52,440,621 字节） |
 | SHA256 | `E05AD5A048E39FBE15BD8F1B8A798674E33661CE23B006A986CB4D6D51CCC196` |
-| 构建标记 | `mdz-webrtc-web-6-lite` / `mdz-ui-6-lite`（含自定义左右黑边 + 分块资源上限） |
+| 构建标记 | `mdz-webrtc-web-7-lite` / `mdz-ui-7-lite`（含自定义左右黑边 + 分块资源上限） |
 | 包名 / 标签 | `com.mdz.webrtcmp` / 「Mini DAYZ 联机版」 |
 | minSdk / targetSdk | 24 / 36（compileSdk 36） |
 | 屏幕方向 | `android:screenOrientation="sensorLandscape"`（横屏锁定）+ 主题 `windowFullscreen` + `viewport-fit=cover` |
@@ -458,7 +521,7 @@ export PATH="$JAVA_HOME/bin:$PATH"
 - `uses-permission`: INTERNET / ACCESS_NETWORK_STATE / **CAMERA**
 - `uses-feature-not-required: android.hardware.camera` → 没有摄像头的设备也能装（会自动退化到模式B）
 - APK 内 `assets/public/`：**1940 个文件 / 29.0 MB**，`media/` 489 个、`images/` 1368 个
-- `assets/public/index.html` 内含构建标记（形如 `mdz-webrtc-web-6-lite`，以 `web/index.html` 的 `MDZ_BUILD` 为准）→ 确认打进去的是新代码，不是被缓存的旧页面
+- `assets/public/index.html` 内含构建标记（形如 `mdz-webrtc-web-7-lite`，以 `web/index.html` 的 `MDZ_BUILD` 为准）→ 确认打进去的是新代码，不是被缓存的旧页面
 - `mdz_core.js` / `mdz_p2p.js` / `mdz_ui.js` / `lan_bridge.js` / `vendor/*` 全部在包内
 
 > **一个容易误判的坑**：用 .NET `ZipFile` 或 `tar` 对比文件名时，会发现 51 个西里尔名字（`перс1.png`、`город.png`…）
@@ -505,7 +568,7 @@ macOS 机器产出未签名 IPA → 回 Windows 用 Sideloadly 签名安装。�
 
 **iOS 侧不需要为本次改动做任何额外配置**：黑边功能与分块上限都在 `web/mdz_ui.js` / `web/mdz_core.js` 里，
 与 Android 共用同一份代码；工作流会在 CI 里自己跑 `npm ci` + `cap sync ios` 把最新的 `web/` 拷进工程。
-只要 `web/` 里是新的构建标记（`mdz-webrtc-web-6-lite` / `mdz-ui-6-lite`），产出的 IPA 就带上了这些改动。
+只要 `web/` 里是新的构建标记（`mdz-webrtc-web-7-lite` / `mdz-ui-7-lite`），产出的 IPA 就带上了这些改动。
 
 > iOS 上 `window.innerWidth` 的覆盖同样有效（WKWebView 支持在实例上定义同名属性遮蔽原型上的 getter），
 > 所以黑边在 iPhone 上一样能用；挖孔/灵动岛被遮时把对应一侧调宽即可。

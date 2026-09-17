@@ -261,6 +261,88 @@ const MEASURE = `(function(){
     ok('无未捕获异常', errors.length === 0, errors.slice(0, 2).join(' | '));
     ok('无 console.error', consoleErrors.length === 0, consoleErrors.slice(0, 2).join(' | '));
 
+    section('G. 画面清晰度（渲染倍率封顶，治发热 / 掉帧）');
+    const baseStat = await ev(`(function(){var rt=window.cr_getC2Runtime();var c=document.getElementById('c2canvas');
+      return {dpr:rt.devicePixelRatio, mp:Math.round(c.width*c.height/10000), isRetina:rt.isRetina};})()`);
+    ok('面板有清晰度三档', await ev(`document.querySelectorAll('#mdz-panel-wrap [data-lv]').length`) === 3);
+    eq('默认档位是中', await ev(`window.MDZUI.getRenderLevel()`), 'mid');
+
+    // 伪装成 dpr=3 的手机（手机上的默认情况）
+    await ev(`(function(){
+      try{Object.defineProperty(window,'devicePixelRatio',{configurable:true,get:function(){return 3;}});}catch(e){}
+      var rt=window.cr_getC2Runtime();rt.isRetina=true;rt.devicePixelRatio=3;
+      rt.setSize(window.innerWidth,window.innerHeight,true);return true})()`);
+    await sleep(1200);
+    const un = await ev(`(function(){var rt=window.cr_getC2Runtime();var c=document.getElementById('c2canvas');
+      return {dpr:rt.devicePixelRatio, mp:Math.round(c.width*c.height/10000)};})()`);
+    ok('模拟 dpr=3 后画布被放大', un.mp > baseStat.mp * 5, baseStat.mp + '万 -> ' + un.mp + '万');
+
+    for (const [lv, expect] of [['high', 2], ['mid', 1.5], ['low', 1]]) {
+      await ev(`window.MDZUI.setRenderLevel('${lv}', true)`);
+      await sleep(1200);
+      const st = await ev(`(function(){var rt=window.cr_getC2Runtime();var c=document.getElementById('c2canvas');
+        return {dpr:rt.devicePixelRatio, mp:Math.round(c.width*c.height/10000), isRetina:rt.isRetina};})()`);
+      eq(`${lv} 档把渲染倍率压到 ${expect}x`, st.dpr, expect);
+      ok(`${lv} 档画布像素数明显下降`, st.mp < un.mp, un.mp + '万 -> ' + st.mp + '万');
+      eq(`${lv} 档 isRetina 仍为 true（否则画布会溢出屏幕）`, st.isRetina, true);
+    }
+    await ev(`window.MDZUI.setRenderLevel('mid', true)`);
+    await sleep(800);
+
+    section('H. 主菜单上两个遗留入口（MDZ☆START / MINI DayZ 2）');
+    await send('Page.navigate', { url: base });
+    await poll(`(function(){var rt=window.cr_getC2Runtime&&window.cr_getC2Runtime();return !!rt&&rt.running_layout&&rt.running_layout.name==='Menu'&&!!window.MDZUI;})()`, 120000);
+    await sleep(4000);
+
+    const entries = await ev(`(function(){
+      var rt=window.cr_getC2Runtime();var out=[];
+      for(var i=0;i<rt.types_by_index.length;i++){var t=rt.types_by_index[i];
+        if(!t||!t.instances)continue;
+        for(var j=0;j<t.instances.length;j++){var s=t.instances[j];
+          if(typeof s.text!=='string'||!s.text)continue;
+          if(/MINI\s*DayZ\s*2/i.test(s.text)||/MDZ\s*[☆★◇◆*+]{0,2}\s*START/i.test(s.text))
+            out.push({text:String(s.text).slice(0,14),visible:s.visible});}}
+      return out;})()`);
+    ok('找到了这两个入口的实例', entries.length >= 2, entries.length + ' 个');
+    ok('它们全部不可见', entries.length > 0 && entries.every(e => e.visible === false));
+    const keep = await ev(`(function(){
+      var rt=window.cr_getC2Runtime();var out=[];
+      for(var i=0;i<rt.types_by_index.length;i++){var t=rt.types_by_index[i];
+        if(!t||!t.instances)continue;
+        for(var j=0;j<t.instances.length;j++){var s=t.instances[j];
+          if(typeof s.text!=='string')continue;
+          if(/^(新游戏|成就|解锁|选项)$/.test(s.text)) out.push(s.visible);}}
+      return out;})()`);
+    // 注意：这四个菜单项各有 t415 / t1056 两套实例（同一份文本），所以数量是 4 的倍数
+    ok('正常菜单项仍然可见', keep.length >= 4 && keep.length % 4 === 0 && keep.every(v => v === true),
+      keep.length + ' 个（应为 4 的倍数）');
+
+    ok('C2 导航动作已包（原型层）', await ev(`window.__mdzNavPatched === true`));
+    const beforeHref = await ev('location.href');
+    await ev(`(function(){
+      var B=window.cr.plugins_.Browser;var a=B.prototype.acts;
+      var fake={runtime:window.cr_getC2Runtime(),is_arcade:false,isDomFree:false};
+      try{a.GoToURL.call(fake,'https://t.me/likefreefun',0);}catch(e){}
+      try{a.GoToURLWindow.call(fake,'https://store.bistudio.com/products/minidayz','Store');}catch(e){}
+      return true;})()`);
+    await sleep(1500);
+    eq('直接调用 GoToURL / GoToURLWindow 都被拦住（页面没被带走）',
+      await ev('location.href').catch(() => '(卸载)'), beforeHref);
+
+    section('I. 联机功能没被动过');
+    const intact = await ev(`(function(){return{
+      peer: typeof window.Peer === 'function',
+      host: typeof window.startHost === 'function',
+      join: typeof window.joinGame === 'function',
+      p2p: typeof window.MDZP2P === 'object',
+      core: typeof window.MdzCore === 'object',
+      scanBtn: !!Array.from(document.querySelectorAll('button')).find(function(b){return b.textContent.indexOf('客机：加入房间')>=0;})
+    };})()`);
+    ok('window.Peer 垫片仍在', intact.peer);
+    ok('startHost / joinGame 仍在', intact.host && intact.join);
+    ok('mdz_core / mdz_p2p 仍在', intact.p2p && intact.core);
+    ok('扫码按钮仍在', intact.scanBtn);
+
     if (HOLD > 0) {
       section('G. 额外观察 ' + HOLD + ' 秒');
       await sleep(HOLD * 1000);

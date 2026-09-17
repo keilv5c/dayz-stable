@@ -14,7 +14,7 @@
 (function () {
   'use strict';
 
-  var BUILD = 'mdz-ui-6-lite';
+  var BUILD = 'mdz-ui-7-lite';
 
   /** 面板起不来时也要让用户"看得见"错误，而不是界面上一片空白 */
   function fatal(msg, detail) {
@@ -372,6 +372,225 @@
   }
   function resetBars() { setBars(0, 0); }
 
+  /* ------------------------------------------ 画面清晰度（省电 / 保帧率）
+     实测（真 Chrome，同一份代码，只改渲染倍率）：
+       画布  227 万像素 -> 60.2 fps
+       画布  510 万像素 -> 35.4 fps
+       画布 2041 万像素 -> 12.0 fps
+     单帧逻辑耗时始终约 4ms 不变 —— 掉帧全部来自「画布像素数」，不是游戏逻辑。
+     手机屏 dpr 普遍 2.5~3.5，而 C2 的 useHighDpi 会把画布按 dpr 放大，
+     像素数是 CSS 尺寸的 6~12 倍，于是又热又卡。
+     但游戏的原始分辨率只有 1024x768：放大到 2~3 倍不会多出任何细节，纯烧 GPU。
+     所以这里把「实际渲染倍率」封顶，由浏览器负责放大回屏幕尺寸。
+     ⚠️ isRetina 必须保持 true —— 它同时决定 C2 要不要给 canvas 写 CSS 尺寸，
+        置 false 会让画布按位图尺寸显示、直接溢出屏幕。                       */
+  var RENDER_KEY = 'mdz.ui.render.v1';
+  var RENDER_LEVELS = [
+    { id: 'high', label: '高（最清晰）', cap: 2.0 },
+    { id: 'mid', label: '中（均衡）', cap: 1.5 },
+    { id: 'low', label: '低（最省电）', cap: 1.0 }
+  ];
+  var renderLevel = 'mid';
+
+  function levelCap(id) {
+    for (var i = 0; i < RENDER_LEVELS.length; i++) if (RENDER_LEVELS[i].id === id) return RENDER_LEVELS[i].cap;
+    return 1.5;
+  }
+  function loadRender() {
+    try {
+      var s = localStorage.getItem(RENDER_KEY);
+      if (s) { var o = JSON.parse(s); if (o && o.level) renderLevel = o.level; }
+    } catch (e) { /* 配置坏了就用默认 */ }
+    if (!levelCap(renderLevel)) renderLevel = 'mid';
+  }
+  function saveRender() {
+    try { localStorage.setItem(RENDER_KEY, JSON.stringify({ level: renderLevel })); } catch (e) {}
+  }
+
+  /** 把渲染倍率应用到运行时；运行时还没就绪时返回 null */
+  function applyRenderLevel(quiet) {
+    var rt = (window.cr_getC2Runtime && window.cr_getC2Runtime()) || null;
+    if (!rt) return null;
+    var real = window.devicePixelRatio || 1;
+    var use = Math.min(real, levelCap(renderLevel));
+    try {
+      rt.isRetina = true;              // 必须保持 true，见上面注释
+      rt.devicePixelRatio = use;
+      rt.setSize(window.innerWidth, window.innerHeight, true);
+    } catch (e) {
+      console.warn('[MDZ-UI] 应用渲染倍率失败', e);
+      return null;
+    }
+    if (ui.renderLevelBox) {
+      var btns = ui.renderLevelBox.querySelectorAll('button');
+      for (var i = 0; i < btns.length; i++) {
+        btns[i].style.background = (btns[i].getAttribute('data-lv') === renderLevel) ? '#1f6feb' : '#39424e';
+      }
+    }
+    var info = { real: real, use: use, canvasW: rt.width, canvasH: rt.height,
+                 megapixels: Math.round(rt.width * rt.height / 10000) };
+    if (ui.renderInfo) {
+      ui.renderInfo.textContent = '设备 ' + real + 'x → 实际渲染 ' + (Math.round(use * 100) / 100) +
+        'x，画布 ' + rt.width + 'x' + rt.height + '（约 ' + info.megapixels + ' 万像素）';
+    }
+    if (!quiet) {
+      log('渲染倍率 ' + real + 'x -> ' + (Math.round(use * 100) / 100) + 'x，画布 ' +
+        rt.width + 'x' + rt.height + '（约 ' + info.megapixels + ' 万像素）', '#9fe8ff');
+    }
+    return info;
+  }
+
+  function setRenderLevel(id, quiet) {
+    renderLevel = id;
+    saveRender();
+    var r = applyRenderLevel(quiet);
+    if (!quiet) {
+      setStatus(r ? ('画面清晰度：' + id + '（实际渲染 ' + (Math.round(r.use * 100) / 100) + 'x，约 ' +
+        r.megapixels + ' 万像素）') : '画面清晰度已保存，但运行时还没就绪', r ? '#7bd88f' : '#ffcc66');
+    }
+  }
+
+  /* --------------------------------------- 移除菜单里遗留的两个外部入口
+     游戏主菜单上原本有两个「入口」：
+       左侧  MDZ☆START / MDZ◇START   点了跳 t.me/likefreefun
+       右侧  MINI DayZ 2             点了跳 store.bistudio.com 的商店页
+     两者都是 Menu 布局 menu_elements 层上 t415 的实例（idx 4 / idx 5）；
+     同一类型里 idx 0~3 是正常的「新游戏 / 成就 / 解锁 / 选项」，所以不能整类删。
+     做法（都不改游戏本体，web/ 仍与原版逐字节一致）：
+       1) 按文本匹配把这两个实例置为 invisible。实测稳定（15 秒内游戏不会改回来），
+          而且 C2 的命中测试会跳过 invisible 实例 —— 文字与点击区一起消失；
+       2) 再兜一层 window.open 拦截：万一某机型上还残留热区，也不会把玩家带出游戏。
+     菜单会滚动、文本会在 ☆/◇ 之间变，所以用 1 秒的轻量巡检兜底，只在 Menu 布局上跑。 */
+  var ENTRY_TEXT_PATTERNS = [/MINI\s*DayZ\s*2/i, /MDZ\s*[☆★◇◆*+]{0,2}\s*START/i];
+  var BLOCKED_LINK_HOSTS = ['store.bistudio.com', 't.me/likefreefun'];
+  var entryScanTimer = null;
+
+  function hideLegacyEntries() {
+    var rt = window.cr_getC2Runtime && window.cr_getC2Runtime();
+    if (!rt || !rt.running_layout || rt.running_layout.name !== 'Menu') return 0;
+    var types = rt.types_by_index || [], n = 0;
+    var marks = [];
+    var i, j, k, t, ins;
+
+    // 第一遍：按文本认出入口实例，记下它的类型与位置
+    for (i = 0; i < types.length; i++) {
+      t = types[i];
+      if (!t || !t.instances) continue;
+      for (j = 0; j < t.instances.length; j++) {
+        ins = t.instances[j];
+        if (typeof ins.text !== 'string' || !ins.text) continue;
+        for (k = 0; k < ENTRY_TEXT_PATTERNS.length; k++) {
+          if (ENTRY_TEXT_PATTERNS[k].test(ins.text)) {
+            marks.push({ type: t, ins: ins });
+            break;
+          }
+        }
+      }
+    }
+    if (!marks.length) return 0;
+
+    // 第二遍：把与入口**位置重合、尺寸相近**的实例一起隐藏。
+    // 入口除了文字本身，还有一块底色板/高亮板，而它是**另一种类型**的对象
+    // （按文本或按同类实例都匹配不到，实测确认过）。
+    // 尺寸护栏用来排除覆盖全屏的背景对象（bg / grnd_til 那类），否则会把整个菜单干掉。
+    for (i = 0; i < marks.length; i++) {
+      var m = marks[i];
+      var ea = Math.max(1, m.ins.width * m.ins.height);
+      var mx0 = m.ins.x, my0 = m.ins.y, mx1 = m.ins.x + m.ins.width, my1 = m.ins.y + m.ins.height;
+      for (j = 0; j < types.length; j++) {
+        var tt = types[j];
+        if (!tt || !tt.instances) continue;
+        for (k = 0; k < tt.instances.length; k++) {
+          ins = tt.instances[k];
+          if (ins === m.ins || ins.visible === false) continue;
+          if (!ins.layer || ins.layer !== m.ins.layer) continue;
+          var ia = Math.max(1, ins.width * ins.height);
+          if (ia > ea * 6 || ia < ea / 6) continue;          // 尺寸差太多 -> 不是同一块板
+          var ix0 = ins.x, iy0 = ins.y, ix1 = ins.x + ins.width, iy1 = ins.y + ins.height;
+          if (ix0 < mx1 && ix1 > mx0 && iy0 < my1 && iy1 > my0) {
+            ins.visible = false;
+            n++;
+          }
+        }
+      }
+    }
+    // 入口本身
+    for (i = 0; i < marks.length; i++) {
+      if (marks[i].ins.visible !== false) { marks[i].ins.visible = false; n++; }
+    }
+    return n;
+  }
+
+  /** 拦住那两个入口指向的外链
+     这里有两条路径，必须都堵：
+       1) C2 的 Browser.GoToURLWindow -> window.open(url, tag)（可以直接包）
+       2) C2 的 Browser.GoToURL     -> window.location = url
+          ⚠️ location 是 unforgeable 的，JS 覆盖不了它的 setter，
+             所以只能在**动作函数的原型**上包一层。
+             注意必须打在原型（Acts.prototype）上：动作对象是 Acts 的实例，
+             只给实例加同名属性，运行时仍可能拿到原型上的原函数。
+     只拦这两个入口的域名，其它外链照常放行。 */
+  function blockLegacyLinks() {
+    if (window.__mdzLinkBlocked) return;
+    window.__mdzLinkBlocked = true;
+    var isBlocked = function (url) {
+      var u = String(url || '');
+      for (var i = 0; i < BLOCKED_LINK_HOSTS.length; i++) if (u.indexOf(BLOCKED_LINK_HOSTS[i]) >= 0) return true;
+      return false;
+    };
+
+    // (1) window.open
+    try {
+      var origOpen = window.open;
+      window.open = function (url, name, features) {
+        if (isBlocked(url)) { log('已拦下菜单入口的外链：' + url, '#ffcc66'); return null; }
+        return origOpen.apply(window, arguments);
+      };
+      var c = window.cordova;
+      if (c && c.InAppBrowser && typeof c.InAppBrowser.open === 'function') {
+        var origIab = c.InAppBrowser.open;
+        c.InAppBrowser.open = function (url) {
+          if (isBlocked(url)) { log('已拦下菜单入口的外链（InAppBrowser）：' + url, '#ffcc66'); return null; }
+          return origIab.apply(c.InAppBrowser, arguments);
+        };
+      }
+    } catch (e) { console.warn('[MDZ-UI] 拦截 window.open 失败', e); }
+
+    // (2) C2 Browser 插件的导航动作（GoToURL 用 window.location，绕不开）
+    try {
+      var B = window.cr && window.cr.plugins_ && window.cr.plugins_.Browser;
+      var acts = B && B.prototype && (B.prototype.acts || B.prototype.Acts);
+      var actsProto = acts && Object.getPrototypeOf(acts);
+      if (actsProto) {
+        ['GoToURL', 'GoToURLWindow'].forEach(function (key) {
+          var fn = actsProto[key];
+          if (typeof fn !== 'function' || fn.__mdzWrapped) return;
+          var wrapped = function () {
+            var url = arguments[0];
+            if (isBlocked(url)) {
+              log('已拦下菜单入口的跳转（Browser.' + key + '）：' + url, '#ffcc66');
+              return;
+            }
+            return fn.apply(this, arguments);
+          };
+          wrapped.__mdzWrapped = true;
+          actsProto[key] = wrapped;
+        });
+        window.__mdzNavPatched = true;
+      }
+    } catch (e) { console.warn('[MDZ-UI] 拦截 C2 导航动作失败', e); }
+  }
+
+  function startEntryScan() {
+    if (entryScanTimer) return;
+    var first = hideLegacyEntries();
+    if (first) log('已移除菜单里遗留的 ' + first + ' 个外部入口（MDZ☆START / MINI DayZ 2）', '#7bd88f');
+    entryScanTimer = setInterval(function () {
+      var n = hideLegacyEntries();
+      if (n) log('已移除菜单里遗留的 ' + n + ' 个外部入口', '#7bd88f');
+    }, 1000);
+  }
+
   /* ------------------------------------------------------------ 面板构建 */
 
   var PANEL_CSS = [
@@ -559,7 +778,8 @@
     ui.barBox.appendChild(barRow('右', 'right'));
 
     var barBtns = el('div', 'margin:2px 0 0');
-    [[40, '对称 40'], [80, '对称 80']].forEach(function (p) {
+    ui.barBtns = barBtns;
+    [[54, '对称 54'], [80, '对称 80']].forEach(function (p) {
       var q = el('button', BTN2_CSS, p[1]);
       q.onclick = function () { setBars(p[0], p[0]); };
       barBtns.appendChild(q);
@@ -569,6 +789,23 @@
     barBtns.appendChild(ui.btnResetBars);
     ui.barBox.appendChild(barBtns);
     panel.appendChild(ui.barBox);
+
+    // 画面清晰度：手机发热 / 掉帧就调低（渲染倍率封顶，不改游戏逻辑）
+    ui.renderBox = el('div', 'margin:8px 0 0;padding-top:6px;border-top:1px solid rgba(255,255,255,0.12)');
+    ui.renderBox.appendChild(el('div', 'opacity:.85', '画面清晰度（发热 / 掉帧就调低）'));
+    ui.renderBox.appendChild(el('div', 'font-size:11px;opacity:.6;margin:2px 0 4px',
+      '只改渲染像素数，不影响游戏速度与联机。像素画放大不会更清晰，调低通常看不出差别。'));
+    ui.renderLevelBox = el('div', 'margin:2px 0 0');
+    RENDER_LEVELS.forEach(function (lv) {
+      var q = el('button', BTN2_CSS, lv.label);
+      q.setAttribute('data-lv', lv.id);
+      q.onclick = function () { setRenderLevel(lv.id); };
+      ui.renderLevelBox.appendChild(q);
+    });
+    ui.renderBox.appendChild(ui.renderLevelBox);
+    ui.renderInfo = el('div', 'font-size:11px;opacity:.6;margin:3px 0 0', '运行时就绪后显示');
+    ui.renderBox.appendChild(ui.renderInfo);
+    panel.appendChild(ui.renderBox);
 
     // 底部：日志 + 统计
     var foot = el('div', 'margin-top:6px');
@@ -1389,6 +1626,20 @@
         show(ui.barBox, false);
         log('本环境不支持接管视口宽度，黑边功能已隐藏（不影响联机）', '#ffcc66');
       }
+      // 画面清晰度（渲染倍率封顶）+ 移除菜单里遗留的两个外部入口
+      loadRender();
+      blockLegacyLinks();
+      startEntryScan();
+      var renderTries = 0;
+      (function tryRender() {
+        var r = applyRenderLevel(true);
+        if (r) {
+          log('画面清晰度：' + renderLevel + '（设备 ' + r.real + 'x → 实际渲染 ' +
+            (Math.round(r.use * 100) / 100) + 'x，画布约 ' + r.megapixels + ' 万像素）', '#9fe8ff');
+        } else if (renderTries++ < 20) {
+          setTimeout(tryRender, 500);      // 运行时可能比面板晚就绪
+        }
+      })();
       log('面板就绪。扫码能力：' + (nativeScanner() ? '原生插件' : (webScannerAvailable() ? 'html5-qrcode' : '不可用')), '#9fe8ff');
       log('面板可用手指/鼠标拖动标题栏移动位置（挡住游戏按钮时拖开即可）', '#9fe8ff');
       console.log('[MDZ-UI] 调试提示：MDZP2P.stats() 看统计；MDZP2P.setFastLane(false) 关闭副通道；MDZP2P.CFG.DEBUG=false 关日志');
@@ -1413,6 +1664,12 @@
     barsSupported: function () { return barsSupported === true; },
     // 真实视口（不受黑边影响）：页面自身的布局计算都必须用这个，而不是 window.innerWidth
     viewport: function () { return { w: realVW(), h: realVH() }; },
+    // 画面清晰度（渲染倍率封顶，治发热 / 掉帧）
+    setRenderLevel: setRenderLevel,
+    getRenderLevel: function () { return renderLevel; },
+    applyRenderLevel: function () { return applyRenderLevel(true); },
+    // 移除菜单里遗留的两个外部入口（MDZ☆START / MINI DayZ 2）
+    hideLegacyEntries: hideLegacyEntries,
     // 供外部（调试/自测页）使用：把进度打到面板状态行与日志里
     log: log,
     setStatus: setStatus,

@@ -23,6 +23,7 @@ const { JSDOM, VirtualConsole } = require('jsdom');
 
 const WEB = path.join(__dirname, '..', 'web');
 const BARS_KEY = 'mdz.ui.bars.v1';
+const RENDER_KEY = 'mdz.ui.render.v1';
 const BAR_MAX = 400;
 const REAL_W = 1024, REAL_H = 768;   // jsdom 默认视口
 
@@ -52,7 +53,7 @@ function readScript(rel) {
 
 /** 起一个"页面"：按 index.html 的真实顺序装 pako -> mdz_core -> mdz_p2p -> mdz_ui，
  *  并等到面板真的建出来（jsdom 的 DOMContentLoaded 是异步的，不能立刻断言）。 */
-async function makePage(seedBars) {
+async function makePage(seedBars, seedRender) {
   const vc = new VirtualConsole();
   vc.on('jsdomError', () => {});
   const dom = new JSDOM(PAGE, {
@@ -64,6 +65,7 @@ async function makePage(seedBars) {
   w.console.warn = function () {};
   w.console.error = function () {};
   if (seedBars !== undefined) w.localStorage.setItem(BARS_KEY, JSON.stringify(seedBars));
+  if (seedRender !== undefined) w.localStorage.setItem(RENDER_KEY, JSON.stringify({ level: seedRender }));
 
   // runScripts:'outside-only' 下文档里的 <script> 不会自动执行，必须用 window.eval
   const run = (code) => w.eval(code);
@@ -71,6 +73,9 @@ async function makePage(seedBars) {
   run(readScript('mdz_core.js'));
   run(readScript('mdz_p2p.js'));
   run('MDZP2P.install(window);');
+  // 在装 mdz_ui.js 之前放一个 window.open 探针：它会被我们的拦截器包一层，
+  // 于是能验证「拦下外链」与「放行其它链接」两种情况。
+  run('window.__opened = null; window.open = function (u) { window.__opened = String(u); return "stub-window"; };');
   run(readScript('mdz_ui.js'));
 
   const ready = await until(() => !!w.document.getElementById('mdz-panel-wrap'));
@@ -189,6 +194,64 @@ async function makePage(seedBars) {
   ok('面板能被摆到超出"收窄后宽度"的位置（说明用的是真实视口）',
     !isFinite(leftPx) || leftPx > w4.innerWidth - 200,
     'panel.left=' + panelEl.style.left + ' innerWidth=' + w4.innerWidth);
+
+  /* -------------------------------------------- 8. 黑边快捷预设（对称 54） */
+  section('8. 黑边快捷预设');
+
+  const presetBtns = Array.from(w4.MDZUI._ui.barBtns.querySelectorAll('button'))
+    .filter(b => /对称/.test(b.textContent));
+  ok('有「对称 54」按钮', presetBtns.some(b => b.textContent.indexOf('对称 54') >= 0),
+    presetBtns.map(b => b.textContent).join(' / '));
+  ok('不再有「对称 40」按钮', !presetBtns.some(b => b.textContent.indexOf('对称 40') >= 0));
+  const p54 = presetBtns.find(b => b.textContent.indexOf('对称 54') >= 0);
+  if (p54) {
+    p54.click();
+    eq('点「对称 54」后左右都是 54', JSON.stringify(w4.MDZUI.getBars()), JSON.stringify({ left: 54, right: 54 }));
+    eq('innerWidth 同步为 真实宽度-108', w4.innerWidth, REAL_W - 108);
+  }
+
+  /* ------------------------------------- 9. 画面清晰度（渲染倍率封顶） */
+  section('9. 画面清晰度设置');
+
+  const rl = w4.MDZUI._ui;
+  ok('清晰度控件存在', !!rl.renderBox && !!rl.renderLevelBox);
+  ok('控件挂在面板里', !!rl.panel && rl.panel.contains(rl.renderBox));
+  const rBtns = Array.from(rl.renderLevelBox.querySelectorAll('button'));
+  eq('有三档（高/中/低）', rBtns.length, 3);
+  eq('三档的 data-lv 齐全',
+    rBtns.map(b => b.getAttribute('data-lv')).sort().join(','), 'high,low,mid');
+  eq('默认是中档（均衡）', w4.MDZUI.getRenderLevel(), 'mid');
+  // 刻意不在启动时写 localStorage：用户没改过就不该动存储
+  eq('未改动前不写 localStorage', w4.localStorage.getItem('mdz.ui.render.v1'), null);
+
+  w4.MDZUI.setRenderLevel('low', true);
+  eq('切到低档后 getRenderLevel 跟着变', w4.MDZUI.getRenderLevel(), 'low');
+  eq('低档写入 localStorage', JSON.parse(w4.localStorage.getItem('mdz.ui.render.v1')).level, 'low');
+  eq('applyRenderLevel 在运行时缺席时安全返回 null（不抛错）', w4.MDZUI.applyRenderLevel(), null);
+  eq('运行时缺席也不会崩，档位仍可切换', (w4.MDZUI.setRenderLevel('high', true), w4.MDZUI.getRenderLevel()), 'high');
+
+  // 档位要能跨页面记住
+  const w5 = await makePage(undefined, 'low');
+  eq('重载后记住低档', w5.MDZUI.getRenderLevel(), 'low');
+
+  /* --------------------------------- 10. 菜单遗留入口：外链拦截 + 隐藏 */
+  section('10. 菜单遗留的两个外部入口');
+
+  ok('外链拦截器已装', w4.__mdzLinkBlocked === true);
+  w4.__opened = null;
+  const blocked = w4.open('https://store.bistudio.com/products/minidayz', 'Store');
+  eq('商店页外链被拦下（返回 null）', blocked, null);
+  eq('被拦的链接没有真的调用底层 window.open', w4.__opened, null);
+  w4.__opened = null;
+  const tg = w4.open('https://t.me/likefreefun', '_blank');
+  eq('Telegram 外链被拦下', tg, null);
+  eq('同样没有透传', w4.__opened, null);
+  w4.__opened = null;
+  const passthrough = w4.open('https://example.com/other', '_blank');
+  eq('其它链接照常放行', passthrough, 'stub-window');
+  eq('其它链接确实透传到了底层', w4.__opened, 'https://example.com/other');
+
+  eq('hideLegacyEntries 在没有运行时环境时安全返回 0', w4.MDZUI.hideLegacyEntries(), 0);
 
   console.log('\n--------------------------------------------------');
   console.log(`结果: ${pass} 通过 / ${fail} 失败`);
