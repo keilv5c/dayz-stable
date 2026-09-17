@@ -449,16 +449,16 @@ npm run verify:bars -- --chrome "C:\path\to\chrome.exe"
 | 项 | 值 |
 |---|---|
 | APK | `dist/Minidayz-WebRTC-debug.apk`（同时保留在 `android/app/build/outputs/apk/debug/app-debug.apk`） |
-| 大小 | **50.0 MB**（52,440,621 字节） |
-| SHA256 | `E05AD5A048E39FBE15BD8F1B8A798674E33661CE23B006A986CB4D6D51CCC196` |
-| 构建标记 | `mdz-webrtc-web-7-lite` / `mdz-ui-7-lite`（含自定义左右黑边 + 分块资源上限） |
+| 大小 | **50.0 MB**（52,474,757 字节） |
+| SHA256 | `DA342B77FF80999CE064D2851BC7FC411941B7DD73FB74DE4155A765958DCD80` |
+| 构建标记 | `mdz-webrtc-web-7-lite` / `mdz-ui-7-lite`（含黑边、画面清晰度三档、入口移除、分块上限、性能快照） |
 | 包名 / 标签 | `com.mdz.webrtcmp` / 「Mini DAYZ 联机版」 |
 | minSdk / targetSdk | 24 / 36（compileSdk 36） |
 | 屏幕方向 | `android:screenOrientation="sensorLandscape"`（横屏锁定）+ 主题 `windowFullscreen` + `viewport-fit=cover` |
 | 插件 | barcode-scanning 8.2.1 / camera 8.2.4 / status-bar 8.0.3 |
 | WebView 调试 | **已关闭**（`webContentsDebuggingEnabled: false`，`test/mdz_invariants.test.js` 守着） |
 | 签名 | Android Debug 证书（可正常安装，不能上架） |
-| 构建耗时 | 首次 12m17s；本次增量 6m37s（187 tasks，含 3 个 Capacitor 插件子工程） |
+| 构建耗时 | 首次 12m17s；增量构建 1m19s（187 tasks，160 个 up-to-date） |
 
 > 本次构建环境：worktree 内 `npm ci` → `npx cap sync android` → 直接用工具链跑 `./gradlew assembleDebug`
 > （JDK 21 + Android SDK 36 在 `D:\game_hack\minidayz\tools`）。
