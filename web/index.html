@@ -84,6 +84,46 @@
 	
     <!-- The runtime script.  You can rename it, but don't forget to rename the reference here as well.
     This file will have been minified and obfuscated if you enabled "Minify script" during export. -->
+	<!-- ===================================================================
+	     帧率上限（可选）—— 必须放在 c2runtime.js **之前**，不能挪到 mdz_ui.js 里
+	     原因：C2 在脚本加载那一刻就把 window.requestAnimationFrame 抓成了局部变量
+	     （c2runtime.js 顶部：var raf = window["requestAnimationFrame"] || …），
+	     之后再改 window.requestAnimationFrame，它已经看不见了。
+	     这里只做「跳帧」：仍然走 rAF（保持与屏幕 vsync 对齐），
+	     只是距上一帧不够久就不调用业务回调 —— 120Hz 屏设 16.67ms 即稳定 60 帧。
+	     具体值由 mdz_ui.js 的「帧率上限」设置写进 window.__mdzRafMinMs（0 = 不限）。
+	     =================================================================== -->
+	<script>
+	(function () {
+		try {
+			var origRaf = window.requestAnimationFrame;
+			if (!origRaf) return;
+			window.__mdzOrigRaf = origRaf;   // 原生 rAF，留给需要测真实刷新率的代码
+			window.__mdzRafMinMs = 0;        // 0 = 不限
+			window.__mdzRafSkips = 0;        // 被跳掉的帧数，供「性能快照」核对
+			// ⚠️ 必须「每个回调各自记上次执行时间」，不能共用一个全局时间戳。
+			// 共用的话，页面上任何别的 rAF 使用者（包括我们自己的刷新率采样）
+			// 都会把时间戳刷新成当前时刻，于是游戏主循环永远「太早」而被无限跳过 ——
+			// 实测踩过：锁 30 帧后游戏直接停住（tickcount 冻住、跳帧数却一直涨）。
+			var lastByCb = new WeakMap();
+			window.requestAnimationFrame = function (cb) {
+				var min = window.__mdzRafMinMs || 0;
+				if (!min) return origRaf.call(window, cb);
+				return origRaf.call(window, function (t) {
+					var now = performance.now();
+					var last = lastByCb.get(cb) || 0;
+					if (now - last >= min - 1) {
+						lastByCb.set(cb, now);
+						cb(t);
+					} else {
+						window.__mdzRafSkips++;
+						window.requestAnimationFrame(cb);
+					}
+				});
+			};
+		} catch (e) { /* 出错就当作不限帧，不影响游戏 */ }
+	})();
+	</script>
 	<script src="c2runtime.js"></script>
 
     <script>
@@ -171,7 +211,7 @@
          如果控制台没有 "[MDZ] build …"，那这个页面是被 Service Worker
          或浏览器 HTTP 缓存住的旧 index.html（旧页面根本没有联机面板）。
          =================================================================== */
-      window.MDZ_BUILD = 'mdz-webrtc-web-7-lite';
+      window.MDZ_BUILD = 'mdz-webrtc-web-8-lite';
       console.log('%c[MDZ] build ' + window.MDZ_BUILD + ' 已加载（联机面板应出现在右上角）',
         'color:#3fb950;font-weight:bold');
 

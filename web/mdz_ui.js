@@ -14,7 +14,7 @@
 (function () {
   'use strict';
 
-  var BUILD = 'mdz-ui-7-lite';
+  var BUILD = 'mdz-ui-8-lite';
 
   /** 面板起不来时也要让用户"看得见"错误，而不是界面上一片空白 */
   function fatal(msg, detail) {
@@ -450,6 +450,105 @@
     }
   }
 
+  /* ------------------------------------------ 帧率上限（可选，省电 / 降温）
+     为什么需要：高刷屏（120Hz）上 C2 会老老实实跑满 120 帧 —— 工作量是 60 帧的两倍，
+     实测某 2.8x dpr 的 120Hz 手机上帧耗时 p50 约 4.9ms：
+       120 帧时占一帧预算（8.33ms）的 59%
+        60 帧时只占 16.67ms 的 29%
+     同样的画面、同样的逻辑，发热差一倍。
+     实现放在 index.html 里（必须在 c2runtime.js 之前，见那里的注释），
+     这里只负责读写 window.__mdzRafMinMs。                                  */
+  var FPS_KEY = 'mdz.ui.fps.v1';
+  var FPS_LEVELS = [
+    { id: 'auto', label: '不限（跟屏幕）', minMs: 0 },
+    { id: '60', label: '60 帧', minMs: 1000 / 60 },
+    { id: '30', label: '30 帧', minMs: 1000 / 30 }
+  ];
+  var fpsLevel = 'auto';
+  var screenHz = 0;
+
+  function fpsLevelById(id) {
+    for (var i = 0; i < FPS_LEVELS.length; i++) if (FPS_LEVELS[i].id === id) return FPS_LEVELS[i];
+    return FPS_LEVELS[0];
+  }
+  function loadFps() {
+    try {
+      var s = localStorage.getItem(FPS_KEY);
+      if (s) { var o = JSON.parse(s); if (o && o.level) fpsLevel = o.level; }
+    } catch (e) { /* 坏配置就用默认 */ }
+    fpsLevelById(fpsLevel);   // 校验一次
+  }
+  function saveFps() {
+    try { localStorage.setItem(FPS_KEY, JSON.stringify({ level: fpsLevel })); } catch (e) {}
+  }
+
+  /** 采样 rAF 间隔，估出屏幕刷新率（只读展示用，0 = 没测到） */
+  function estimateScreenHz(done) {
+    // 用原生 rAF：否则测到的是「限帧之后」的帧率，不是屏幕刷新率
+    var raf = window.__mdzOrigRaf || window.requestAnimationFrame;
+    if (typeof raf !== 'function') { if (done) done(0); return; }
+    var times = [], last = 0, t0 = performance.now();
+    function step(t) {
+      var now = performance.now();
+      if (last) times.push(now - last);
+      last = now;
+      if (now - t0 < 500) { raf.call(window, step); return; }
+      if (!times.length) { if (done) done(0); return; }
+      times.sort(function (a, b) { return a - b; });
+      var med = times[Math.floor(times.length / 2)];
+      var hz = med > 0 ? Math.round(1000 / med) : 0;
+      // 归到常见档位，避免测出 119 / 121 这种抖动值
+      var common = [30, 48, 50, 60, 75, 90, 120, 144, 165, 240];
+      for (var i = 0; i < common.length; i++) if (Math.abs(hz - common[i]) <= 3) { hz = common[i]; break; }
+      screenHz = hz;
+      if (done) done(hz);
+    }
+    raf.call(window, step);
+  }
+
+  function fpsInfoText() {
+    var lv = fpsLevelById(fpsLevel);
+    var txt = '帧率上限：' + lv.label;
+    if (screenHz) txt += '（屏幕约 ' + screenHz + 'Hz）';
+    if (lv.minMs > 0) txt += '，被跳过的帧 ' + (window.__mdzRafSkips || 0);
+    return txt;
+  }
+
+  /** 把帧率上限写进页面里的 rAF 垫片；返回是否生效 */
+  function applyFpsLevel(quiet) {
+    var lv = fpsLevelById(fpsLevel);
+    var ok = (typeof window.__mdzRafMinMs !== 'undefined');
+    try {
+      window.__mdzRafMinMs = lv.minMs;
+      window.__mdzRafSkips = 0;
+    } catch (e) { ok = false; }
+    if (ui.fpsLevelBox) {
+      var btns = ui.fpsLevelBox.querySelectorAll('button');
+      for (var i = 0; i < btns.length; i++) {
+        btns[i].style.background = (btns[i].getAttribute('data-fps') === fpsLevel) ? '#1f6feb' : '#39424e';
+      }
+    }
+    if (ui.fpsInfo) ui.fpsInfo.textContent = fpsInfoText();
+    if (!quiet) {
+      log('帧率上限：' + lv.label + (lv.minMs ? '（间隔 ' + (Math.round(lv.minMs * 100) / 100) + 'ms）' : '') +
+        (screenHz ? '，屏幕约 ' + screenHz + 'Hz' : ''), '#9fe8ff');
+    }
+    return ok;
+  }
+
+  function setFpsLevel(id, quiet) {
+    fpsLevel = id;
+    saveFps();
+    applyFpsLevel(quiet);
+    if (!quiet) {
+      var lv = fpsLevelById(id);
+      setStatus('帧率上限已设为 ' + lv.label + (lv.minMs ? '' : '（由屏幕刷新率决定）'), '#7bd88f');
+      if (!screenHz) {
+        estimateScreenHz(function () { if (ui.fpsInfo) ui.fpsInfo.textContent = fpsInfoText(); });
+      }
+    }
+  }
+
   /* --------------------------------------- 移除菜单里遗留的两个外部入口
      游戏主菜单上原本有两个「入口」：
        左侧  MDZ☆START / MDZ◇START   点了跳 t.me/likefreefun
@@ -640,6 +739,7 @@
         level: renderLevel,
         viewportW: window.innerWidth, viewportH: window.innerHeight,
         renderer: rt.glwrap ? 'WebGL' : 'Canvas2D',
+        fpsLimit: fpsLevel, screenHz: screenHz, rafSkips: window.__mdzRafSkips || 0,
         heapMB: (function () {
           try { return performance.memory ? Math.round(performance.memory.usedJSHeapSize / 1048576) : null; } catch (e) { return null; }
         })()
@@ -647,7 +747,9 @@
       var line = 'FPS ' + snap.fps + ' | 帧耗时 p50 ' + snap.frameMsP50 + 'ms / p95 ' + snap.frameMsP95 +
         'ms / max ' + snap.frameMsMax + 'ms | 画布 ' + snap.canvasW + 'x' + snap.canvasH + '（' + snap.megapixels +
         '万像素）| 渲染 ' + (Math.round(snap.renderScale * 100) / 100) + 'x（设备 ' + snap.deviceDpr + 'x，档位 ' +
-        snap.level + '）| 渲染器 ' + snap.renderer + (snap.heapMB !== null ? ' | 堆 ' + snap.heapMB + 'MB' : '') +
+        snap.level + '）| 渲染器 ' + snap.renderer +
+        ' | 帧率上限 ' + snap.fpsLimit + (snap.screenHz ? '（屏幕 ' + snap.screenHz + 'Hz）' : '') +
+        (snap.heapMB !== null ? ' | 堆 ' + snap.heapMB + 'MB' : '') +
         (snap.longFrames ? ' | 长帧 ' + snap.longFrames : '');
       state.lastPerf = snap;
       setStatus(line, snap.fps >= 55 ? '#7bd88f' : (snap.fps >= 40 ? '#ffcc66' : '#ff6b6b'));
@@ -870,6 +972,20 @@
       ui.renderLevelBox.appendChild(q);
     });
     ui.renderBox.appendChild(ui.renderLevelBox);
+
+    // 帧率上限：高刷屏跑满 120 帧会让发热翻倍，锁 60 能省一半
+    ui.renderBox.appendChild(el('div', 'opacity:.85;margin:6px 0 0', '帧率上限'));
+    ui.fpsLevelBox = el('div', 'margin:2px 0 0');
+    FPS_LEVELS.forEach(function (lv) {
+      var q = el('button', BTN2_CSS, lv.label);
+      q.setAttribute('data-fps', lv.id);
+      q.onclick = function () { setFpsLevel(lv.id); };
+      ui.fpsLevelBox.appendChild(q);
+    });
+    ui.renderBox.appendChild(ui.fpsLevelBox);
+    ui.fpsInfo = el('div', 'font-size:11px;opacity:.6;margin:2px 0 0', '');
+    ui.renderBox.appendChild(ui.fpsInfo);
+
     ui.renderInfo = el('div', 'font-size:11px;opacity:.6;margin:3px 0 0', '运行时就绪后显示');
     ui.renderBox.appendChild(ui.renderInfo);
     panel.appendChild(ui.renderBox);
@@ -1698,8 +1814,17 @@
         show(ui.barBox, false);
         log('本环境不支持接管视口宽度，黑边功能已隐藏（不影响联机）', '#ffcc66');
       }
-      // 画面清晰度（渲染倍率封顶）+ 移除菜单里遗留的两个外部入口
+      // 画面清晰度（渲染倍率封顶）+ 帧率上限 + 移除菜单里遗留的两个外部入口
       loadRender();
+      loadFps();
+      applyFpsLevel(true);
+      // 估一下屏幕刷新率（只读展示，500ms 采样；结果会写进「帧率上限」那行说明）
+      setTimeout(function () {
+        estimateScreenHz(function () {
+          if (ui.fpsInfo) ui.fpsInfo.textContent = fpsInfoText();
+          log('屏幕刷新率约 ' + screenHz + 'Hz；当前帧率上限：' + fpsLevelById(fpsLevel).label, '#9fe8ff');
+        });
+      }, 1200);
       blockLegacyLinks();
       startEntryScan();
       var renderTries = 0;
@@ -1742,6 +1867,10 @@
     applyRenderLevel: function () { return applyRenderLevel(true); },
     // 移除菜单里遗留的两个外部入口（MDZ☆START / MINI DayZ 2）
     hideLegacyEntries: hideLegacyEntries,
+    // 帧率上限（省电 / 降温）：'auto' | '60' | '30'
+    setFpsLevel: setFpsLevel,
+    getFpsLevel: function () { return fpsLevel; },
+    getScreenHz: function () { return screenHz; },
     // 性能快照（按需测量帧率 / 帧耗时 / 画布像素 / 渲染倍率）
     perfSnapshot: perfSnapshot,
     // 供外部（调试/自测页）使用：把进度打到面板状态行与日志里

@@ -206,6 +206,35 @@ npm run web
 - 为什么不做「限帧」：C2 的主循环在 IIFE 里就把 `requestAnimationFrame` 抓成了局部变量，
   外部改不动；要限帧只能改 `index.html` 的加载顺序去劫持 rAF，收益不明确、风险更大，故不做。
 
+### 帧率上限：高刷屏上能省一半的发热
+
+真机实测（某 2.8125x dpr 的 **120Hz** 手机）：
+
+```
+FPS 118.5 | 帧耗时 p50 4.9ms / p95 6ms / max 6.8ms | 画布 1200x540（65万像素）
+渲染 1.5x（设备 2.8125x，档位 mid）| 渲染器 WebGL | 堆 111MB
+```
+
+**120Hz 屏上 C2 会老实跑满 120 帧** —— 同样的画面、同样的逻辑，工作量是 60 帧的两倍。
+而帧耗时 p50 是 4.9ms：120 帧时占一帧预算（8.33ms）的 **59%**，60 帧时只占 16.67ms 的 **29%**。
+
+所以面板加了 **「帧率上限」**：`不限（跟屏幕）` / `60 帧` / `30 帧`，存 `localStorage`（`mdz.ui.fps.v1`）。
+实测（headless，60Hz 环境，锁 30 帧即掉一半）：`不限 60.0 fps` → `锁 30 帧 29.3 fps` → `切回 59.9 fps`。
+
+**实现有个必须注意的地方**：垫片写在 `web/index.html` 里，**必须在 `c2runtime.js` 之前**。
+原因：C2 在脚本加载那一刻就把 rAF 抓成了局部变量
+（`var raf = window["requestAnimationFrame"] || …`），之后再改 `window.requestAnimationFrame` 它已经看不见了。
+
+另一个坑（实测踩过，锁 30 帧后游戏直接停住、`tickcount` 冻住）：
+
+> 限帧状态**不能用一个全局时间戳**。第一版是 `window.__mdzRafLast`，
+> 结果页面上任何别的 rAF 使用者（包括我们自己的刷新率采样代码）每帧都会把它刷成当前时刻，
+> 于是游戏主循环永远判定「太早」而被无限跳过。
+> **正确做法是按回调分别记录**（`WeakMap` 以回调函数为键），互不干扰。
+
+采样屏幕刷新率时要用原生 rAF（垫片里存了 `window.__mdzOrigRaf`），
+否则测到的是「限帧之后」的帧率，不是屏幕刷新率。
+
 ### 衡量优化效果：帧率 / 发热的指标与测法
 
 **一、应用内指标（点联机面板的「性能快照」按钮，或 `MDZUI.perfSnapshot(3)`）**
@@ -240,6 +269,7 @@ iOS：Xcode → Instruments 的 **Thermal State** 与 **Energy Log**；
 **三、判定标准（建议）**
 
 - **帧率**：连续玩 5 分钟，`fps` 的 1% low（最差的那 1% 帧）≥ 50 —— 只看平均会被好帧掩盖。
+  高刷屏（120Hz）上如果嫌热，先把「帧率上限」设成 **60**：同样的观感，工作量少一半。
 - **温度**：Android 电池温度 **≤ 40℃** 为舒适区；40~43℃ 会开始降频；> 43℃ 必须降档。
   测法：开一局玩 10 分钟，每 30 秒记一次，看**稳态值**而不是起始值。
 - **降频**：`thermalservice` 的 status 出现 `THROTTLING_*` 说明已经在降频 —— 此时 fps 会掉。
@@ -451,7 +481,7 @@ npm run verify:bars -- --chrome "C:\path\to\chrome.exe"
 | APK | `dist/Minidayz-WebRTC-debug.apk`（同时保留在 `android/app/build/outputs/apk/debug/app-debug.apk`） |
 | 大小 | **50.0 MB**（52,474,757 字节） |
 | SHA256 | `DA342B77FF80999CE064D2851BC7FC411941B7DD73FB74DE4155A765958DCD80` |
-| 构建标记 | `mdz-webrtc-web-7-lite` / `mdz-ui-7-lite`（含黑边、画面清晰度三档、入口移除、分块上限、性能快照） |
+| 构建标记 | `mdz-webrtc-web-8-lite` / `mdz-ui-8-lite`（含黑边、画面清晰度三档、入口移除、分块上限、性能快照） |
 | 包名 / 标签 | `com.mdz.webrtcmp` / 「Mini DAYZ 联机版」 |
 | minSdk / targetSdk | 24 / 36（compileSdk 36） |
 | 屏幕方向 | `android:screenOrientation="sensorLandscape"`（横屏锁定）+ 主题 `windowFullscreen` + `viewport-fit=cover` |
@@ -583,7 +613,7 @@ export PATH="$JAVA_HOME/bin:$PATH"
 - `uses-permission`: INTERNET / ACCESS_NETWORK_STATE / **CAMERA**
 - `uses-feature-not-required: android.hardware.camera` → 没有摄像头的设备也能装（会自动退化到模式B）
 - APK 内 `assets/public/`：**1940 个文件 / 29.0 MB**，`media/` 489 个、`images/` 1368 个
-- `assets/public/index.html` 内含构建标记（形如 `mdz-webrtc-web-7-lite`，以 `web/index.html` 的 `MDZ_BUILD` 为准）→ 确认打进去的是新代码，不是被缓存的旧页面
+- `assets/public/index.html` 内含构建标记（形如 `mdz-webrtc-web-8-lite`，以 `web/index.html` 的 `MDZ_BUILD` 为准）→ 确认打进去的是新代码，不是被缓存的旧页面
 - `mdz_core.js` / `mdz_p2p.js` / `mdz_ui.js` / `lan_bridge.js` / `vendor/*` 全部在包内
 
 > **一个容易误判的坑**：用 .NET `ZipFile` 或 `tar` 对比文件名时，会发现 51 个西里尔名字（`перс1.png`、`город.png`…）
@@ -630,7 +660,7 @@ macOS 机器产出未签名 IPA → 回 Windows 用 Sideloadly 签名安装。�
 
 **iOS 侧不需要为本次改动做任何额外配置**：黑边功能与分块上限都在 `web/mdz_ui.js` / `web/mdz_core.js` 里，
 与 Android 共用同一份代码；工作流会在 CI 里自己跑 `npm ci` + `cap sync ios` 把最新的 `web/` 拷进工程。
-只要 `web/` 里是新的构建标记（`mdz-webrtc-web-7-lite` / `mdz-ui-7-lite`），产出的 IPA 就带上了这些改动。
+只要 `web/` 里是新的构建标记（`mdz-webrtc-web-8-lite` / `mdz-ui-8-lite`），产出的 IPA 就带上了这些改动。
 
 > iOS 上 `window.innerWidth` 的覆盖同样有效（WKWebView 支持在实例上定义同名属性遮蔽原型上的 getter），
 > 所以黑边在 iPhone 上一样能用；挖孔/灵动岛被遮时把对应一侧调宽即可。

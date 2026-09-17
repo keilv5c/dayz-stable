@@ -289,6 +289,48 @@ const MEASURE = `(function(){
     await ev(`window.MDZUI.setRenderLevel('mid', true)`);
     await sleep(800);
 
+    section('G2. 帧率上限（高刷屏省电 / 降温）');
+    const shim = await ev(`(function(){
+      var src = String(window.requestAnimationFrame);
+      return { 垫片变量存在: typeof window.__mdzRafMinMs !== 'undefined',
+               原生rAF已保存: typeof window.__mdzOrigRaf === 'function',
+               当前rAF是否原生: src.indexOf('native code') >= 0,   // 用 indexOf：正则里的反斜杠在模板字符串里会被吃掉
+               当前rAF开头: src.slice(0, 46).replace(/\s+/g, ' '),
+               面板控件数: document.querySelectorAll('#mdz-panel-wrap [data-fps]').length }; })()`);
+    console.log('   ' + JSON.stringify(shim));
+    ok('rAF 垫片已装（必须在 c2runtime 之前）',
+      shim.垫片变量存在 && !shim.当前rAF是否原生, shim.当前rAF开头);
+    eq('面板有帧率上限三档', shim.面板控件数, 3);
+
+    const fpsOf = async (sec) => {
+      await ev(`(function(){var rt=window.cr_getC2Runtime();rt.__ft0=rt.tickcount;rt.__fw0=performance.now();return true})()`);
+      await sleep(sec * 1000);
+      return await ev(`(function(){var rt=window.cr_getC2Runtime();
+        var d=(performance.now()-rt.__fw0)/1000;
+        return Math.round((rt.tickcount-rt.__ft0)/d*10)/10;})()`);
+    };
+
+    // 注意：本工具跑在桌面视口下，渲染本身就是瓶颈（约 40fps），
+    // 所以这里只做**相对**比较，不设绝对阈值 —— 绝对帧率要按手机视口用 measure-perf 测。
+    await ev(`window.MDZUI.setFpsLevel('auto', true)`);
+    await sleep(1200);
+    const fAuto = await fpsOf(5);
+    console.log('   不限帧 ' + fAuto + ' fps（本环境渲染上限）');
+
+    await ev(`window.MDZUI.setFpsLevel('30', true)`);
+    await sleep(1500);
+    const f30 = await fpsOf(5);
+    console.log('   锁 30 帧 ' + f30 + ' fps');
+    ok('锁 30 帧后帧率被压到 ~30', f30 >= 25 && f30 <= 35, fAuto + ' -> ' + f30 + ' fps');
+    ok('确实比基线低', f30 < fAuto * 0.8, '基线 ' + fAuto + ' -> ' + f30);
+    ok('跳帧计数器在增长', (await ev('window.__mdzRafSkips')) > 0);
+
+    await ev(`window.MDZUI.setFpsLevel('auto', true)`);
+    await sleep(1500);
+    const fBack = await fpsOf(5);
+    console.log('   切回不限 ' + fBack + ' fps');
+    ok('切回不限后恢复到基线（±25%）', fBack >= fAuto * 0.75, f30 + ' -> ' + fBack + ' fps');
+
     section('H. 主菜单上两个遗留入口（MDZ☆START / MINI DayZ 2）');
     await send('Page.navigate', { url: base });
     await poll(`(function(){var rt=window.cr_getC2Runtime&&window.cr_getC2Runtime();return !!rt&&rt.running_layout&&rt.running_layout.name==='Menu'&&!!window.MDZUI;})()`, 120000);

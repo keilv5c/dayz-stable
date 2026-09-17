@@ -24,6 +24,7 @@ const { JSDOM, VirtualConsole } = require('jsdom');
 const WEB = path.join(__dirname, '..', 'web');
 const BARS_KEY = 'mdz.ui.bars.v1';
 const RENDER_KEY = 'mdz.ui.render.v1';
+const FPS_KEY = 'mdz.ui.fps.v1';
 const BAR_MAX = 400;
 const REAL_W = 1024, REAL_H = 768;   // jsdom 默认视口
 
@@ -53,7 +54,7 @@ function readScript(rel) {
 
 /** 起一个"页面"：按 index.html 的真实顺序装 pako -> mdz_core -> mdz_p2p -> mdz_ui，
  *  并等到面板真的建出来（jsdom 的 DOMContentLoaded 是异步的，不能立刻断言）。 */
-async function makePage(seedBars, seedRender) {
+async function makePage(seedBars, seedRender, seedFps) {
   const vc = new VirtualConsole();
   vc.on('jsdomError', () => {});
   const dom = new JSDOM(PAGE, {
@@ -66,6 +67,7 @@ async function makePage(seedBars, seedRender) {
   w.console.error = function () {};
   if (seedBars !== undefined) w.localStorage.setItem(BARS_KEY, JSON.stringify(seedBars));
   if (seedRender !== undefined) w.localStorage.setItem(RENDER_KEY, JSON.stringify({ level: seedRender }));
+  if (seedFps !== undefined) w.localStorage.setItem(FPS_KEY, JSON.stringify({ level: seedFps }));
 
   // runScripts:'outside-only' 下文档里的 <script> 不会自动执行，必须用 window.eval
   const run = (code) => w.eval(code);
@@ -252,6 +254,32 @@ async function makePage(seedBars, seedRender) {
   eq('其它链接确实透传到了底层', w4.__opened, 'https://example.com/other');
 
   eq('hideLegacyEntries 在没有运行时环境时安全返回 0', w4.MDZUI.hideLegacyEntries(), 0);
+
+  /* ----------------------------------------- 11. 帧率上限（省电 / 降温） */
+  section('11. 帧率上限设置');
+
+  const fp = w4.MDZUI._ui;
+  ok('帧率上限控件存在', !!fp.fpsLevelBox && !!fp.fpsInfo);
+  ok('控件挂在面板里', !!fp.panel && fp.panel.contains(fp.fpsLevelBox));
+  const fBtns = Array.from(fp.fpsLevelBox.querySelectorAll('button'));
+  eq('有三档（不限 / 60 / 30）', fBtns.length, 3);
+  eq('三档的 data-fps 齐全',
+    fBtns.map(b => b.getAttribute('data-fps')).sort().join(','), '30,60,auto');
+  eq('默认不限帧', w4.MDZUI.getFpsLevel(), 'auto');
+
+  w4.MDZUI.setFpsLevel('30', true);
+  eq('切到 30 帧后 getFpsLevel 跟着变', w4.MDZUI.getFpsLevel(), '30');
+  eq('30 帧写入 localStorage', JSON.parse(w4.localStorage.getItem(FPS_KEY)).level, '30');
+  eq('30 帧的间隔约 33.3ms', Math.round(w4.__mdzRafMinMs), 33);
+  w4.MDZUI.setFpsLevel('60', true);
+  eq('60 帧的间隔约 16.7ms', Math.round(w4.__mdzRafMinMs), 17);
+  w4.MDZUI.setFpsLevel('auto', true);
+  eq('不限帧时间隔为 0', w4.__mdzRafMinMs, 0);
+
+  const w6 = await makePage(undefined, undefined, '30');
+  eq('重载后记住 30 帧档', w6.MDZUI.getFpsLevel(), '30');
+  eq('重载后间隔也按已保存值设置', Math.round(w6.__mdzRafMinMs), 33);
+  ok('说明行显示当前档位', fp.fpsInfo.textContent.indexOf('帧率上限：') >= 0, fp.fpsInfo.textContent.slice(0, 40));
 
   console.log('\n--------------------------------------------------');
   console.log(`结果: ${pass} 通过 / ${fail} 失败`);
