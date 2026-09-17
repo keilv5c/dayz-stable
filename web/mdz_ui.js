@@ -591,6 +591,73 @@
     }, 1000);
   }
 
+  /* ------------------------------------------------ 性能快照（按需测量）
+     为什么是「按需」而不是常驻 HUD：常驻的话每帧都要更新 DOM，本身就成了负载源，
+     会污染它要测量的东西。所以点一次按钮，测 3 秒，给一份可复制的数据。
+     测的指标与含义：
+       FPS       —— 3 秒内的实际帧数/秒（C2 的 tickcount 差值）
+       帧耗时    —— 每帧 tick() 的耗时（含逻辑+绘制调用），看 p50/p95/max，
+                    p95 比平均值有意义：卡顿是长尾，平均值会被好帧拉平
+       画布像素  —— 决定 GPU 填充率，是发热的第一驱动
+       渲染倍率  —— 实际用的 devicePixelRatio（= min(设备 dpr, 档位上限)）
+       长任务    —— 超过 50ms 的帧数（会肉眼可见地卡一下）
+     真机上的温度/降频只能从系统侧读（见 README-DEV「衡量优化效果」一节）。   */
+  function perfSnapshot(seconds, quiet) {
+    var rt = window.cr_getC2Runtime && window.cr_getC2Runtime();
+    if (!rt) { setStatus('运行时还没就绪，稍后再试', '#ffcc66'); return null; }
+    var sec = seconds || 3;
+    if (state.perfBusy) { setStatus('正在测量，请稍候…', '#ffcc66'); return null; }
+    state.perfBusy = true;
+    setStatus('性能测量中（' + sec + ' 秒）…', '#9fe8ff');
+
+    var samples = [];
+    var origTick = rt.tick;
+    rt.tick = function () {
+      var t0 = performance.now();
+      var r = origTick.apply(this, arguments);
+      samples.push(performance.now() - t0);
+      return r;
+    };
+    var t0count = rt.tickcount;
+    var t0 = performance.now();
+
+    setTimeout(function () {
+      rt.tick = origTick;
+      state.perfBusy = false;
+      var wall = (performance.now() - t0) / 1000;
+      var frames = rt.tickcount - t0count;
+      var s = samples.slice().sort(function (a, b) { return a - b; });
+      function q(p) { return s.length ? Math.round(s[Math.min(s.length - 1, Math.floor(s.length * p))] * 100) / 100 : 0; }
+      var canvas = document.getElementById('c2canvas');
+      var longTasks = samples.filter(function (v) { return v > 50; }).length;
+      var snap = {
+        fps: Math.round(frames / wall * 10) / 10,
+        frameMsP50: q(0.5), frameMsP95: q(0.95), frameMsMax: q(0.999),
+        frames: frames, longFrames: longTasks,
+        canvasW: canvas ? canvas.width : 0, canvasH: canvas ? canvas.height : 0,
+        megapixels: canvas ? Math.round(canvas.width * canvas.height / 10000) : 0,
+        renderScale: rt.devicePixelRatio, deviceDpr: window.devicePixelRatio || 1,
+        level: renderLevel,
+        viewportW: window.innerWidth, viewportH: window.innerHeight,
+        renderer: rt.glwrap ? 'WebGL' : 'Canvas2D',
+        heapMB: (function () {
+          try { return performance.memory ? Math.round(performance.memory.usedJSHeapSize / 1048576) : null; } catch (e) { return null; }
+        })()
+      };
+      var line = 'FPS ' + snap.fps + ' | 帧耗时 p50 ' + snap.frameMsP50 + 'ms / p95 ' + snap.frameMsP95 +
+        'ms / max ' + snap.frameMsMax + 'ms | 画布 ' + snap.canvasW + 'x' + snap.canvasH + '（' + snap.megapixels +
+        '万像素）| 渲染 ' + (Math.round(snap.renderScale * 100) / 100) + 'x（设备 ' + snap.deviceDpr + 'x，档位 ' +
+        snap.level + '）| 渲染器 ' + snap.renderer + (snap.heapMB !== null ? ' | 堆 ' + snap.heapMB + 'MB' : '') +
+        (snap.longFrames ? ' | 长帧 ' + snap.longFrames : '');
+      state.lastPerf = snap;
+      setStatus(line, snap.fps >= 55 ? '#7bd88f' : (snap.fps >= 40 ? '#ffcc66' : '#ff6b6b'));
+      log('性能快照：' + line, '#9fe8ff');
+      if (!quiet) copy(line, '性能快照');
+      return snap;
+    }, sec * 1000);
+    return null;
+  }
+
   /* ------------------------------------------------------------ 面板构建 */
 
   var PANEL_CSS = [
@@ -817,6 +884,11 @@
         (s.iceStats ? s.iceStats.total : 0) + '，收发 ' + s.tx.txMsgs + '/' + s.tx.rxMsgs) : '当前没有会话', '#9fe8ff');
     };
     foot.appendChild(ui.btnStats);
+
+    // 性能快照：按需测 3 秒，把帧率 / 帧耗时 / 画布像素 / 渲染倍率打到状态行并复制
+    ui.btnPerf = el('button', BTN2_CSS, '性能快照');
+    ui.btnPerf.onclick = function () { perfSnapshot(3); };
+    foot.appendChild(ui.btnPerf);
 
     ui.btnLog = el('button', BTN2_CSS, '清空日志');
     ui.btnLog.onclick = function () { state.log = []; if (ui.logBox) ui.logBox.textContent = ''; };
@@ -1670,6 +1742,8 @@
     applyRenderLevel: function () { return applyRenderLevel(true); },
     // 移除菜单里遗留的两个外部入口（MDZ☆START / MINI DayZ 2）
     hideLegacyEntries: hideLegacyEntries,
+    // 性能快照（按需测量帧率 / 帧耗时 / 画布像素 / 渲染倍率）
+    perfSnapshot: perfSnapshot,
     // 供外部（调试/自测页）使用：把进度打到面板状态行与日志里
     log: log,
     setStatus: setStatus,

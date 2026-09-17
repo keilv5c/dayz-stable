@@ -19,7 +19,8 @@
     "open:android": "cap open android",
     "sp:sync": "powershell -NoProfile -ExecutionPolicy Bypass -File sp/scripts/sync-game.ps1",
     "sp:prepare": "powershell -NoProfile -ExecutionPolicy Bypass -File sp/scripts/prepare.ps1",
-    "sp:web": "python -m http.server 8774 --directory sp/ios/App/App/public"
+    "sp:web": "python -m http.server 8774 --directory sp/ios/App/App/public",
+    "measure:perf": "node tools/measure-perf.js"
   },
   "dependencies": {
     "@capacitor-mlkit/barcode-scanning": "^8.2.1",

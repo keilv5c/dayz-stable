@@ -171,6 +171,20 @@ ok('package.json 里有 verify:bars 脚本',
   !!(pkg.scripts && pkg.scripts['verify:bars']),
   pkg.scripts && pkg.scripts['verify:bars']);
 
+// 发热/帧率的测量工具：必须按**手机视口**测，桌面视口会得出高一个数量级的假象
+ok('性能测量工具 tools/measure-perf.js 存在', fs.existsSync(path.join(ROOT, 'tools', 'measure-perf.js')));
+ok('package.json 里有 measure:perf 脚本',
+  !!(pkg.scripts && pkg.scripts['measure:perf']),
+  pkg.scripts && pkg.scripts['measure:perf']);
+if (fs.existsSync(path.join(ROOT, 'tools', 'measure-perf.js'))) {
+  const mp = readText('tools/measure-perf.js');
+  ok('measure-perf 用了手机视口模拟（setDeviceMetricsOverride）', /setDeviceMetricsOverride/.test(mp));
+  ok('measure-perf 自带静态服务与浏览器启动（零依赖）',
+    /createServer/.test(mp) && /requestAnimationFrame|remote-debugging-port/.test(mp));
+}
+ok('面板提供「性能快照」按钮', /性能快照/.test(ui) && /perfSnapshot/.test(ui));
+ok('测试者须知.md 说明了怎么测性能', /性能快照/.test(readText('测试者须知.md')));
+
 console.log('\n--------------------------------------------------');
 console.log(`结果: ${pass} 通过 / ${fail} 失败`);
 process.exit(fail === 0 ? 0 : 1);
